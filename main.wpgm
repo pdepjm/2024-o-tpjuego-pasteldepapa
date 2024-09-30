@@ -4,7 +4,7 @@ import fireboy.*
 
 program HombreFogonyChicaAguaGame {
     game.title("HombreFogonyChicaAguaGame")
-    game.boardGround("fondoo.jpeg")
+    game.boardGround("level_1.png")
     game.height(50)
     game.width(50)
     game.cellSize(60)
