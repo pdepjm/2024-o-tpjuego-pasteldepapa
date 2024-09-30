@@ -1,21 +1,31 @@
 import wollok.game.*
 
 import fireboy.*
+import watergirl.*
+import diamante.*
 
 program HombreFogonyChicaAguaGame {
     game.title("HombreFogonyChicaAguaGame")
-    game.boardGround("level_1.png")
+    game.boardGround("nomerentiel.jpeg")
     game.height(50)
     game.width(50)
     game.cellSize(60)
 
     game.addVisual(fireboy)
-    //game.addVisual(watergirl)
+    game.addVisual(watergirl)
+    game.addVisual(diamanteRojo)
+    game.addVisual(diamanteCeleste)
 
-    //keyboard.l().onPressDo({ watergirl.avanzar(1) })
-    //keyboard.j().onPressDo({ watergirl.retroceder(1) })
+
+    keyboard.l().onPressDo({ watergirl.avanzar(1) })
+    keyboard.j().onPressDo({ watergirl.retroceder(1) })
     keyboard.d().onPressDo({ fireboy.avanzar(1) })
     keyboard.a().onPressDo({ fireboy.retroceder(1) })
+    keyboard.w().onPressDo({ fireboy.saltar(5) })
+    keyboard.i().onPressDo({ watergirl.saltar(5) })
+    game.onCollideDo(fireboy, {diamante => diamante.recoger(fireboy)})
+    game.onCollideDo(watergirl, {diamante => diamante.recoger(watergirl)})
+
 
     game.start()
 }
