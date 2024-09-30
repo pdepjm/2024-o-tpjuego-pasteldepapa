@@ -1,16 +1,21 @@
 import wollok.game.*
 
-import pepita.*
+import fireboy.*
 
-program PepitaGame {
-	game.title("Pepita")
-	game.height(10)
-	game.width(10)
-	game.cellSize(100)
+program HombreFogonyChicaAguaGame {
+    game.title("HombreFogonyChicaAguaGame")
+    game.boardGround("fondoo.jpeg")
+    game.height(50)
+    game.width(50)
+    game.cellSize(60)
 
-	game.addVisual(pepita)
+    game.addVisual(fireboy)
+    //game.addVisual(watergirl)
 
-	keyboard.w().onPressDo({ pepita.fly(1) })
+    //keyboard.l().onPressDo({ watergirl.avanzar(1) })
+    //keyboard.j().onPressDo({ watergirl.retroceder(1) })
+    keyboard.d().onPressDo({ fireboy.avanzar(1) })
+    keyboard.a().onPressDo({ fireboy.retroceder(1) })
 
-	game.start()
+    game.start()
 }
