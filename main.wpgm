@@ -23,14 +23,14 @@ program FireBoyWaterGirlGame {
 
     // Diamantes
 
-    const redDiamonds = [new RedDiamond(posX = 5, posY = 0), new RedDiamond(posX = 8, posY = 0)] // Diamantes rojos
-    const blueDiamonds = [new BlueDiamond(posX = 4, posY = 0), new BlueDiamond(posX = 2, posY = 0)] // Diamantes azules
+    const diamantesRojos = [new DiamanteRojo(posX = 5, posY = 0), new DiamanteRojo(posX = 8, posY = 0)] // Diamantes rojos
+    const diamantesAzules = [new DiamanteAzul(posX = 4, posY = 0), new DiamanteAzul(posX = 2, posY = 0)] // Diamantes azules
 
     // Agregar todos los diamantes rojos al juego
-    redDiamonds.forEach{diamond => game.addVisual(diamond)}
+    diamantesRojos.forEach{diamante => game.addVisual(diamante)}
 
     // Agregar todos los diamantes azules al juego
-    blueDiamonds.forEach {diamond => game.addVisual(diamond)}
+    diamantesAzules.forEach {diamante => game.addVisual(diamante)}
 
     // Movimientos
 

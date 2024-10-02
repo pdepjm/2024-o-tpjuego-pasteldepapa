@@ -2,8 +2,7 @@ import characters.*
 
 // ------------------ Diamantes
 
-class Diamond {
-    var isCollected = false
+class Diamante {
 
     const posX
     const posY
@@ -12,15 +11,14 @@ class Diamond {
 
     method colision(personaje) {
         
-        if (self.canCollect(personaje) && !isCollected) { // Personaje puede recogerlo y todavia no fue recogido 
-            isCollected = true
+        if (self.canCollect(personaje)) { // Personaje puede recogerlo y todavia no fue recogido 
             game.removeVisual(self) 
             // efecto visual, sonido, palabritas
             
         }
     }
 
-    method canCollect(character) {
+    method canCollect(personaje) {
         // Sobrescrito en las subclases
         return false
     }
@@ -30,27 +28,27 @@ class Diamond {
     }
 }
 
-class RedDiamond inherits Diamond {
+class DiamanteRojo inherits Diamante {
     override method image() {
         return "diamante_rojo.png" 
     }
 
-    override method canCollect(character) {
-        return character.isFireboy() // Solo puede ser recogido por Fireboy
+    override method canCollect(personaje) {
+        return personaje.isFireboy() // Solo puede ser recogido por Fireboy
     }
 }
 
-class BlueDiamond inherits Diamond {
+class DiamanteAzul inherits Diamante {
     override method image() {
         return "diamante_azul.png" 
     }
 
-    override method canCollect(character) {
-        return !character.isFireboy() // Solo puede ser recogido por Fireboy
+    override method canCollect(personaje) {
+        return !personaje.isFireboy() // Solo puede ser recogido por Watergirl
     }
 }
 
-class GreenDiamond inherits Diamond {
+class DiamanteVerde inherits Diamante {
     override method image() {
         return "diamante_verde.png" 
     }

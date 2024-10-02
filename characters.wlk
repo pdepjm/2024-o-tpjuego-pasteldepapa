@@ -4,7 +4,7 @@ class Character {
     const unidadSaltar = 5
 
     method position() = position
-    
+
     method image() {
         return "" // Sobrescrito en las subclase
     }
@@ -19,7 +19,7 @@ class Character {
 
     method jump() {
         position.goUp(unidadSaltar) 
-        game.schedule(1000, {self.fall()})
+        game.schedule(500, {self.fall()})
     }
 
     method fall() {
@@ -29,7 +29,7 @@ class Character {
 
 class Fireboy inherits Character {
 
-    const isFireboy = true
+    method isFireboy() = true
 
     override method image() {
         return "Fireboy.png" 
@@ -38,7 +38,7 @@ class Fireboy inherits Character {
 
 class Watergirl inherits Character {
 
-    const isFireboy = false
+    method isFireboy() = false
 
     override method image() {
         return "Watergirl.png" 
