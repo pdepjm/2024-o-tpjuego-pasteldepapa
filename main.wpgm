@@ -1,31 +1,52 @@
 import wollok.game.*
 
-import fireboy.*
-import watergirl.*
-import diamante.*
+import characters.*
+import elements.*
 
-program HombreFogonyChicaAguaGame {
-    game.title("HombreFogonyChicaAguaGame")
-    game.boardGround("nomerentiel.jpeg")
+
+program FireBoyWaterGirlGame {
+    
+    // Juego
+
+    game.title("FireBoyWaterGirlGame")
+    game.boardGround("nivel_1.webp")
     game.height(50)
     game.width(50)
     game.cellSize(60)
+    
+    // Personajes
+    
+    var fireboy = new Fireboy()
+    var watergirl = new Watergirl()
 
     game.addVisual(fireboy)
     game.addVisual(watergirl)
-    game.addVisual(diamanteRojo)
-    game.addVisual(diamanteCeleste)
 
+    // Diamantes
 
-    keyboard.l().onPressDo({ watergirl.avanzar(1) })
-    keyboard.j().onPressDo({ watergirl.retroceder(1) })
-    keyboard.d().onPressDo({ fireboy.avanzar(1) })
-    keyboard.a().onPressDo({ fireboy.retroceder(1) })
-    keyboard.w().onPressDo({ fireboy.saltar(5) })
-    keyboard.i().onPressDo({ watergirl.saltar(5) })
-    game.onCollideDo(fireboy, {diamante => diamante.recoger(fireboy)})
-    game.onCollideDo(watergirl, {diamante => diamante.recoger(watergirl)})
+    var redDiamonds = [new RedDiamond(posX = 3, posY = 5), new RedDiamond(posX = 5, posY = 7)] // Diamantes rojos
+    var blueDiamonds = [new BlueDiamond(posX = 4, posY = 6), new BlueDiamond(posX = 2, posY = 8)] // Diamantes azules
 
+    // Agregar todos los diamantes rojos al juego
+    redDiamonds.forEach[ diamond | game.addVisual(diamond) ]
+
+    // Agregar todos los diamantes azules al juego
+    blueDiamonds.forEach[ diamond | game.addVisual(diamond) ]
+
+    // Movimientos
+
+    keyPressed('left', fireboy.moveLeft)
+    keyPressed('right', fireboy.moveRight)
+    keyPressed('up', fireboy.jump)
+
+    keyPressed('a', watergirl.moveLeft)
+    keyPressed('d', watergirl.moveRight)
+    keyPressed('w', watergirl.jump)
+    
+    // Manejar Colisiones (por ahora solo esta las de diamantes)
+
+    game.onCollideDo(fireboy, {element => element.colision(fireboy)}) 
+    game.onCollideDo(watergirl, {element => element.colision(watergirl)}) 
 
     game.start()
 }
