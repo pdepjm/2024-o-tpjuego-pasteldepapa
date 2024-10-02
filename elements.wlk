@@ -32,7 +32,7 @@ class Diamond {
 
 class RedDiamond inherits Diamond {
     override method image() {
-        return "diamante_rojo.png" // Devuelve la imagen específica del diamante rojo
+        return "diamante_rojo.png" 
     }
 
     override method canCollect(character) {
@@ -42,17 +42,17 @@ class RedDiamond inherits Diamond {
 
 class BlueDiamond inherits Diamond {
     override method image() {
-        return "diamante_azul.png" // Devuelve la imagen específica del diamante azul
+        return "diamante_azul.png" 
     }
 
     override method canCollect(character) {
-        return character.!isFireboy() // Solo puede ser recogido por Fireboy
+        return !character.isFireboy() // Solo puede ser recogido por Fireboy
     }
 }
 
 class GreenDiamond inherits Diamond {
     override method image() {
-        return "diamante_verde.png" // Devuelve la imagen específica del diamante verde
+        return "diamante_verde.png" 
     }
 
     override method canCollect(character) {
@@ -108,5 +108,5 @@ class Platform {
             character.position.goTo(positionX, positionY); // Coloca al personaje en la plataforma
         }
     }
-}
+}*/
 

@@ -1,5 +1,4 @@
 import wollok.game.*
-
 import characters.*
 import elements.*
 
@@ -9,39 +8,40 @@ program FireBoyWaterGirlGame {
     // Juego
 
     game.title("FireBoyWaterGirlGame")
-    game.boardGround("nivel_1.webp")
+    game.boardGround("nivel_1.png")
     game.height(50)
     game.width(50)
     game.cellSize(60)
     
     // Personajes
     
-    var fireboy = new Fireboy()
-    var watergirl = new Watergirl()
+    const fireboy = new Fireboy()
+    const watergirl = new Watergirl()
 
     game.addVisual(fireboy)
     game.addVisual(watergirl)
 
     // Diamantes
 
-    var redDiamonds = [new RedDiamond(posX = 3, posY = 5), new RedDiamond(posX = 5, posY = 7)] // Diamantes rojos
-    var blueDiamonds = [new BlueDiamond(posX = 4, posY = 6), new BlueDiamond(posX = 2, posY = 8)] // Diamantes azules
+    const redDiamonds = [new RedDiamond(posX = 5, posY = 0), new RedDiamond(posX = 8, posY = 0)] // Diamantes rojos
+    const blueDiamonds = [new BlueDiamond(posX = 4, posY = 0), new BlueDiamond(posX = 2, posY = 0)] // Diamantes azules
 
     // Agregar todos los diamantes rojos al juego
-    redDiamonds.forEach[ diamond | game.addVisual(diamond) ]
+    redDiamonds.forEach{diamond => game.addVisual(diamond)}
 
     // Agregar todos los diamantes azules al juego
-    blueDiamonds.forEach[ diamond | game.addVisual(diamond) ]
+    blueDiamonds.forEach {diamond => game.addVisual(diamond)}
 
     // Movimientos
 
-    keyPressed('left', fireboy.moveLeft)
-    keyPressed('right', fireboy.moveRight)
-    keyPressed('up', fireboy.jump)
-
-    keyPressed('a', watergirl.moveLeft)
-    keyPressed('d', watergirl.moveRight)
-    keyPressed('w', watergirl.jump)
+    keyboard.a().onPressDo({ watergirl.moveLeft()})
+    keyboard.d().onPressDo({ watergirl.moveRight() })
+    keyboard.w().onPressDo({ watergirl.jump() })
+    
+    keyboard.left().onPressDo({ fireboy.moveLeft() })
+    keyboard.right().onPressDo({ fireboy.moveRight() })
+    keyboard.up().onPressDo({ fireboy.jump() })
+    
     
     // Manejar Colisiones (por ahora solo esta las de diamantes)
 

@@ -1,10 +1,13 @@
 class Character {
-    const position = new MutablePosition(x=0, y=0)
+    const position = new MutablePosition(x=1, y=0)
     const unidadCaminar = 1
     const unidadSaltar = 5
 
-    var canTouchFire
-    var isFireboy
+    method position() = position
+    
+    method image() {
+        return "" // Sobrescrito en las subclase
+    }
 
     method moveLeft() {
         position.goLeft(unidadCaminar)
@@ -16,7 +19,7 @@ class Character {
 
     method jump() {
         position.goUp(unidadSaltar) 
-        game.schedule(1000, {this.fall()})
+        game.schedule(1000, {self.fall()})
     }
 
     method fall() {
@@ -24,18 +27,20 @@ class Character {
     }
 }
 
-class Fireboy extends Character {
-    const imagePath = "Fireboy.png"
-    var canTouchFire = true
-    var isFireboy = true
+class Fireboy inherits Character {
 
-    method image() = imagePath
+    const isFireboy = true
+
+    override method image() {
+        return "Fireboy.png" 
+    }
 }
 
-class Watergirl extends Character {
-    const imagePath = "Watergirl.png"
-    var canTouchFire = false
-    var isFireboy = false
+class Watergirl inherits Character {
 
-    method image() = imagePath
+    const isFireboy = false
+
+    override method image() {
+        return "Watergirl.png" 
+    } 
 }
