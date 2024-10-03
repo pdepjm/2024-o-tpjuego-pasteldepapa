@@ -10,6 +10,7 @@ UTN - Facultad Regional Buenos Aires - Materia Paradigmas de Programación
 - Alejo Scarlato
 - Elín Winter
  
+https://docs.google.com/document/d/1R91lfeDYZxvoI4jlMRLPcgxWOQLW_wcF7T8srPrkxb0/edit?usp=sharing
 
 ## Capturas 
 
