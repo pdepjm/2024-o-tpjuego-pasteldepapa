@@ -9,8 +9,6 @@ UTN - Facultad Regional Buenos Aires - Materia Paradigmas de Programación
 - Tomás Sagrada
 - Alejo Scarlato
 - Elín Winter
- 
-https://docs.google.com/document/d/1R91lfeDYZxvoI4jlMRLPcgxWOQLW_wcF7T8srPrkxb0/edit?usp=sharing
 
 ## Capturas 
 
@@ -18,9 +16,14 @@ https://docs.google.com/document/d/1R91lfeDYZxvoI4jlMRLPcgxWOQLW_wcF7T8srPrkxb0/
 
 ## Reglas de Juego / Instrucciones
 
-(completar...)
+Los jugadores deben completar los niveles del mapa guiando a los dos personajes, FireBoy y WaterGirl, hacia sus respectivas puertas. Para avanzar, deben recolectar la mayor cantidad de diamantes posible y evitar obstáculos mortales que correspondan a cada personaje, como agua para FireBoy y fuego para WaterGirl.
 
 ## Controles:
 
-- `W` para...
+Moverse (izquierda/derecha)
+Saltar
+Empujar objetos
+Morir (si caen en trampas o elementos contrarios a su naturaleza)
+Escapar por la salida
+
 
