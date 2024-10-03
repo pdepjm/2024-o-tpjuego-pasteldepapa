@@ -1,11 +1,14 @@
-#  (reemplazar nombre de juego acá) 
+#  FireBoy y WaterGirl
 
 UTN - Facultad Regional Buenos Aires - Materia Paradigmas de Programación
 
 ## Equipo de desarrollo: 
 
-- completar...
-- completar...
+- Natalia Pinkas
+- Facundo Gutman
+- Tomás Sagrada
+- Alejo Scarlato
+- Elín Winter
  
 
 ## Capturas 
