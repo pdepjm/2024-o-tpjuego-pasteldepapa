@@ -9,9 +9,9 @@ program FireBoyWaterGirlGame {
 
     game.title("FireBoyWaterGirlGame")
     game.boardGround("nivel_1.png")
-    game.height(50)
-    game.width(50)
-    game.cellSize(60)
+    game.height(29)
+    game.width(39)
+    game.cellSize(36) // 1404x1044 / 39x29 = 36px
     
     // Personajes
     
@@ -23,8 +23,12 @@ program FireBoyWaterGirlGame {
 
     // Diamantes
 
-    const diamantesRojos = [new DiamanteRojo(posX = 5, posY = 0), new DiamanteRojo(posX = 8, posY = 0)] // Diamantes rojos
-    const diamantesAzules = [new DiamanteAzul(posX = 4, posY = 0), new DiamanteAzul(posX = 2, posY = 0)] // Diamantes azules
+    const diamantesRojos = [
+        new DiamanteRojo(posX = 5, posY = 1), 
+        new DiamanteRojo(posX = 8, posY = 1)] // Diamantes rojos
+    const diamantesAzules = [
+        new DiamanteAzul(posX = 4, posY = 1), 
+        new DiamanteAzul(posX = 3, posY = 1)] // Diamantes azules
 
     // Agregar todos los diamantes rojos al juego
     diamantesRojos.forEach{diamante => game.addVisual(diamante)}

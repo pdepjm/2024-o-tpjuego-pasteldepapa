@@ -30,7 +30,7 @@ class Diamante {
 
 class DiamanteRojo inherits Diamante {
     override method image() {
-        return "diamante_rojo.png" 
+        return "f_diamond.png" 
     }
 
     override method canCollect(personaje) {
@@ -40,7 +40,7 @@ class DiamanteRojo inherits Diamante {
 
 class DiamanteAzul inherits Diamante {
     override method image() {
-        return "diamante_azul.png" 
+        return "w_diamond.png" 
     }
 
     override method canCollect(personaje) {
@@ -48,6 +48,7 @@ class DiamanteAzul inherits Diamante {
     }
 }
 
+/*
 class DiamanteVerde inherits Diamante {
     override method image() {
         return "diamante_verde.png" 
@@ -57,7 +58,7 @@ class DiamanteVerde inherits Diamante {
         return true // Puede ser recogido por todos
     }
 }
-
+*/
 
 /*
 

@@ -1,5 +1,5 @@
 class Character {
-    const position = new MutablePosition(x=1, y=0)
+    const position = new MutablePosition(x=1, y=1)
     const unidadCaminar = 1
     const unidadSaltar = 5
 
