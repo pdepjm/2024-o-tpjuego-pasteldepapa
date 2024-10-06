@@ -27,7 +27,7 @@ program FireBoyWaterGirlGame {
         new DiamanteRojo(posX = 5, posY = 1), 
         new DiamanteRojo(posX = 8, posY = 1)] // Diamantes rojos
     const diamantesAzules = [
-        new DiamanteAzul(posX = 4, posY = 1), 
+        new DiamanteAzul(posX = 20, posY = 3), 
         new DiamanteAzul(posX = 3, posY = 1)] // Diamantes azules
 
     // Agregar todos los diamantes rojos al juego

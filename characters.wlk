@@ -1,7 +1,6 @@
 class Character {
     const position = new MutablePosition(x=1, y=1)
-    const unidadCaminar = 1
-    const unidadSaltar = 5
+    const unidadMovimiento = 1
 
     method position() = position
 
@@ -10,20 +9,27 @@ class Character {
     }
 
     method moveLeft() {
-        position.goLeft(unidadCaminar)
+        position.goLeft(unidadMovimiento)
     }
 
     method moveRight() {
-        position.goRight(unidadCaminar)
+        position.goRight(unidadMovimiento)
     }
 
     method jump() {
-        position.goUp(unidadSaltar) 
-        game.schedule(500, {self.fall()})
+        position.goUp(unidadMovimiento)
+        game.schedule(100, {position.goUp(unidadMovimiento)})
+        game.schedule(200, {position.goUp(unidadMovimiento)})
+        game.schedule(300, {position.goUp(unidadMovimiento)})
+        self.fall()
+
     }
 
     method fall() {
-        position.goDown(unidadSaltar)
+        game.schedule(800, {position.goDown(unidadMovimiento)})
+        game.schedule(900, {position.goDown(unidadMovimiento)})
+        game.schedule(1000, {position.goDown(unidadMovimiento)})
+        game.schedule(1100, {position.goDown(unidadMovimiento)})
     }
 }
 
@@ -32,7 +38,7 @@ class Fireboy inherits Character {
     method isFireboy() = true
 
     override method image() {
-        return "Fireboy.png" 
+        return "fireboy.png" 
     }
 }
 
@@ -41,6 +47,6 @@ class Watergirl inherits Character {
     method isFireboy() = false
 
     override method image() {
-        return "Watergirl.png" 
+        return "watergirl.png" 
     } 
 }
