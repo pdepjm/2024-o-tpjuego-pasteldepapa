@@ -7,6 +7,8 @@ class Diamante {
     const posX
     const posY
 
+    method esAtravesable() = true
+
     method position() = game.at(posX,posY)
 
     method colision(personaje) {

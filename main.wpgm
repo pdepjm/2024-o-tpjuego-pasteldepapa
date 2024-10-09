@@ -1,34 +1,36 @@
 import wollok.game.*
 import characters.*
 import elements.*
-
+import invisible_objects.*
+import config.*
 
 program FireBoyWaterGirlGame {
     
     // Juego
 
-    game.title("FireBoyWaterGirlGame")
-    game.boardGround("nivel_1.png")
-    game.height(29)
-    game.width(39)
-    game.cellSize(36) // 1404x1044 / 39x29 = 36px
+    settings.init()
+    settings.generarMarco()
     
     // Personajes
     
-    const fireboy = new Fireboy()
-    const watergirl = new Watergirl()
-
+    const fireboy = new Fireboy(positionX = 3, positionY = 1)
+    const watergirl = new Watergirl(positionX = 1, positionY = 1)
+    
     game.addVisual(fireboy)
     game.addVisual(watergirl)
-
+    
     // Diamantes
 
     const diamantesRojos = [
-        new DiamanteRojo(posX = 5, posY = 1), 
-        new DiamanteRojo(posX = 8, posY = 1)] // Diamantes rojos
+        new DiamanteRojo(posX = 28, posY = 3), 
+        new DiamanteRojo(posX = 9, posY = 14), // Diamantes rojos
+        new DiamanteRojo(posX = 10, posY = 25), // Diamantes rojos
+        new DiamanteRojo(posX = 22, posY = 23)] // Diamantes rojos
     const diamantesAzules = [
-        new DiamanteAzul(posX = 20, posY = 3), 
-        new DiamanteAzul(posX = 3, posY = 1)] // Diamantes azules
+        new DiamanteAzul(posX = 24, posY = 13), // Diamantes azules
+        new DiamanteAzul(posX = 20, posY = 3),
+        new DiamanteAzul(posX = 4, posY = 22),
+        new DiamanteAzul(posX = 18, posY = 23)]
 
     // Agregar todos los diamantes rojos al juego
     diamantesRojos.forEach{diamante => game.addVisual(diamante)}
@@ -45,12 +47,11 @@ program FireBoyWaterGirlGame {
     keyboard.left().onPressDo({ fireboy.moveLeft() })
     keyboard.right().onPressDo({ fireboy.moveRight() })
     keyboard.up().onPressDo({ fireboy.jump() })
-    
-    
-    // Manejar Colisiones (por ahora solo esta las de diamantes)
 
+    // Manejar Colisiones ()
+    
     game.onCollideDo(fireboy, {element => element.colision(fireboy)}) 
-    game.onCollideDo(watergirl, {element => element.colision(watergirl)}) 
+    game.onCollideDo(watergirl, {element => element.colision(watergirl)})
 
     game.start()
 }
