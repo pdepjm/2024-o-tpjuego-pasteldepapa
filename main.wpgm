@@ -1,132 +1,14 @@
 import wollok.game.*
-import characters.*
-import elements.*
-import invisible_objects.*
 import config.*
 
 program FireBoyWaterGirlGame {
-  
-    // Juego
 
-    settings.init()
+    settings.init("nivel_1.png", 29, 39, 36)
     settings.generarMarco()
-    
-    // Personajes
-    
-    const fireboy = new Fireboy(positionX = 3, positionY = 1)
-    const watergirl = new Watergirl(positionX = 1, positionY = 1)
-    
-    game.addVisual(fireboy)
-    game.addVisual(watergirl)
-    
-    // Diamantes
-
-    const diamantes = [
-        new DiamanteRojo(posX = 28, posY = 3), 
-        new DiamanteRojo(posX = 9, posY = 14), 
-        new DiamanteRojo(posX = 10, posY = 25), 
-        new DiamanteRojo(posX = 22, posY = 23),
-        new DiamanteAzul(posX = 24, posY = 13), 
-        new DiamanteAzul(posX = 20, posY = 3),
-        new DiamanteAzul(posX = 4, posY = 22),
-        new DiamanteAzul(posX = 18, posY = 23)
-    ]
-    
-    // Agregar todos los diamantes al juego
-    diamantes.forEach {diamante => game.addVisual(diamante)}
-
-    // Movimientos
-
-    keyboard.a().onPressDo({ watergirl.moveLeft()})
-    keyboard.d().onPressDo({ watergirl.moveRight() })
-    keyboard.w().onPressDo({ watergirl.jump() })
-    
-    keyboard.left().onPressDo({ fireboy.moveLeft() })
-    keyboard.right().onPressDo({ fireboy.moveRight() })
-    keyboard.up().onPressDo({ fireboy.jump() })
-
-    // Manejar Colisiones ()
-    
-    game.onCollideDo(fireboy, {element => element.colision(fireboy)}) 
-    game.onCollideDo(watergirl, {element => element.colision(watergirl)})
-
-    game.start()
-
-
-
-/*
-
-//////////////////// ELI, NO TOCAR
-
-    // Inicializar Juego
-
-    settings.init()
-    settings.generarMarco()
-
-    // Empezar con nivel 1
     
     const nivel1 = new Level()
-    nivel1.start("nivel_1.png", 1)
+    nivel1.start(1)
 
+    // FALTA PONER QUE HACER CUANDO TERMINA EL NIVEL, POR EJ PASAR AL 
 
-////////////////////
-
-    class Level {
-        const fireboy = new Fireboy(positionX = 3, positionY = 1)
-        const watergirl = new Watergirl(positionX = 1, positionY = 1)
-        const diamantes = []
-
-        method start(background, nroNivel) {
-            game.clear()
-            game.boardGround(backgroundImage)
-
-            setupCharacters()
-            setupDiamonds(nroNivel) 
-            setupControls()
-            setupCollisions()
-
-            game.start()
-        }
-
-    method setupCharacters() {
-        game.addVisual(fireboy)
-        game.addVisual(watergirl)
-    }
-
-    method setupControls() {
-        // Controles para Watergirl
-        keyboard.a().onPressDo({ watergirl.moveLeft() })
-        keyboard.d().onPressDo({ watergirl.moveRight() })
-        keyboard.w().onPressDo({ watergirl.jump() })
-
-        // Controles para Fireboy
-        keyboard.left().onPressDo({ fireboy.moveLeft() })
-        keyboard.right().onPressDo({ fireboy.moveRight() })
-        keyboard.up().onPressDo({ fireboy.jump() })
-    }
-
-    method setupCollisions(onComplete) {
-        game.onCollideDo(fireboy, { element => colision(fireboy, element) })
-        game.onCollideDo(watergirl, { element => colision(watergirl, element) })
-    }
-
-    method setupDiamonds(nroNivel) {
-
-        if(nroNivel == 1)
-            const diamantes = [
-                new DiamanteRojo(posX = 28, posY = 3), 
-                new DiamanteRojo(posX = 9, posY = 14),
-                new DiamanteAzul(posX = 24, posY = 13)
-        ]
-        else if(nroNivel == 2)
-            // conf diamantes nivel 2
-        
-        diamantes.forEach { diamante => 
-            game.addVisual(diamante) 
-        }
-    } 
-}
-
-    
-    */
 }

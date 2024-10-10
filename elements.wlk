@@ -59,6 +59,39 @@ class DiamanteVerde inherits Diamante {
 }
 */
 
+
+
+// ------------------- Puerta
+
+class Puerta {
+    const posX
+    const posY
+    const image
+    const tipo
+    
+    method position() = game.at(posX, posY)
+
+    method esAtravesable() = true  
+
+    method image() = image
+
+    method tipo() = tipo
+
+    method colision() {
+
+        /*
+        game.showMessage("¡Nivel completado! Pasando al siguiente nivel...")
+        game.wait(2)  // Esperar 2 segundos antes de pasar al siguiente nivel
+
+        */
+    }
+}
+
+
+
+
+
+
 /*
 
 // ------------------ Obstaculos 

@@ -64,7 +64,7 @@ class Fireboy inherits Character {
     override method tipo() = fuego
 
     override method image() {
-        return "fireboy.png" 
+        return "Fireboy.png" 
     }
 }
 
@@ -73,7 +73,7 @@ class Watergirl inherits Character {
     override method tipo() = agua
 
     override method image() {
-        return "watergirl.png" 
+        return "Watergirl.png" 
     } 
 }
 
