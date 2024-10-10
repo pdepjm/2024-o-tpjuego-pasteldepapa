@@ -7,6 +7,8 @@ class Diamante {
     const posX
     const posY
 
+    method tipo() = "" // redefinido en las subclases
+
     method esAtravesable() = true
 
     method position() = game.at(posX,posY)
@@ -20,10 +22,7 @@ class Diamante {
         }
     }
 
-    method canCollect(personaje) {
-        // Sobrescrito en las subclases
-        return false
-    }
+    method canCollect(personaje) = personaje.tipo() == self.tipo()
 
     method image() {
         return "" // Sobrescrito en las subclase
@@ -31,23 +30,21 @@ class Diamante {
 }
 
 class DiamanteRojo inherits Diamante {
+    
+    override method tipo() = fuego
     override method image() {
         return "f_diamond.png" 
     }
 
-    override method canCollect(personaje) {
-        return personaje.isFireboy() // Solo puede ser recogido por Fireboy
-    }
 }
 
 class DiamanteAzul inherits Diamante {
+
+    override method tipo() = agua
     override method image() {
         return "w_diamond.png" 
     }
 
-    override method canCollect(personaje) {
-        return !personaje.isFireboy() // Solo puede ser recogido por Watergirl
-    }
 }
 
 /*

@@ -1,6 +1,5 @@
 import invisible_objects.*
 object settings {
-
     method init (){
     game.title("FireBoyWaterGirlGame")
     game.boardGround("nivel_1.png")
@@ -16,3 +15,5 @@ object settings {
     (0..28).forEach{ y => game.addVisual(new Border(posX = 38, posY = y))}
     }
 }
+
+
