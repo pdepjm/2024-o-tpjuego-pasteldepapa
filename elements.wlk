@@ -29,6 +29,7 @@ class Diamante {
         
         if (self.canCollect(personaje)) { // Personaje puede recogerlo y todavia no fue recogido 
             game.removeVisual(self) 
+            game.sound("diamante.mp3").play()
             // efecto visual, sonido, palabritas
             
         }

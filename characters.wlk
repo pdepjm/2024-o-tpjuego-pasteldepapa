@@ -80,6 +80,9 @@ class Fireboy inherits Character {
     override method image() {
         return "Fireboy.png" 
     }
+    var puntos = 0;
+
+    method collect () {puntos += 100}
 }
 
 class Watergirl inherits Character {
@@ -89,6 +92,9 @@ class Watergirl inherits Character {
     override method image() {
         return "Watergirl.png" 
     } 
+    var puntos = 0;
+
+    method collect () {puntos += 100}
 }
 
 object fuego {}
