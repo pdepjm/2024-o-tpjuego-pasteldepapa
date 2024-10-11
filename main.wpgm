@@ -5,6 +5,9 @@ program FireBoyWaterGirlGame {
 
     settings.init("nivel_1.png", 29, 39, 36)
     settings.generarMarco()
+    const fondo = game.sound("fondo.mp3")
+    fondo.shouldLoop(true)
+    game.schedule(500, { fondo.play() fondo.volume(0.3)} )
     
     // INTRO
 

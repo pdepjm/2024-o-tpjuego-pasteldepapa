@@ -30,6 +30,8 @@ class Diamante {
         if (self.canCollect(personaje)) { // Personaje puede recogerlo y todavia no fue recogido 
             game.removeVisual(self) 
             game.sound("diamante.mp3").play()
+            game.addVisual(puntajes) // Agrega el objeto puntajes al juego para que se muestre en pantalla
+            game.schedule(5000,{game.removeVisual(puntajes)})
             // efecto visual, sonido, palabritas
             
         }
@@ -40,6 +42,12 @@ class Diamante {
     method image() {
         return "" // Sobrescrito en las subclase
     }
+}
+
+object puntajes{
+    method position() = game.center()
+    method image() = "puntajes.jpeg"
+    method text() = "hola"
 }
 
 class DiamanteRojo inherits Diamante {
