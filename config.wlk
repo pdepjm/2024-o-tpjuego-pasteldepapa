@@ -21,8 +21,8 @@ object settings {
 class Level {
 
     // ---------------- REFERENCIAS
-    const fireboy = new Fireboy(positionX = 3, positionY = 1) //Depende del nivel
-    const watergirl = new Watergirl(positionX = 1, positionY = 1) //Depende del nivel
+    const fireboy = new Fireboy(positionX = 16, positionY = 18, oldPositionX = 16) //Depende del nivel
+    const watergirl = new Watergirl(positionX = 1, positionY = 1, oldPositionX = 1) //Depende del nivel
     const puertaFireboy = new Puerta(posX = 30, posY = 22, image = "f_door.png", tipo = fuego) //Depende del nivel
     const puertaWatergirl = new Puerta(posX = 34, posY = 22, image = "w_door.png", tipo = agua) //Depende del nivel
     
@@ -30,17 +30,20 @@ class Level {
     // ---------------- JUEGO PRINCIPAL
 
     method start() {
-        self.setupCharacters()
-        self.setupFloors()
+        self.setupElements()
         self.setupControls()
         self.setupCollisions()
         self.setupDoors()
         self.setupDiamonds()
         self.gravedad()
-
+        self.setupCharacters()
+        self.setupFloors()
+        self.generarCharcos()
         game.start()
     }
     
+    method setupElements () {}
+    method generarCharcos() {}
     method gravedad(){
         game.onTick(100, "Gravedad", {fireboy.moveDown()})
         game.onTick(100, "Gravedad", {watergirl.moveDown()})
@@ -51,6 +54,7 @@ class Level {
         game.addVisual(watergirl)
     }
 
+ 
     method setupFloors(){}       
 
     method setupControls() {
@@ -126,7 +130,77 @@ object level1 inherits Level {
         (11..37).forEach    { x => game.addVisual(new Border(posX = x, posY = 22 ))}
         (10..13).forEach    { x => game.addVisual(new Border(posX = x, posY = 23 ))}
         (27..29).forEach    { x => game.addVisual(new Border(posX = x, posY = 23 ))}
-        (9..11).forEach      { x => game.addVisual(new Border(posX = x, posY = 24 ))}
+        (9..11).forEach     { x => game.addVisual(new Border(posX = x, posY = 24 ))}
     }
 
+    override method setupElements() {
+        game.addVisual(new Caja(positionX = 13, positionY = 18))
+               
+    }
+    
+    override method generarCharcos() {
+        (18..22).forEach    { x => game.addVisual(new Charco(tipo = agua, posX = x, posY = 0 ))}
+        (26..30).forEach    { x => game.addVisual(new Charco(tipo = fuego, posX = x, posY = 0 ))}
+        (24..28).forEach    { x => game.addVisual(new Charco(tipo = null, posX = x, posY = 6 ))}
+    } 
 }
+
+/*
+
+class Level {
+    // ---------------- REFERENCIAS
+    const fireboy = new Fireboy(positionX = 3, positionY = 1)
+    const watergirl = new Watergirl(positionX = 1, positionY = 1)
+    const puertaFireboy = new Puerta(posX = 30, posY = 22, image = "f_door.png", tipo = fuego) 
+    const puertaWatergirl = new Puerta(posX = 34, posY = 22, image = "w_door.png", tipo = agua)  
+    const diamantes = []
+    // ---------------- JUEGO PRINCIPAL
+    method start(nroNivel) {
+        self.setupCharacters()
+        self.setupControls()
+        self.setupCollisions()
+        self.setupDoors()
+        self.setupDiamonds(nroNivel) 
+        game.start()
+    }
+    method setupCharacters() {
+        game.addVisual(fireboy)
+        game.addVisual(watergirl)
+    }
+    method setupControls() {
+        // Controles para Watergirl
+        keyboard.a().onPressDo({ watergirl.moveLeft() })
+        keyboard.d().onPressDo({ watergirl.moveRight() })
+        keyboard.w().onPressDo({ watergirl.jump() })
+        // Controles para Fireboy
+        keyboard.left().onPressDo({ fireboy.moveLeft() })
+        keyboard.right().onPressDo({ fireboy.moveRight() })
+        keyboard.up().onPressDo({ fireboy.jump() })
+    }
+    method setupCollisions() {
+        game.onCollideDo(fireboy, {element => element.colision(fireboy)}) 
+        game.onCollideDo(watergirl, {element => element.colision(watergirl)})
+    }
+    method setupDoors() {
+        game.addVisual(puertaFireboy) 
+        game.addVisual(puertaWatergirl) 
+    }
+    method setupDiamonds(nroNivel) {
+        diamantes.clear()
+        if (nroNivel == 1) {
+            diamantes.add(new DiamanteRojo(posX = 28, posY = 3))
+            diamantes.add(new DiamanteRojo(posX = 9, posY = 14))
+            diamantes.add(new DiamanteRojo(posX = 10, posY = 25))
+            diamantes.add(new DiamanteRojo(posX = 22, posY = 23))
+            diamantes.add(new DiamanteAzul(posX = 24, posY = 13))
+            diamantes.add(new DiamanteAzul(posX = 20, posY = 3))
+            diamantes.add(new DiamanteAzul(posX = 4, posY = 22))
+            diamantes.add(new DiamanteAzul(posX = 18, posY = 23))
+        } else if (nroNivel == 2) {
+            diamantes.add(new DiamanteRojo(posX = 28, posY = 3))
+            // agregar mas, lo puse solo para que no saltara error
+        }
+        diamantes.forEach { diamante => game.addVisual(diamante) }
+    }
+}
+*/

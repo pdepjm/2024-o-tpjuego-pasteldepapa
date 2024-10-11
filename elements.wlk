@@ -4,18 +4,12 @@ import characters.*
 
 class Border {
     
-    var posX
-    var posY
+    const posX
+    const posY
 
     method esAtravesable() = false 
 
-    method position(positionX, positionY) {
-        posX = positionX
-        posY = positionY
-    }
-
-    var property position = new MutablePosition (x=posX, y=posY)
-
+    method position() = game.at(posX,posY)
 }
 
 // ------------------ Diamantes
@@ -105,10 +99,46 @@ class Puerta {
     }
 }
 
+//Caja
 
+class Caja {
 
+    const positionX
+    const positionY
+  
+    var property position = new MutablePosition (x=positionX, y=positionY)
 
+    const unidadMovimiento = 1
 
+    method image() = "cube.png"
+    
+    method esAtravesable () = false
+
+    method esColisionable() = true
+
+    method colision (personaje){
+        if(personaje.oldPositionX() > self.position().x()){
+            position = self.position().left(1)
+        }
+        if (personaje.oldPositionX() <= self.position().x()) {
+            position = self.position().right(1)
+        }
+    }
+
+    method moveLeft() {
+        const nuevaPosicion = position.left(unidadMovimiento)   
+        if (self.puedeAtravesar(nuevaPosicion))
+          position = position.goLeft(unidadMovimiento)
+    }
+
+    method moveRight() {
+        const nuevaPosicion = position.right(unidadMovimiento)
+        if (self.puedeAtravesar(nuevaPosicion))
+            position.goRight(unidadMovimiento)
+    }
+
+    method puedeAtravesar(nuevaPosicion) =  game.getObjectsIn(nuevaPosicion).all{obj => obj.esAtravesable()}
+}
 
 /*
 

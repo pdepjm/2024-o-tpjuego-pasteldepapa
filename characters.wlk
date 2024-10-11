@@ -4,8 +4,9 @@ class Character {
 
     const positionX
     const positionY
-  
+
     var property position = new MutablePosition (x=positionX, y=positionY)
+    var property oldPositionX = new MutablePosition (x=positionX, y=positionY)
 
     const unidadMovimiento = 1
 
@@ -24,14 +25,16 @@ class Character {
     // ------------ Movimientos
 
     method moveLeft() {
+        oldPositionX = self.position().x()
         const nuevaPosicion = position.left(unidadMovimiento)   
-        if (self.puedeAtravesar(nuevaPosicion))
+        if (self.puedeAtravesar(nuevaPosicion) || self.puedeColisionar(nuevaPosicion))
             position.goLeft(unidadMovimiento)
     }
 
     method moveRight() {
+        oldPositionX = self.position().x()
         const nuevaPosicion = position.right(unidadMovimiento)
-        if (self.puedeAtravesar(nuevaPosicion))
+        if (self.puedeAtravesar(nuevaPosicion) || self.puedeColisionar(nuevaPosicion))
             position.goRight(unidadMovimiento)
     }
 
@@ -56,6 +59,18 @@ class Character {
 
     method puedeAtravesar(nuevaPosicion) =  game.getObjectsIn(nuevaPosicion).all{obj => obj.esAtravesable()}
 
+
+    method puedeColisionar(nuevaPosicion) = game.getObjectsIn(nuevaPosicion).all{obj => obj.esColisionable()}
+
+    method die (){
+        game.removeVisual(self.image())
+        // SONIDO MUERTE
+        // IMAGEN GAME_OVER
+        // RESTART LEVEL1
+    }
+
+    
+
 }
 
 class Fireboy inherits Character {
@@ -76,7 +91,23 @@ class Watergirl inherits Character {
     } 
 }
 
-
 object fuego {}
 
 object agua {}
+
+class Charco {
+    
+    const tipo
+    const posX
+    const posY
+
+    method position() = game.at(posX, posY)
+
+    method esAtravesable () = false
+    
+    method colision(personaje){
+        if(tipo.personaje() != tipo){
+            personaje.die()
+        }
+    }
+}
