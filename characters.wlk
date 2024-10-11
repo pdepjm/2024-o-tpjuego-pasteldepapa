@@ -46,13 +46,12 @@ class Character {
         if (self.puedeAtravesar(nuevaPosicion)){
             position.goDown(unidadMovimiento)
         }
-        else 
-            game.removeTickEvent("Fall")
     }
 
     method jump() {
-        [100, 200, 300].forEach { num => game.schedule(num, { self.moveUp() }) }        
-        game.schedule(800, {game.onTick(100, "Fall", {self.moveDown()})})
+        game.removeTickEvent("Gravedad")
+        [100, 200, 300, 400].forEach { num => game.schedule(num, { self.moveUp() }) }        
+        game.schedule(900, {game.onTick(100, "Gravedad", {self.moveDown()} )})
     }
 
     method puedeAtravesar(nuevaPosicion) =  game.getObjectsIn(nuevaPosicion).all{obj => obj.esAtravesable()}

@@ -6,8 +6,9 @@ program FireBoyWaterGirlGame {
     settings.init("nivel_1.png", 29, 39, 36)
     settings.generarMarco()
     
-    const nivel1 = new Level()
-    nivel1.start(1)
+    // INTRO
+
+    level1.start() 
 
     // FALTA PONER QUE HACER CUANDO TERMINA EL NIVEL, POR EJ PASAR AL 
 
