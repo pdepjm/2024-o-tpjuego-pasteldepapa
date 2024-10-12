@@ -83,12 +83,6 @@ class Caja {
     method esColisionable() = true
 
     method colision (personaje){
-        console.println("Anterior X (CAJA): " + personaje.oldPosition().x())
-        console.println("Actual X (CAJA): " + self.position().x())
-        console.println("Anterior Y (CAJA): " + personaje.oldPosition().y())
-        console.println("Actual Y (CAJA): " + self.position().y())
-        //if (personaje.oldPosition().y() > self.position().y()) { return }
-        
         if(personaje.oldPosition().x() > self.position().x() && position.left(1).x().between(6, 18)){
             position = self.position().left(1)
         }

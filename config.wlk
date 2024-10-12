@@ -4,7 +4,7 @@ import elements.*
 object settings {
 
     // Referencias
-    const niveles = [level1, level2, level3, level4] 
+    const niveles = [level1] 
     var nivelActual = 0 // Índice del nivel actual
 
     // Métodos
@@ -15,6 +15,7 @@ object settings {
         game.width(width)
         game.cellSize(cellSize) // 1404x1044 // 39x29 = 36px
     }
+    
     method checkLevelCompletion(level) {
         game.schedule(100, {
             if(level.isLevelComplete()) { 
@@ -26,6 +27,7 @@ object settings {
             }
         })
     }
+
     method pasarSgteNivel(){
         nivelActual += 1
         if (nivelActual < niveles.size()) { // Avanza al siguiente nivel
@@ -50,19 +52,11 @@ object settings {
 
 class Level {
 
-    // ---------------- REFERENCIAS
-    
-    const fireboy = new Fireboy(position = new MutablePosition (x=16, y=18), oldPosition = new MutablePosition (x=16, y=18)) //Depende del nivel
-    const watergirl = new Watergirl(position = new MutablePosition (x=3, y=1), oldPosition = new MutablePosition (x=3, y=1)) //Depende del nivel
-
     // ---------------- JUEGO PRINCIPAL
 
     method start() {
         self.setupElements()  // Bloques, palancas, plataformas, etc.
-        self.setupControls() // Movimientos de Personajes
-        self.setupCollisions()  
         self.setupDiamonds()
-        self.gravedad()  // Para el salto
         self.setupCharacters()
         self.generarCharcos()
         self.setupBorders()
@@ -73,7 +67,6 @@ class Level {
     // Marco de juego
 
     const positions = [] // Guardar las coordenadas que no puede atravesar
-
     
     method setupBorders(){
         (0..38).forEach     { x => positions.add([x, 0])    }
@@ -82,53 +75,36 @@ class Level {
         (0..28).forEach     { y => positions.add([38, y])   }
     }
 
-    method setupPositions(){}    
-
-    // Personajes
-    method setupCharacters() {
-        game.addVisual(fireboy)
-        game.addVisual(watergirl)
-    } 
-    method gravedad(){
-        game.onTick(100, "Gravedad", {fireboy.moveDown()})
-        game.onTick(100, "Gravedad", {watergirl.moveDown()})
-    }
-    method setupControls() {
-        // Controles para Watergirl
-        keyboard.a().onPressDo({ watergirl.moveLeft() })
-        keyboard.d().onPressDo({ watergirl.moveRight() })
-        keyboard.w().onPressDo({ watergirl.jump() })
-
-        // Controles para Fireboy
-        keyboard.left().onPressDo({ fireboy.moveLeft() })
-        keyboard.right().onPressDo({ fireboy.moveRight() })
-        keyboard.up().onPressDo({ fireboy.jump() })
-    }
-    method setupCollisions() {
-        game.onCollideDo(fireboy, {element => element.colision(fireboy)}) 
-        game.onCollideDo(watergirl, {element => element.colision(watergirl)})
-    }
+    method setupPositions(){}
 
     // Métodos Sobrescritos en los Niveles
     method setupDiamonds() {}
     method setupElements () {}
     method generarCharcos() {}
     method isLevelComplete() {}
-
-   
-
-    // Mecanica del Juego 
-
+    method setupCharacters() {}
 }
 
 
 object level1 inherits Level {
     
     const diamantes = []
+    const fireboy = new Fireboy(position = new MutablePosition (x=1, y=1), oldPosition = new MutablePosition (x=1, y=1)) //Depende del nivel
+    const watergirl = new Watergirl(position = new MutablePosition (x=3, y=1), oldPosition = new MutablePosition (x=3, y=1)) //Depende del nivel
     const puertaFireboy = new Puerta(posX = 30, posY = 22)
     const puertaWatergirl = new Puerta(posX = 34, posY = 22)
     
-    method scharacters
+    override method setupCharacters() {
+        self.setupMechanics(fireboy)
+        self.setupMechanics(watergirl)
+    }
+
+    method setupMechanics(personaje){
+        personaje.gravedad()
+        personaje.setupControls()
+        personaje.setupCollisions()
+        game.addVisual(personaje)
+    }
 
     override method setupDiamonds() {
         diamantes.add(new DiamanteRojo(posX = 28, posY = 3))
@@ -194,10 +170,6 @@ object level1 inherits Level {
     
     method posicionIgual(e1, e2) = e1.position() == e2.position()
 }
-
-object level2 inherits Level {}
-object level3 inherits Level {}
-object level4 inherits Level {}
 
 object puntajes{
     method position() = game.center()

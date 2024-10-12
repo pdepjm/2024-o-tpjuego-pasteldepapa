@@ -94,6 +94,17 @@ class Character {
         game.schedule(5000,{game.removeVisual(muerte)})
         // RESTART LEVEL1
     }
+    
+    
+    method gravedad(){
+        game.onTick(100, "Gravedad", {self.moveDown()})
+    }
+
+    method setupControls() {}
+    
+    method setupCollisions() {
+        game.onCollideDo(self, {element => element.colision(self)}) 
+    }
 }
 
 class Fireboy inherits Character {
@@ -105,6 +116,13 @@ class Fireboy inherits Character {
     }
 
     method puntaje() = puntos
+
+    override method setupControls(){
+        // Controles para Fireboy
+        keyboard.left().onPressDo   ({ self.moveLeft() })
+        keyboard.right().onPressDo  ({ self.moveRight() })
+        keyboard.up().onPressDo     ({ self.jump() })
+    }
 }
 
 class Watergirl inherits Character {
@@ -113,6 +131,13 @@ class Watergirl inherits Character {
 
     override method image() {
         return "Watergirl.png" 
+    }
+
+    override method setupControls(){
+        // Controles para Fireboy
+        keyboard.a().onPressDo  ({ self.moveLeft() })
+        keyboard.d().onPressDo  ({ self.moveRight() })
+        keyboard.w().onPressDo  ({ self.jump() })
     }
 
     method puntaje() = puntos 
