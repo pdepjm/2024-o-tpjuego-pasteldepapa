@@ -1,15 +1,22 @@
+import config.*
+
 class Character {
     
     // Referencias
 
-    const positionX
-    const positionY
-
-    var property position = new MutablePosition (x=positionX, y=positionY)
-    var property oldPositionX = new MutablePosition (x=positionX, y=positionY)
+    const property position
+    var property oldPosition
 
     const unidadMovimiento = 1
 
+    var positions = []
+    
+    var property enPuerta = false
+
+    var puntos = 0
+    method position(invalidPositions) {
+        positions = invalidPositions
+    }
 
     // Métodos Sobrescritos en las Subclases
 
@@ -20,34 +27,47 @@ class Character {
 
     method colision(personaje) {}  // Para que no genere error si colisionan entre personajes
 
-    method esAtravesable () = true // Para los bordes y pisos
+    method esColisionable () = true // Para los bordes y pisos
     
     // ------------ Movimientos
 
+    method esAtravesable () = true
+    
     method moveLeft() {
-        oldPositionX = self.position().x()
-        const nuevaPosicion = position.left(unidadMovimiento)   
-        if (self.puedeAtravesar(nuevaPosicion) || self.puedeColisionar(nuevaPosicion))
+        const nuevaPosicion = [position.left(unidadMovimiento).x(), position.y()]   
+        
+        if(!positions.contains(nuevaPosicion) && self.puedeColisionar(nuevaPosicion))
             position.goLeft(unidadMovimiento)
+            oldPosition = new MutablePosition(x = self.position().x() + 1, y = self.position().y())
     }
 
     method moveRight() {
-        oldPositionX = self.position().x()
-        const nuevaPosicion = position.right(unidadMovimiento)
-        if (self.puedeAtravesar(nuevaPosicion) || self.puedeColisionar(nuevaPosicion))
+        const nuevaPosicion = [position.right(unidadMovimiento).x(), position.y()]
+
+        if (!positions.contains(nuevaPosicion) && self.puedeColisionar(nuevaPosicion))
             position.goRight(unidadMovimiento)
+            oldPosition = new MutablePosition(x = self.position().x() - unidadMovimiento, y = self.position().y())
     }
 
     method moveUp() {
-        const nuevaPosicion = position.up(unidadMovimiento)
-        if (self.puedeAtravesar(nuevaPosicion))
+        const nuevaPosicion = [position.x(), position.up(unidadMovimiento).y()]
+        const posicionAtravesable = position.up(unidadMovimiento)
+        
+        if(!positions.contains(nuevaPosicion) && self.puedeColisionar(nuevaPosicion) && self.puedeAtravesar(nuevaPosicion))
             position.goUp(unidadMovimiento)
+            oldPosition = new MutablePosition(x = self.position().x(), y = self.position().y() - unidadMovimiento)
     }
 
     method moveDown() {
-        const nuevaPosicion = position.down(unidadMovimiento)
-        if (self.puedeAtravesar(nuevaPosicion)){
+        const nuevaPosicion = [position.x(), position.down(unidadMovimiento).y()]
+        const posicionAtravesable = position.down(unidadMovimiento)
+
+        if(!positions.contains(nuevaPosicion) && self.puedeColisionar(nuevaPosicion) && self.puedeAtravesar(posicionAtravesable)){
+            const atravesar = self.puedeAtravesar(nuevaPosicion)
+            console.println(atravesar)
+            console.println(game.getObjectsIn(nuevaPosicion))
             position.goDown(unidadMovimiento)
+            oldPosition = new MutablePosition(x = self.position().x(), y = self.position().y() + unidadMovimiento)
         }
     }
 
@@ -57,20 +77,23 @@ class Character {
         game.schedule(900, {game.onTick(100, "Gravedad", {self.moveDown()} )})
     }
 
-    method puedeAtravesar(nuevaPosicion) =  game.getObjectsIn(nuevaPosicion).all{obj => obj.esAtravesable()}
 
 
     method puedeColisionar(nuevaPosicion) = game.getObjectsIn(nuevaPosicion).all{obj => obj.esColisionable()}
 
+    method puedeAtravesar(nuevaPosicion) = game.getObjectsIn(nuevaPosicion).all{obj => obj.esAtravesable()}
+
+    // Puntos y Mecanica del Juego
+
+    method collect () {puntos += 100}
     method die (){
         game.removeVisual(self.image())
-        // SONIDO MUERTE
-        // IMAGEN GAME_OVER
+        game.sound("muerte.mp3").play()
+        game.addVisual(muerte)
+        game.sound("sonido_de_fin_de_juego.mp3").play()
+        game.schedule(5000,{game.removeVisual(muerte)})
         // RESTART LEVEL1
     }
-
-    
-
 }
 
 class Fireboy inherits Character {
@@ -80,9 +103,8 @@ class Fireboy inherits Character {
     override method image() {
         return "Fireboy.png" 
     }
-    var puntos = 0;
 
-    method collect () {puntos += 100}
+    method puntaje() = puntos
 }
 
 class Watergirl inherits Character {
@@ -91,29 +113,11 @@ class Watergirl inherits Character {
 
     override method image() {
         return "Watergirl.png" 
-    } 
-    var puntos = 0;
+    }
 
-    method collect () {puntos += 100}
+    method puntaje() = puntos 
 }
 
 object fuego {}
 
 object agua {}
-
-class Charco {
-    
-    const tipo
-    const posX
-    const posY
-
-    method position() = game.at(posX, posY)
-
-    method esAtravesable () = false
-    
-    method colision(personaje){
-        if(tipo.personaje() != tipo){
-            personaje.die()
-        }
-    }
-}

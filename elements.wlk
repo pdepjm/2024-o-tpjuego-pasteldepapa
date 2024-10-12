@@ -1,16 +1,6 @@
 import characters.*
+import config.*
 
-//Bordes (Objeto Invisible)
-
-class Border {
-    
-    const posX
-    const posY
-
-    method esAtravesable() = false 
-
-    method position() = game.at(posX,posY)
-}
 
 // ------------------ Diamantes
 
@@ -30,8 +20,6 @@ class Diamante {
         if (self.canCollect(personaje)) { // Personaje puede recogerlo y todavia no fue recogido 
             game.removeVisual(self) 
             game.sound("diamante.mp3").play()
-            game.addVisual(puntajes) // Agrega el objeto puntajes al juego para que se muestre en pantalla
-            game.schedule(5000,{game.removeVisual(puntajes)})
             // efecto visual, sonido, palabritas
             
         }
@@ -42,12 +30,6 @@ class Diamante {
     method image() {
         return "" // Sobrescrito en las subclase
     }
-}
-
-object puntajes{
-    method position() = game.center()
-    method image() = "puntajes.jpeg"
-    method text() = "hola"
 }
 
 class DiamanteRojo inherits Diamante {
@@ -68,116 +50,137 @@ class DiamanteAzul inherits Diamante {
 
 }
 
-/*
-class DiamanteVerde inherits Diamante {
+class DiamanteGris inherits Diamante {
     override method image() {
-        return "diamante_verde.png" 
+        return "g_diamond.png" 
     }
 
     override method canCollect(character) {
         return true // Puede ser recogido por todos
     }
 }
-*/
 
-
-
-// ------------------- Puerta
+// ------------------ Puerta
 
 class Puerta {
     const posX
     const posY
-    const image
-    const tipo
-    
+
     method position() = game.at(posX, posY)
+    method esAtravesable () = true
+    method esColisionable() = false //??
 
-    method esAtravesable() = true  
-
-    method image() = image
-
-    method tipo() = tipo
-
-    method colision() {
-
-        /*
-        game.showMessage("¡Nivel completado! Pasando al siguiente nivel...")
-        game.wait(2)  // Esperar 2 segundos antes de pasar al siguiente nivel
-
-        */
-    }
 }
 
-//Caja
+// ------------------ Caja
 
 class Caja {
-
-    const positionX
-    const positionY
-  
-    var property position = new MutablePosition (x=positionX, y=positionY)
-
-    const unidadMovimiento = 1
+    var property position
 
     method image() = "cube.png"
-    
-    method esAtravesable () = false
 
+    method esAtravesable() = false
     method esColisionable() = true
 
     method colision (personaje){
-        if(personaje.oldPositionX() > self.position().x()){
+        console.println("Anterior X (CAJA): " + personaje.oldPosition().x())
+        console.println("Actual X (CAJA): " + self.position().x())
+        console.println("Anterior Y (CAJA): " + personaje.oldPosition().y())
+        console.println("Actual Y (CAJA): " + self.position().y())
+        //if (personaje.oldPosition().y() > self.position().y()) { return }
+        
+        if(personaje.oldPosition().x() > self.position().x() && position.left(1).x().between(6, 18)){
             position = self.position().left(1)
         }
-        if (personaje.oldPositionX() <= self.position().x()) {
+        else if (personaje.oldPosition().x() < self.position().x() && position.right(1).x().between(6, 18)) {
             position = self.position().right(1)
         }
     }
-
-    method moveLeft() {
-        const nuevaPosicion = position.left(unidadMovimiento)   
-        if (self.puedeAtravesar(nuevaPosicion))
-          position = position.goLeft(unidadMovimiento)
-    }
-
-    method moveRight() {
-        const nuevaPosicion = position.right(unidadMovimiento)
-        if (self.puedeAtravesar(nuevaPosicion))
-            position.goRight(unidadMovimiento)
-    }
-
-    method puedeAtravesar(nuevaPosicion) =  game.getObjectsIn(nuevaPosicion).all{obj => obj.esAtravesable()}
 }
 
-/*
+// ------------------ Charco
 
-// ------------------ Obstaculos 
+class Charco {
+    
+    const tipo
+    const posX
+    const posY
 
-class Obstacle {
-    var isFire = false
-    var isWater = false
-    var positionX
-    var positionY
+    method position() = game.at(posX, posY)
 
-    constructor(x, y) {
-        positionX = x
-        positionY = y
-    }
-
-    method interact(character) {
-        if (isFire && character.canTouchFire) {
-            // El personaje puede atravesar el obstáculo de fuego
-            return true; // Permite el paso
-        } else if (isWater && character.canTouchWater) {
-            // El personaje puede atravesar el obstáculo de agua
-            return true; // Permite el paso
-        } else {
-            // El personaje pierde o sufre un efecto negativo
-            character.position.goDown(2); // Ejemplo: hacer que el personaje caiga
-            return false; // No permite el paso
+    method esAtravesable () = false
+    
+    method colision(personaje){
+        if(tipo.personaje() != tipo){
+            personaje.die()
         }
     }
 }
+
+// ------------------ Boton para Plataforma
+
+/*
+class Boton {
+
+    const posX
+    const posY
+    const plataforma
+
+    method position() = game.at(posX, posY)
+
+    method colision(personaje){
+        while(self.posicionIgual(personaje) and self.hastaMaxAltura()) {
+            plataforma.goUp(1)
+        }
+        
+    }
+
+    method posicionIgual(x) = x.position() == self.position()
+
+    method hastaMaxAltura() = plataforma.position() != plataforma.maxAltura()
+
+}
+
+*/
+
+// ------------------ Plataforma Movible
+
+/*
+
+class PlataformaMovible {
+
+    const posX
+    const posY
+
+    method position() = game.at(posX, posY)
+
+    method colision(personaje) {}
+
+    method esAtravesable() = false
+
+
+
+  
+    position.goUp(unidadMovimiento)
+    position.goDown(unidadMovimiento)
+
+    game.schedule(1000, {self.fall()})
+    game.schedule(500, {self.fall()})
+
+    method jump() {
+        game.removeTickEvent("Gravedad")
+        [100, 200, 300, 400].forEach { num => game.schedule(num, { self.moveUp() }) }        
+        game.schedule(400, {game.onTick(100, "Gravedad", {self.moveDown()} )})
+    }
+
+
+
+}
+
+
+*/
+
+/*
 
 // ------------------ Plataformas 
 
