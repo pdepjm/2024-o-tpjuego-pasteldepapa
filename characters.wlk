@@ -23,8 +23,6 @@ class Character {
     method image() = "" 
     method tipo() = "" 
 
-    // -------------------- Métodos
-
     method colision(personaje) {}  // Para que no genere error si colisionan entre personajes
 
     method esColisionable () = true // Para los bordes y pisos
@@ -62,13 +60,14 @@ class Character {
         const nuevaPosicion = [position.x(), position.down(unidadMovimiento).y()]
         const posicionAtravesable = position.down(unidadMovimiento)
 
-        if(!positions.contains(nuevaPosicion) && self.puedeColisionar(nuevaPosicion) && self.puedeAtravesar(posicionAtravesable)){
-            const atravesar = self.puedeAtravesar(nuevaPosicion)
-            console.println(atravesar)
-            console.println(game.getObjectsIn(nuevaPosicion))
+        if (self.esZonaProhibida(nuevaPosicion)){
+            self.die()
+        }
+        else if(!positions.contains(nuevaPosicion) && self.puedeColisionar(posicionAtravesable) && self.puedeAtravesar(posicionAtravesable)){
             position.goDown(unidadMovimiento)
             oldPosition = new MutablePosition(x = self.position().x(), y = self.position().y() + unidadMovimiento)
         }
+
     }
 
     method jump() {
@@ -76,25 +75,6 @@ class Character {
         [100, 200, 300, 400].forEach { num => game.schedule(num, { self.moveUp() }) }        
         game.schedule(900, {game.onTick(100, "Gravedad", {self.moveDown()} )})
     }
-
-
-
-    method puedeColisionar(nuevaPosicion) = game.getObjectsIn(nuevaPosicion).all{obj => obj.esColisionable()}
-
-    method puedeAtravesar(nuevaPosicion) = game.getObjectsIn(nuevaPosicion).all{obj => obj.esAtravesable()}
-
-    // Puntos y Mecanica del Juego
-
-    method collect () {puntos += 100}
-    method die (){
-        game.removeVisual(self.image())
-        game.sound("muerte.mp3").play()
-        game.addVisual(muerte)
-        game.sound("sonido_de_fin_de_juego.mp3").play()
-        game.schedule(5000,{game.removeVisual(muerte)})
-        // RESTART LEVEL1
-    }
-    
     
     method gravedad(){
         game.onTick(100, "Gravedad", {self.moveDown()})
@@ -105,6 +85,35 @@ class Character {
     method setupCollisions() {
         game.onCollideDo(self, {element => element.colision(self)}) 
     }
+    
+    //Definimos zonas de charcos
+
+    var zonasProhibidas = []
+    
+    method zonasProhibidas (charcos){
+        zonasProhibidas = charcos
+    }
+
+    method esZonaProhibida (posicion) = zonasProhibidas.contains(posicion)
+
+    method puedeColisionar(nuevaPosicion) = game.getObjectsIn(nuevaPosicion).all{obj => obj.esColisionable()}
+
+    method puedeAtravesar(nuevaPosicion) = game.getObjectsIn(nuevaPosicion).all{obj => obj.esAtravesable()}
+
+    // Puntos y Mecanica del Juego
+
+    method collect () {puntos += 100}
+    
+    method die (){
+        game.removeVisual(self.image())
+        game.sound("muerte.mp3").play()
+        game.addVisual(muerte)
+        game.sound("sonido_de_fin_de_juego.mp3").play()
+        game.schedule(5000,{game.removeVisual(muerte)})
+        // RESTART LEVEL1
+    }
+    
+    
 }
 
 class Fireboy inherits Character {
@@ -118,7 +127,6 @@ class Fireboy inherits Character {
     method puntaje() = puntos
 
     override method setupControls(){
-        // Controles para Fireboy
         keyboard.left().onPressDo   ({ self.moveLeft() })
         keyboard.right().onPressDo  ({ self.moveRight() })
         keyboard.up().onPressDo     ({ self.jump() })
@@ -134,7 +142,6 @@ class Watergirl inherits Character {
     }
 
     override method setupControls(){
-        // Controles para Fireboy
         keyboard.a().onPressDo  ({ self.moveLeft() })
         keyboard.d().onPressDo  ({ self.moveRight() })
         keyboard.w().onPressDo  ({ self.jump() })

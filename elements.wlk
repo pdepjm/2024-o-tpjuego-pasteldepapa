@@ -12,6 +12,7 @@ class Diamante {
     method tipo() = "" // redefinido en las subclases
 
     method esAtravesable() = true
+    method esColisionable () = true
 
     method position() = game.at(posX,posY)
 
@@ -88,25 +89,6 @@ class Caja {
         }
         else if (personaje.oldPosition().x() < self.position().x() && position.right(1).x().between(6, 18)) {
             position = self.position().right(1)
-        }
-    }
-}
-
-// ------------------ Charco
-
-class Charco {
-    
-    const tipo
-    const posX
-    const posY
-
-    method position() = game.at(posX, posY)
-
-    method esAtravesable () = false
-    
-    method colision(personaje){
-        if(tipo.personaje() != tipo){
-            personaje.die()
         }
     }
 }

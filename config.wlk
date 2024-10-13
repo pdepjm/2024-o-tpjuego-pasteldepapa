@@ -58,7 +58,7 @@ class Level {
         self.setupElements()  // Bloques, palancas, plataformas, etc.
         self.setupDiamonds()
         self.setupCharacters()
-        self.generarCharcos()
+        self.setupCharcos()
         self.setupBorders()
         self.setupPositions()
         game.start()
@@ -80,7 +80,7 @@ class Level {
     // Métodos Sobrescritos en los Niveles
     method setupDiamonds() {}
     method setupElements () {}
-    method generarCharcos() {}
+    method setupCharcos() {}
     method isLevelComplete() {}
     method setupCharacters() {}
 }
@@ -88,11 +88,11 @@ class Level {
 
 object level1 inherits Level {
     
-    const diamantes = []
+    //Personajes 
+
     const fireboy = new Fireboy(position = new MutablePosition (x=1, y=1), oldPosition = new MutablePosition (x=1, y=1)) //Depende del nivel
     const watergirl = new Watergirl(position = new MutablePosition (x=3, y=1), oldPosition = new MutablePosition (x=3, y=1)) //Depende del nivel
-    const puertaFireboy = new Puerta(posX = 30, posY = 22)
-    const puertaWatergirl = new Puerta(posX = 34, posY = 22)
+    
     
     override method setupCharacters() {
         self.setupMechanics(fireboy)
@@ -106,6 +106,11 @@ object level1 inherits Level {
         game.addVisual(personaje)
     }
 
+    //Elementos
+    const puertaFireboy = new Puerta(posX = 30, posY = 22)
+    const puertaWatergirl = new Puerta(posX = 34, posY = 22)
+
+    const diamantes = []
     override method setupDiamonds() {
         diamantes.add(new DiamanteRojo(posX = 28, posY = 3))
         diamantes.add(new DiamanteRojo(posX = 9, posY = 14))
@@ -119,6 +124,23 @@ object level1 inherits Level {
 
         diamantes.forEach { diamante => game.addVisual(diamante) }
     }
+
+    override method setupElements() {
+        game.addVisual(new Caja(position = new MutablePosition (x=13, y=18)))
+    }
+
+    const zonasProhibidasFuego = []
+    const zonasProhibidasAgua = []
+
+    override method setupCharcos() {
+        (18..22).forEach { x => zonasProhibidasFuego.add([x, 0])} // charco de agua
+        (24..28).forEach { x => zonasProhibidasFuego.add([x, 6])} // charco de acido
+        (26..30).forEach { x => zonasProhibidasAgua.add([x, 0])} // charco de fuego 
+        (24..28).forEach { x => zonasProhibidasAgua.add([x, 6]) } // charco de acido
+        fireboy.zonasProhibidas(zonasProhibidasFuego)                                                   
+        watergirl.zonasProhibidas(zonasProhibidasAgua)                                                   
+    }
+    //Marco de juego
 
     override method setupPositions (){
         
@@ -155,20 +177,13 @@ object level1 inherits Level {
         fireboy.position(positions)
     }
 
-    override method setupElements() {
-        game.addVisual(new Caja(position = new MutablePosition (x=13, y=18)))
-    }
     
-    override method generarCharcos() {
-        (18..22).forEach    { x => game.addVisual(new Charco(tipo = agua, posX = x, posY = 0 ))}
-        (26..30).forEach    { x => game.addVisual(new Charco(tipo = fuego, posX = x, posY = 0 ))}
-        (24..28).forEach    { x => game.addVisual(new Charco(tipo = null, posX = x, posY = 6 ))}
-    } 
 
     override method isLevelComplete() = 
         self.posicionIgual(fireboy, puertaFireboy) and self.posicionIgual(watergirl, puertaWatergirl)
     
     method posicionIgual(e1, e2) = e1.position() == e2.position()
+    
 }
 
 object puntajes{
