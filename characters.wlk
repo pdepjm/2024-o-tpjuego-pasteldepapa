@@ -100,13 +100,16 @@ class Character {
     method collect () {puntos += 100}
     
     method die (){        
-        //game.sound("muerte.mp3").play()
+        //game.sound("S_muerte.mp3").play()
         //game.addVisual(muerte)
-        // game.sound("sonido_de_fin_de_juego.mp3").play()
-        // game.schedule(3000,{game.removeVisual(muerte)})
+        //game.sound("S_game_over.mp3").play()
+        //game.schedule(3000,{game.removeVisual(muerte)})
         game.schedule(3000, {nivelActual.start()}) // Reiniciamos el nivel 
         // RESTART LEVEL1
     }    
+
+
+
 }
 
 class Fireboy inherits Character {
@@ -114,7 +117,7 @@ class Fireboy inherits Character {
     override method tipo() = fuego
 
     override method image() {
-        return "Fireboy.png" 
+        return "P_Fireboy.png" 
     }
 
     method puntaje() = puntos
@@ -131,7 +134,7 @@ class Watergirl inherits Character {
     override method tipo() = agua
 
     override method image() {
-        return "Watergirl.png" 
+        return "P_Watergirl.png" 
     }
 
     override method setupControls(){

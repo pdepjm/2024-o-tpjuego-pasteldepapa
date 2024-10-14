@@ -8,31 +8,30 @@ class Diamante {
 
     const posX
     const posY
-
-    method tipo() = "" // redefinido en las subclases
+    
+    method tipo() = "" 
 
     method esAtravesable() = true
     method esColisionable () = true
 
     method position() = game.at(posX,posY)
 
+    // Métodos Sobrescritos en las Subclases
+
+   
+
     method colision(personaje) {
         
         if (self.canCollect(personaje)) { // Personaje puede recogerlo y todavia no fue recogido 
             game.removeVisual(self) 
-            game.sound("diamante.mp3").play()
+            game.sound("S_diamante.mp3").play()
             // efecto visual, sonido, palabritas
             
         }
     }
 
     method canCollect(personaje) = personaje.tipo() == self.tipo()
-
-    // Métodos Sobrescritos en las Subclases
-
-    // method tipo() = "" 
-
-    method image() {
+ method image() {
         return "" 
     }
 }
@@ -41,7 +40,7 @@ class DiamanteRojo inherits Diamante {
     
     override method tipo() = fuego
     override method image() {
-        return "f_diamond.png" 
+        return "E_f_diamond.png" 
     }
 
 }
@@ -50,14 +49,14 @@ class DiamanteAzul inherits Diamante {
 
     override method tipo() = agua
     override method image() {
-        return "w_diamond.png" 
+        return "E_w_diamond.png" 
     }
 
 }
 
 class DiamanteGris inherits Diamante {
     override method image() {
-        return "g_diamond.png" 
+        return "E_g_diamond.png" 
     }
 
     override method canCollect(character) {
@@ -82,7 +81,7 @@ class Puerta {
 class Caja {
     var property position
 
-    method image() = "cube.png"
+    method image() = "E_cube.png"
 
     method esAtravesable() = false
     method esColisionable() = true
@@ -99,40 +98,63 @@ class Caja {
 
 // ------------------ Boton para Plataforma
 
-/*
+class BotonInvisible {
+
+    const posX
+    const posY
+    const botonAsoc
+
+    method position() = game.at(posX, posY)
+
+    method colision(personaje) {
+        botonAsoc.personajeMovido()
+    }
+
+}
+
+
 class Boton {
 
     const posX
     const posY
     const plataformaAsoc
     const unidadMovimiento = 1
+    var enColision = false
 
     method position() = game.at(posX, posY)
 
     method colision(personaje){
-        if(self.hastaMaxAltura()) 
-            plataformaAsoc.goUp(unidadMovimiento)    
+        enColision = true
+        if(plataformaAsoc.hastaMaxAltura()) 
+            plataformaAsoc.goUp(unidadMovimiento)
+    
+        enColision = false 
     }
 
-    method image() = "button.png"
+    method personajeMovido() {
+        if(plataformaAsoc.hastaMinAltura() and !enColision) {
+            plataformaAsoc.goDown(unidadMovimiento)
+            self.personajeMovido()
+        }
+    }
+    
+    method image() = "E_button.png"
 
-    method hastaMaxAltura() = plataforma.position().y() != plataforma.maxAltura()
-
+    method hastaMaxAltura() = plataformaAsoc.position().y() != plataformaAsoc.maxAltura()
+    method hastaMinAltura() = plataformaAsoc.position().y() == plataformaAsoc.minAltura()  
 }
 
-*/
-
 // ------------------ Plataforma Movible
-
-/*
 
 class PlataformaMovible {
 
     const posX
     const posY
     const maxAltura
+    const minAltura
 
     method maxAltura() = maxAltura
+    method minAltura() = minAltura
 
     method position() = game.at(posX, posY)
 
@@ -140,18 +162,9 @@ class PlataformaMovible {
 
     method esAtravesable() = false
 
-    method image() = "horizontal_gate.png"
-
-
-
-  
-
-
+    method image() = "E_horizontal_gate.png"
 
 }
-
-
-*/
 
 /*
 
