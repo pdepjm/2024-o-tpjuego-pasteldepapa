@@ -13,6 +13,6 @@ program FireBoyWaterGirlGame {
     
     // Mecanica del Juego
     level1.start() 
-    settings.checkLevelCompletion(level1)
+    settings.checkLevelCompletion(level1) 
 
 }

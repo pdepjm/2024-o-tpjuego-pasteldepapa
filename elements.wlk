@@ -104,10 +104,13 @@ class BotonInvisible {
     const posY
     const botonAsoc
 
+    method esAtravesable() = true
+    method esColisionable() = true
+
     method position() = game.at(posX, posY)
 
     method colision(personaje) {
-        botonAsoc.personajeMovido()
+        botonAsoc.personajeMovido(personaje)
     }
 
 }
@@ -118,30 +121,36 @@ class Boton {
     const posX
     const posY
     const plataformaAsoc
-    const unidadMovimiento = 1
-    var enColision = false
+
+
+    method esAtravesable() = false
+    method esColisionable() = true
 
     method position() = game.at(posX, posY)
 
     method colision(personaje){
-        enColision = true
-        if(plataformaAsoc.hastaMaxAltura()) 
-            plataformaAsoc.goUp(unidadMovimiento)
-    
-        enColision = false 
+        if(personaje.position() == self.position()) {
+            if(self.hastaMaxAltura()) {
+                plataformaAsoc.moveUp()
+                game.schedule(100, {self.colision(personaje)})
+            }
+    }
     }
 
-    method personajeMovido() {
-        if(plataformaAsoc.hastaMinAltura() and !enColision) {
-            plataformaAsoc.goDown(unidadMovimiento)
-            self.personajeMovido()
+    method personajeMovido(personaje) {
+        
+        if(personaje.position() != self.position()) {
+            if(self.hastaMinAltura()) {
+                plataformaAsoc.moveDown()
+                game.schedule(100, {self.personajeMovido(personaje)})
+            }
         }
     }
     
-    method image() = "E_button.png"
+    method image() = "E_cube.png"
 
     method hastaMaxAltura() = plataformaAsoc.position().y() != plataformaAsoc.maxAltura()
-    method hastaMinAltura() = plataformaAsoc.position().y() == plataformaAsoc.minAltura()  
+    method hastaMinAltura() = plataformaAsoc.position().y() != plataformaAsoc.minAltura()  
 }
 
 // ------------------ Plataforma Movible
@@ -152,15 +161,26 @@ class PlataformaMovible {
     const posY
     const maxAltura
     const minAltura
-
+    const position = new MutablePosition(x=posX, y=posY)
+    const unidadMovimiento = 1
+    
     method maxAltura() = maxAltura
     method minAltura() = minAltura
 
-    method position() = game.at(posX, posY)
+    method position() = position
 
     method colision(personaje) {}
 
     method esAtravesable() = false
+    method esColisionable() = true
+
+    method moveUp() {
+        position.goUp(unidadMovimiento)
+    }
+
+    method moveDown() {
+        position.goDown(unidadMovimiento)
+    }
 
     method image() = "E_horizontal_gate.png"
 

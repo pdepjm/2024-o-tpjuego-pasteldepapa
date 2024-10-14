@@ -2,7 +2,7 @@ import config.*
 
 class Character {
     
-    // Referencias
+    // -------------------- Referencias
 
     var property position
     var property oldPosition
@@ -17,10 +17,15 @@ class Character {
 
     const nivelActual
 
+    // -------------------- Métodos
+
     // Métodos Sobrescritos en las Subclases
 
     method image() = "" 
-    method tipo() = "" 
+    method tipo() = ""
+    method setupControls() {} 
+
+    // Métodos Propios
 
     method setPosition (posX, posY){
         position = new MutablePosition(x=posX, y=posY)
@@ -29,11 +34,10 @@ class Character {
     method colision(personaje) {}  // Para que no genere error si colisionan entre personajes
 
     method esColisionable () = true // Para los bordes y pisos
-    
-    // ------------ Movimientos
-
     method esAtravesable () = true
     
+    // Movimientos
+
     method moveLeft() {
         const nuevaPosicion = [position.left(unidadMovimiento).x(), position.y()]   
         
@@ -83,8 +87,6 @@ class Character {
         game.onTick(100, "Gravedad", {self.moveDown()})
     }
 
-    method setupControls() {}
-    
     method setupCollisions() {
         game.onCollideDo(self, {element => element.colision(self)}) 
     }
@@ -101,26 +103,23 @@ class Character {
     
     method die (){        
         //game.sound("S_muerte.mp3").play()
-        //game.addVisual(muerte)
-        //game.sound("S_game_over.mp3").play()
-        //game.schedule(3000,{game.removeVisual(muerte)})
+        game.addVisual(muerte)
+        game.sound("S_game_over.mp3").play()
+        game.schedule(3000,{game.removeVisual(muerte)})
         game.schedule(3000, {nivelActual.start()}) // Reiniciamos el nivel 
         // RESTART LEVEL1
     }    
-
-
-
 }
 
 class Fireboy inherits Character {
+
+    method puntaje() = puntos
 
     override method tipo() = fuego
 
     override method image() {
         return "P_Fireboy.png" 
     }
-
-    method puntaje() = puntos
 
     override method setupControls(){
         keyboard.left().onPressDo   ({ self.moveLeft() })
@@ -131,6 +130,8 @@ class Fireboy inherits Character {
 
 class Watergirl inherits Character {
 
+    method puntaje() = puntos 
+      
     override method tipo() = agua
 
     override method image() {
@@ -142,8 +143,6 @@ class Watergirl inherits Character {
         keyboard.d().onPressDo  ({ self.moveRight() })
         keyboard.w().onPressDo  ({ self.jump() })
     }
-
-    method puntaje() = puntos 
 }
 
 object fuego {}

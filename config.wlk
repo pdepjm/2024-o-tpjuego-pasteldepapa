@@ -3,11 +3,12 @@ import elements.*
 
 object settings {
 
-    // Referencias
+    // ---------------------- Referencias
     const niveles = [level1, level2] 
     var nivelActual = 0 // Índice del nivel actual
 
-    // Métodos
+    // ---------------------- Métodos
+
     method init (background, height, width, cellSize){
         game.title("FireBoyWaterGirlGame")
         game.boardGround(background)
@@ -17,7 +18,7 @@ object settings {
         game.start()
     }
     
-    method checkLevelCompletion(level) {
+    method checkLevelCompletion(level) { 
         game.schedule(100, {
             if(level.isLevelComplete()) { 
                 //game.addVisual(nivelSuperado)
@@ -29,6 +30,8 @@ object settings {
         })
     }
 
+
+
     method pasarSgteNivel(){
         nivelActual += 1
         if (nivelActual < niveles.size()) { // Avanza al siguiente nivel
@@ -39,7 +42,7 @@ object settings {
             game.schedule(5000,{game.removeVisual(nivelSuperado)})
 
             niveles.get(nivelActual).start()
-            self.checkLevelCompletion(niveles.get(nivelActual))
+            self.checkLevelCompletion(niveles.get(nivelActual)) 
         
         } /*else { // Todos los niveles completados  
             
@@ -56,7 +59,7 @@ class Level {
     // ---------------- JUEGO PRINCIPAL
 
     method start() {
-        game.clear()
+        //game.clear()
         self.setupElements()  // Bloques, palancas, plataformas, etc.
         self.setupDiamonds()
         self.setupCharacters()
@@ -77,9 +80,9 @@ class Level {
         (0..28).forEach     { y => positions.add([38, y])   }
     }
 
-    method setupPositions(){}
-
     // Métodos Sobrescritos en los Niveles
+    
+    method setupPositions(){}
     method setupDiamonds() {}
     method setupElements () {}
     method setupCharcos() {}
@@ -97,6 +100,8 @@ object level1 inherits Level {
     const fireboy = new Fireboy(position = new MutablePosition (x=16, y=18), oldPosition = new MutablePosition (x=16, y=18), nivelActual = self, zonasProhibidas = zonasProhibidasFuego, invalidPositions = positions) //Depende del nivel
     const watergirl = new Watergirl(position = new MutablePosition (x=24, y=1), oldPosition  = new MutablePosition (x=24, y=1), nivelActual = self, zonasProhibidas = zonasProhibidasAgua, invalidPositions = positions) //Depende del nivel
     
+    // Lista de Posiciones prohibidas y diamantes
+
     const zonasProhibidasFuego = []
     const zonasProhibidasAgua = []
     const diamantes = []
@@ -109,7 +114,7 @@ object level1 inherits Level {
     const botonAmarillo = new Boton(posX = 10, posY = 9, plataformaAsoc = plataformaAmarilla)
 
     const botonInvAmarillo1 = new BotonInvisible(posX = 11, posY = 9, botonAsoc = botonAmarillo)
-    const botonInvAmarillo2 = new BotonInvisible(posX = 11, posY = 9, botonAsoc = botonAmarillo)
+    const botonInvAmarillo2 = new BotonInvisible(posX = 9, posY = 9, botonAsoc = botonAmarillo)
 
 
     const plataformaBordo = new PlataformaMovible(posX = 34, posY = 13, maxAltura = 16, minAltura = 13)
@@ -120,9 +125,6 @@ object level1 inherits Level {
     const botonInvBordoA2 = new BotonInvisible(posX = 12, posY = 14, botonAsoc = botonBordoA)
     const botonInvBordoB1 = new BotonInvisible(posX = 31, posY = 18, botonAsoc = botonBordoB)
     const botonInvBordoB2 = new BotonInvisible(posX = 29, posY = 18, botonAsoc = botonBordoB)
-
-
-
 
     // --------------------- Métodos
 
@@ -151,19 +153,26 @@ object level1 inherits Level {
 
     override method setupElements() {
         game.addVisual(new Caja(position = new MutablePosition (x=13, y=18)))
+        
+        game.addVisual(puertaFireboy)
+        game.addVisual(puertaWatergirl)
+
         game.addVisual(plataformaAmarilla)
+        
         game.addVisual(botonAmarillo)
+        
         game.addVisual(botonInvAmarillo1)
         game.addVisual(botonInvAmarillo2)
 
         game.addVisual(plataformaBordo)
+        
         game.addVisual(botonBordoA)
         game.addVisual(botonBordoB)
+        
         game.addVisual(botonInvBordoA1)
         game.addVisual(botonInvBordoA2)
         game.addVisual(botonInvBordoB1)
         game.addVisual(botonInvBordoB2)
-
     }
 
     override method setupCharcos() {
@@ -206,7 +215,7 @@ object level1 inherits Level {
     }
 
     override method isLevelComplete() = 
-        self.posicionIgual(fireboy, puertaFireboy) and self.posicionIgual(watergirl, puertaWatergirl)
+        self.posicionIgual(fireboy, puertaFireboy) and self.posicionIgual(watergirl, puertaWatergirl) 
 
 
     // Métodos Propios
@@ -238,6 +247,6 @@ object muerte{
 object nivelSuperado{
     method position() = game.center()
     method image() = "F_Nivel_Superado.png"
-    method text1()  {Fireboy.puntaje()}
-    method text2()  {Watergirl.puntaje()}
+   // method text1()  {Fireboy.puntaje()}
+   // method text2()  {Watergirl.puntaje()}
 }
