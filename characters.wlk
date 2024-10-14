@@ -4,24 +4,27 @@ class Character {
     
     // Referencias
 
-    const property position
+    var property position
     var property oldPosition
 
     const unidadMovimiento = 1
+    var puntos = 0
 
-    var positions = []
+    const invalidPositions = [] // Lista de posiciones invalidas (se la pasamos al incio)
+    const zonasProhibidas = [] // Lista de charcos de distinto tipo (se la pasamos al incio)
     
     var property enPuerta = false
 
-    var puntos = 0
-    method position(invalidPositions) {
-        positions = invalidPositions
-    }
+    const nivelActual
 
     // Métodos Sobrescritos en las Subclases
 
     method image() = "" 
     method tipo() = "" 
+
+    method setPosition (posX, posY){
+        position = new MutablePosition(x=posX, y=posY)
+    }
 
     method colision(personaje) {}  // Para que no genere error si colisionan entre personajes
 
@@ -34,7 +37,7 @@ class Character {
     method moveLeft() {
         const nuevaPosicion = [position.left(unidadMovimiento).x(), position.y()]   
         
-        if(!positions.contains(nuevaPosicion) && self.puedeColisionar(nuevaPosicion))
+        if(!invalidPositions.contains(nuevaPosicion) && self.puedeColisionar(nuevaPosicion))
             position.goLeft(unidadMovimiento)
             oldPosition = new MutablePosition(x = self.position().x() + 1, y = self.position().y())
     }
@@ -42,7 +45,7 @@ class Character {
     method moveRight() {
         const nuevaPosicion = [position.right(unidadMovimiento).x(), position.y()]
 
-        if (!positions.contains(nuevaPosicion) && self.puedeColisionar(nuevaPosicion))
+        if (!invalidPositions.contains(nuevaPosicion) && self.puedeColisionar(nuevaPosicion))
             position.goRight(unidadMovimiento)
             oldPosition = new MutablePosition(x = self.position().x() - unidadMovimiento, y = self.position().y())
     }
@@ -51,7 +54,7 @@ class Character {
         const nuevaPosicion = [position.x(), position.up(unidadMovimiento).y()]
         const posicionAtravesable = position.up(unidadMovimiento)
         
-        if(!positions.contains(nuevaPosicion) && self.puedeColisionar(nuevaPosicion) && self.puedeAtravesar(nuevaPosicion))
+        if(!invalidPositions.contains(nuevaPosicion) && self.puedeColisionar(nuevaPosicion) && self.puedeAtravesar(nuevaPosicion))
             position.goUp(unidadMovimiento)
             oldPosition = new MutablePosition(x = self.position().x(), y = self.position().y() - unidadMovimiento)
     }
@@ -63,7 +66,7 @@ class Character {
         if (self.esZonaProhibida(nuevaPosicion)){
             self.die()
         }
-        else if(!positions.contains(nuevaPosicion) && self.puedeColisionar(posicionAtravesable) && self.puedeAtravesar(posicionAtravesable)){
+        else if(!invalidPositions.contains(nuevaPosicion) && self.puedeColisionar(posicionAtravesable) && self.puedeAtravesar(posicionAtravesable)){
             position.goDown(unidadMovimiento)
             oldPosition = new MutablePosition(x = self.position().x(), y = self.position().y() + unidadMovimiento)
         }
@@ -85,14 +88,6 @@ class Character {
     method setupCollisions() {
         game.onCollideDo(self, {element => element.colision(self)}) 
     }
-    
-    //Definimos zonas de charcos
-
-    var zonasProhibidas = []
-    
-    method zonasProhibidas (charcos){
-        zonasProhibidas = charcos
-    }
 
     method esZonaProhibida (posicion) = zonasProhibidas.contains(posicion)
 
@@ -104,16 +99,14 @@ class Character {
 
     method collect () {puntos += 100}
     
-    method die (){
-        game.removeVisual(self.image())
-        game.sound("muerte.mp3").play()
-        game.addVisual(muerte)
-        game.sound("sonido_de_fin_de_juego.mp3").play()
-        game.schedule(5000,{game.removeVisual(muerte)})
+    method die (){        
+        //game.sound("muerte.mp3").play()
+        //game.addVisual(muerte)
+        // game.sound("sonido_de_fin_de_juego.mp3").play()
+        // game.schedule(3000,{game.removeVisual(muerte)})
+        game.schedule(3000, {nivelActual.start()}) // Reiniciamos el nivel 
         // RESTART LEVEL1
-    }
-    
-    
+    }    
 }
 
 class Fireboy inherits Character {

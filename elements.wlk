@@ -28,8 +28,12 @@ class Diamante {
 
     method canCollect(personaje) = personaje.tipo() == self.tipo()
 
+    // Métodos Sobrescritos en las Subclases
+
+    // method tipo() = "" 
+
     method image() {
-        return "" // Sobrescrito en las subclase
+        return "" 
     }
 }
 
@@ -69,7 +73,7 @@ class Puerta {
 
     method position() = game.at(posX, posY)
     method esAtravesable () = true
-    method esColisionable() = false //??
+    method esColisionable() = false 
 
 }
 
@@ -100,20 +104,19 @@ class Boton {
 
     const posX
     const posY
-    const plataforma
+    const plataformaAsoc
+    const unidadMovimiento = 1
 
     method position() = game.at(posX, posY)
 
     method colision(personaje){
-        while(self.posicionIgual(personaje) and self.hastaMaxAltura()) {
-            plataforma.goUp(1)
-        }
-        
+        if(self.hastaMaxAltura()) 
+            plataformaAsoc.goUp(unidadMovimiento)    
     }
 
-    method posicionIgual(x) = x.position() == self.position()
+    method image() = "button.png"
 
-    method hastaMaxAltura() = plataforma.position() != plataforma.maxAltura()
+    method hastaMaxAltura() = plataforma.position().y() != plataforma.maxAltura()
 
 }
 
@@ -127,6 +130,9 @@ class PlataformaMovible {
 
     const posX
     const posY
+    const maxAltura
+
+    method maxAltura() = maxAltura
 
     method position() = game.at(posX, posY)
 
@@ -134,20 +140,11 @@ class PlataformaMovible {
 
     method esAtravesable() = false
 
+    method image() = "horizontal_gate.png"
+
 
 
   
-    position.goUp(unidadMovimiento)
-    position.goDown(unidadMovimiento)
-
-    game.schedule(1000, {self.fall()})
-    game.schedule(500, {self.fall()})
-
-    method jump() {
-        game.removeTickEvent("Gravedad")
-        [100, 200, 300, 400].forEach { num => game.schedule(num, { self.moveUp() }) }        
-        game.schedule(400, {game.onTick(100, "Gravedad", {self.moveDown()} )})
-    }
 
 
 

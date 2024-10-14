@@ -4,7 +4,7 @@ import elements.*
 object settings {
 
     // Referencias
-    const niveles = [level1] 
+    const niveles = [level1, level2] 
     var nivelActual = 0 // Índice del nivel actual
 
     // Métodos
@@ -14,12 +14,13 @@ object settings {
         game.height(height)
         game.width(width)
         game.cellSize(cellSize) // 1404x1044 // 39x29 = 36px
+        game.start()
     }
     
     method checkLevelCompletion(level) {
         game.schedule(100, {
             if(level.isLevelComplete()) { 
-                game.addVisual(puntajes)
+                // game.addVisual(puntajes)
                 //game.schedule(5000,{game.removeVisual(puntajes)}) puede ser que con el clear ya sea suficiente apra que el visual se borre, asi que pruebo comentarlo
                 game.schedule(5000,{self.pasarSgteNivel()}) // Pasa de nivel despues de mostrar puntajes
             } else {
@@ -55,13 +56,14 @@ class Level {
     // ---------------- JUEGO PRINCIPAL
 
     method start() {
+        game.clear()
         self.setupElements()  // Bloques, palancas, plataformas, etc.
         self.setupDiamonds()
         self.setupCharacters()
         self.setupCharcos()
         self.setupBorders()
         self.setupPositions()
-        game.start()
+        //game.start()
     }
     
     // Marco de juego
@@ -90,13 +92,18 @@ object level1 inherits Level {
     
     //Personajes 
 
-    const fireboy = new Fireboy(position = new MutablePosition (x=1, y=1), oldPosition = new MutablePosition (x=1, y=1)) //Depende del nivel
-    const watergirl = new Watergirl(position = new MutablePosition (x=3, y=1), oldPosition = new MutablePosition (x=3, y=1)) //Depende del nivel
+    const fireboy = new Fireboy(position = new MutablePosition (x=16, y=18), oldPosition = new MutablePosition (x=16, y=18), nivelActual = self, zonasProhibidas = zonasProhibidasFuego, invalidPositions = positions) //Depende del nivel
+    const watergirl = new Watergirl(position = new MutablePosition (x=24, y=1), oldPosition  = new MutablePosition (x=24, y=1), nivelActual = self, zonasProhibidas = zonasProhibidasAgua, invalidPositions = positions) //Depende del nivel
     
+    const zonasProhibidasFuego = []
+    const zonasProhibidasAgua = []
+    const diamantes = []
     
     override method setupCharacters() {
         self.setupMechanics(fireboy)
         self.setupMechanics(watergirl)
+        fireboy.setPosition(16,18)
+        watergirl.setPosition(24,1) 
     }
 
     method setupMechanics(personaje){
@@ -110,7 +117,6 @@ object level1 inherits Level {
     const puertaFireboy = new Puerta(posX = 30, posY = 22)
     const puertaWatergirl = new Puerta(posX = 34, posY = 22)
 
-    const diamantes = []
     override method setupDiamonds() {
         diamantes.add(new DiamanteRojo(posX = 28, posY = 3))
         diamantes.add(new DiamanteRojo(posX = 9, posY = 14))
@@ -129,18 +135,13 @@ object level1 inherits Level {
         game.addVisual(new Caja(position = new MutablePosition (x=13, y=18)))
     }
 
-    const zonasProhibidasFuego = []
-    const zonasProhibidasAgua = []
-
     override method setupCharcos() {
         (18..22).forEach { x => zonasProhibidasFuego.add([x, 0])} // charco de agua
         (24..28).forEach { x => zonasProhibidasFuego.add([x, 6])} // charco de acido
         (26..30).forEach { x => zonasProhibidasAgua.add([x, 0])} // charco de fuego 
-        (24..28).forEach { x => zonasProhibidasAgua.add([x, 6]) } // charco de acido
-        fireboy.zonasProhibidas(zonasProhibidasFuego)                                                   
-        watergirl.zonasProhibidas(zonasProhibidasAgua)                                                   
+        (24..28).forEach { x => zonasProhibidasAgua.add([x, 6]) } // charco de acido                                                  
     }
-    //Marco de juego
+    // Marco de juego
 
     override method setupPositions (){
         
@@ -171,13 +172,7 @@ object level1 inherits Level {
         (10..13).forEach    { x => positions.add([x, 23])   }
         (27..29).forEach    { x => positions.add([x, 23])   }
         (9..11).forEach     { x => positions.add([x, 24])   }
-
-        // Pasamos la lista a los personajes para que pueda conocer los limites del mapa
-        watergirl.position(positions)
-        fireboy.position(positions)
     }
-
-    
 
     override method isLevelComplete() = 
         self.posicionIgual(fireboy, puertaFireboy) and self.posicionIgual(watergirl, puertaWatergirl)
@@ -185,6 +180,10 @@ object level1 inherits Level {
     method posicionIgual(e1, e2) = e1.position() == e2.position()
     
 }
+
+object level2 inherits Level {} // DEJENLO, NO LO SAQUEN
+object level3 inherits Level {} // DEJENLO, NO LO SAQUEN
+object level4 inherits Level {} // DEJENLO, NO LO SAQUEN
 
 object puntajes{
     method position() = game.center()
