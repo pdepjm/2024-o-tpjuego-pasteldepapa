@@ -1,0 +1,211 @@
+import wollok.game.*
+import config.*
+import characters.*
+import elements.*
+
+
+describe "Movimientos de los Personajes" {
+    test "Fireboy - Movimiento a Izquierda Correcto" {
+        const fireboy = new Fireboy(
+            position = new MutablePosition (x=0, y=0), 
+            oldPosition = new MutablePosition (x=0, y=0), 
+            nivelActual = 0, 
+            zonasProhibidas = [], 
+            invalidPositions = []) 
+
+        fireboy.setPosition(5, 5)
+        fireboy.moveLeft()
+        
+        assert.equals(4, fireboy.position().x()) // Debería moverse 1 unidad a la izquierda
+        assert.equals(5, fireboy.position().y()) // La coordenada y no debería cambiar
+    }
+
+    test "Watergirl - Movimiento a Derecha Correcto" {
+        const watergirl = new Watergirl(
+                position = new MutablePosition (x=0, y=0), 
+                oldPosition = new MutablePosition (x=0, y=0), 
+                nivelActual = level1, 
+                zonasProhibidas = [], 
+                invalidPositions = []) 
+
+        watergirl.setPosition(5, 5)
+        watergirl.moveRight()
+        
+        assert.equals(6, watergirl.position().x()) // Debería moverse 1 unidad a la derecha
+        assert.equals(5, watergirl.position().y()) // La coordenada y no debería cambiar
+    }
+    test "Fireboy - No atraviesa los pisos intermedios"{
+        const invalidPositions = [[2,3]] 
+        
+        const fireboy = new Fireboy(
+                position = new MutablePosition (x=2, y=4), 
+                oldPosition = new MutablePosition (x=2, y=4), 
+                nivelActual = level1, 
+                zonasProhibidas = [], 
+                invalidPositions = invalidPositions)
+        
+        fireboy.setPosition(2, 4)
+        fireboy.moveDown()
+        assert.equals(2, fireboy.position().x())
+        assert.equals(4, fireboy.position().y())
+    }       
+
+    test "Watergirl - Respeta el descubrimiento de Newton" {
+        const watergirl = new Watergirl(
+                position = new MutablePosition (x=0, y=0), 
+                oldPosition = new MutablePosition (x=0, y=0), 
+                nivelActual = level1, 
+                zonasProhibidas = [], 
+                invalidPositions = []) 
+
+        watergirl.setPosition(1, 1)
+        watergirl.jump()
+        
+        assert.equals(1, watergirl.position().y()) // La coordenada y no debería cambiar
+    }
+
+}
+
+
+describe "Zonas Prohibidas" {
+    test "Fireboy muere al pasar por charco de distinto tipo" {
+
+        const zonasProhibidasFireboy = [[2,0]]
+        const fireboy = new Fireboy(
+                position = new MutablePosition (x=2, y=2), 
+                oldPosition = new MutablePosition (x=2, y=2), 
+                nivelActual = level1, 
+                zonasProhibidas = zonasProhibidasFireboy, 
+                invalidPositions = []) 
+        
+        fireboy.setPosition(2, 1)
+        fireboy.moveDown()
+        assert.that(fireboy.murioPersonaje())}
+        
+    test "Fireboy no muere al moverse a posiciones no peligrosas" {
+            const zonasProhibidasFireboy = [[3, 1]]
+            const fireboy = new Fireboy(
+                position = new MutablePosition(x=2, y=2), 
+                oldPosition = new MutablePosition(x=2, y=2), 
+                nivelActual = 0, 
+                zonasProhibidas = zonasProhibidasFireboy, 
+                invalidPositions = []
+            )
+            
+            fireboy.setPosition(1, 1)
+            fireboy.moveRight()
+            assert.notThat(fireboy.murioPersonaje())
+    }
+}
+
+describe "Diamantes" {
+
+    test "Fireboy puede agarrar diamantes Rojos" {
+        game.clear()
+        
+        const diamante = new DiamanteRojo(posX = 2, posY = 1)
+        
+        const fireboy = new Fireboy(
+            position = new MutablePosition (x=0, y=0), 
+            oldPosition = new MutablePosition (x=0, y=0), 
+            nivelActual = level1, 
+            zonasProhibidas = [], 
+            invalidPositions = []) 
+
+        fireboy.setPosition(1, 1)
+        fireboy.moveRight()
+        diamante.colision(fireboy) 
+
+        assert.that(diamante.fuiRecolectado())
+    }
+    
+    test "Watergirl no puede agarrar diamantes rojos" {
+        game.clear()
+        
+        const diamante = new DiamanteRojo(posX = 2, posY = 1)
+
+        const watergirl = new Watergirl(
+            position = new MutablePosition (x=0, y=0), 
+            oldPosition = new MutablePosition (x=0, y=0), 
+            nivelActual = level1, 
+            zonasProhibidas = [], 
+            invalidPositions = []) 
+
+        watergirl.setPosition(1, 1)
+        watergirl.moveRight()
+        diamante.colision(watergirl) 
+
+        assert.notThat(diamante.fuiRecolectado())
+    }
+    test "Fireboy puede agarrar diamantes Grises" {
+        game.clear()
+        const diamante = new DiamanteGris(posX = 2, posY = 1)
+
+        const fireboy = new Fireboy(
+            position = new MutablePosition (x=0, y=0), 
+            oldPosition = new MutablePosition (x=0, y=0), 
+            nivelActual = level1, 
+            zonasProhibidas = [], 
+            invalidPositions = []) 
+
+        fireboy.setPosition(1, 1)
+        fireboy.moveRight() // el movimiento no afecta  ala colision y no la toma
+        diamante.colision(fireboy) 
+            
+        assert.that(diamante.fuiRecolectado())
+    }
+    test "Watergirl puede agarrar diamantes Azules en saltos" {
+        game.clear()
+        const diamante = new DiamanteAzul(posX = 1, posY = 2)
+
+        const watergirl = new Watergirl(
+            position = new MutablePosition (x=0, y=0), 
+            oldPosition = new MutablePosition (x=0, y=0), 
+            nivelActual = level1, 
+            zonasProhibidas = [], 
+            invalidPositions = []) 
+
+        watergirl.setPosition(1, 1)
+        watergirl.jump()
+        diamante.colision(watergirl) 
+
+        assert.that(diamante.fuiRecolectado())
+    }
+}
+
+
+/*
+describe "Pasaje de Nivel"{
+    
+    test "Los personajes ganan al estar en la puerta"{
+        const puertaFireboy = new Puerta(posX = 32, posY = 23, tipo = fuego)
+        const puertaWatergirl = new Puerta(posX = 35, posY = 23, tipo = agua)
+
+        const fireboy = new Fireboy(
+            position = new MutablePosition (x=32, y=23), 
+            oldPosition = new MutablePosition (x=32, y=23), 
+            nivelActual = level1, 
+            zonasProhibidas =  [], 
+            invalidPositions = [])
+
+
+        const watergirl = new Watergirl(
+            position = new MutablePosition (x=35, y=23), 
+            oldPosition = new MutablePosition (x=35, y=23), 
+            nivelActual = level1, 
+            zonasProhibidas =  [], 
+            invalidPositions = [])
+
+        fireboy.setPosition(32, 23)
+        watergirl.setPosition(35, 23)
+
+        puertaFireboy.colision(fireboy)
+        puertaWatergirl.colision(watergirl)
+
+        assert.equals(1, settings.nivelActual())
+        
+    
+    
+    }
+}
+*/

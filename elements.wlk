@@ -10,6 +10,7 @@ class Diamante {
 
     const posX
     const posY
+    var fuiRecolectado = false
     
     // ---------------- Métodos
 
@@ -30,13 +31,16 @@ class Diamante {
 
     method colision(personaje) {
         
-        if (self.canCollect(personaje)) { // Personaje puede recogerlo y todavia no fue recogido 
+        if (self.canCollect(personaje)) { // Personaje puede recogerlo y todavia no fue recogido
+            fuiRecolectado = true 
             game.removeVisual(self) 
             game.sound("S_diamante.mp3").play()
             // efecto visual, sonido, palabritas
             
         }
     }
+
+    method fuiRecolectado() = fuiRecolectado
 
     method canCollect(personaje) = personaje.tipo() == self.tipo()
     
@@ -163,7 +167,7 @@ class Boton {
         if(personaje.position() == self.position()) {
             if(self.hastaMaxAltura()) {
                 plataformaAsoc.moveUp()
-                game.schedule(200, {self.colision(personaje)})
+                game.schedule(300, {self.colision(personaje)})
             }
         }
     }
@@ -173,7 +177,7 @@ class Boton {
         if(personaje.position() != self.position()) {
             if(self.hastaMinAltura()) {
                 plataformaAsoc.moveDown()
-                game.schedule(200, {self.personajeMovido(personaje)})
+                game.schedule(300, {self.personajeMovido(personaje)})
             }
         }
     }
@@ -200,7 +204,11 @@ class PlataformaMovible {
     method position() = position
 
     method colision(personaje) {
-
+        personaje.moveUp()
+        personaje.moveUp()
+        personaje.moveUp()
+        personaje.moveUp()
+        personaje.moveUp()
     }
 
     method esAtravesable() = false

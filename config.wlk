@@ -5,7 +5,7 @@ object settings {
 
     // ---------------------- Referencias
     const niveles = [level1] 
-    var nivelActual = 0 // Índice del nivel actual
+    var property nivelActual = 0 // Índice del nivel actual
     const fondoNuevo = new BackgroundCover()
 
     // ---------------------- Métodos
@@ -28,11 +28,11 @@ object settings {
             game.schedule(2000,{game.removeVisual(nivelSuperado)})
 
             
-            niveles.get(nivelActual).cleanVisuals()
-            game.addVisual(fondoNuevo)
+            game.schedule(2000,{niveles.get(nivelActual).cleanVisuals()})
+            game.schedule(2000,{game.addVisual(fondoNuevo)})
 
             // CAMBIAR AL FONDO DE NIVEL 2
-        //   nivelActual +=1
+            nivelActual +=1
 
            // niveles.get(nivelActual).start()
             //self.checkLevelCompletion(niveles.get(nivelActual)) 
@@ -95,8 +95,19 @@ object level1 inherits Level {
 
     // Personajes 
 
-    const fireboy = new Fireboy(position = new MutablePosition (x=13, y=1), oldPosition = new MutablePosition (x=13, y=1), nivelActual = self, zonasProhibidas = zonasProhibidasFuego, invalidPositions = positions) //Depende del nivel
-    const watergirl = new Watergirl(position = new MutablePosition (x=16, y=1), oldPosition  = new MutablePosition (x=16, y=1), nivelActual = self, zonasProhibidas = zonasProhibidasAgua, invalidPositions = positions) //Depende del nivel
+    const fireboy = new Fireboy(
+        position = new MutablePosition (x=1, y=1), 
+        oldPosition = new MutablePosition (x=3, y=1), 
+        nivelActual = self, 
+        zonasProhibidas = zonasProhibidasFuego, 
+        invalidPositions = positions) //Depende del nivel
+
+    const watergirl = new Watergirl(
+        position = new MutablePosition (x=3, y=1), 
+        oldPosition  = new MutablePosition (x=3, y=1), 
+        nivelActual = self, 
+        zonasProhibidas = zonasProhibidasAgua, 
+        invalidPositions = positions) //Depende del nivel
     
 
     // Lista de Posiciones prohibidas y diamantes
@@ -171,8 +182,8 @@ object level1 inherits Level {
         */
         game.addVisual(fireboy)
         game.addVisual(watergirl)
-        fireboy.setPosition(15,1)
-        watergirl.setPosition(23,1) 
+        fireboy.setPosition(1,1)
+        watergirl.setPosition(3,1) 
     }
 
     method setupMechanicsInit(){
@@ -281,6 +292,7 @@ object level1 inherits Level {
         (10..13).forEach    { x => positions.add([x, 23])   }
         (27..29).forEach    { x => positions.add([x, 23])   }
         (9..11).forEach     { x => positions.add([x, 24])   }
+
     }
 
     override method cleanVisuals() {

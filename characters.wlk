@@ -14,6 +14,7 @@ class Character {
     const zonasProhibidas = [] // Lista de charcos de distinto tipo (se la pasamos al incio)
 
     const nivelActual
+    var murioPersonaje = false
 
     // -------------------- Métodos
 
@@ -80,7 +81,7 @@ class Character {
         [100, 200, 300, 400].forEach { num => game.schedule(num, { self.moveUp() }) }        
         game.schedule(900, {game.onTick(100, "Gravedad", {self.moveDown()} )})
     }
-    
+
     method gravedad(){
         game.onTick(100, "Gravedad", {self.moveDown()})
     }
@@ -98,8 +99,11 @@ class Character {
     // Puntos y Mecanica del Juego
 
     method collect () {puntos += 100}
+
+    method murioPersonaje() = murioPersonaje
     
-    method die (){        
+    method die (){ 
+        murioPersonaje = true       
         game.sound("S_muerte.mp3").play()
         game.addVisual(muerte)
         game.sound("S_game_over.mp3").play()
@@ -107,7 +111,7 @@ class Character {
         nivelActual.cleanVisuals() ///
         game.schedule(4000, {nivelActual.start()}) // Reiniciamos el nivel 
         // RESTART LEVEL1
-    }    
+    }   
 }
 
 class Fireboy inherits Character {
