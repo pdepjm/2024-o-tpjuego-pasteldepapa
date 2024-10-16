@@ -20,10 +20,17 @@ Los jugadores deben completar los niveles del mapa guiando a los dos personajes,
 
 ## Controles:
 
-Moverse (izquierda/derecha)
-Saltar
-Empujar objetos
-Morir (si caen en trampas o elementos contrarios a su naturaleza)
-Escapar por la salida
+**Controles para Fireboy:**
+
+- ```↑``` para saltar 5 unidades.
+- ```→``` para dirigirse 1 unidad a la derecha. 
+- ```←``` para dirigirse 1 unidad a la izquierda. 
+
+**Controles para Watergirl:**
+
+- ```w``` para saltar 5 unidades.
+- ```a``` para dirigirse 1 unidad a la derecha. 
+- ```d``` para dirigirse 1 unidad a la izquierda. 
+
 
 
