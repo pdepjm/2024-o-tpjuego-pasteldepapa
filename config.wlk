@@ -4,21 +4,20 @@ import elements.*
 object settings {
 
     // ---------------------- Referencias
-    const niveles = [level1, level2] 
+    const niveles = [level1] 
     var nivelActual = 0 // Índice del nivel actual
     const fondoNuevo = new BackgroundCover()
 
     // ---------------------- Métodos
 
-    method init (background, height, width, cellSize){
-        game.title("FireBoyWaterGirlGame")
-        game.boardGround(background)
+    method init(title, boardground, height, width, cellSize){
+        game.title(title)
+        game.boardGround(boardground)
         game.height(height)
         game.width(width)
         game.cellSize(cellSize) // 1404x1044 // 39x29 = 36px
         game.start()
     }
-    
     method pasarSgteNivel(){
 
         const proxNivel = nivelActual + 1
@@ -51,11 +50,13 @@ object settings {
 class Level {
 
     // ---------------- JUEGO PRINCIPAL
+    method image()
+    method position() = game.origin()
 
     
     method start() {
         //game.clear()
-        
+        //game.addVisual(self)
         self.setupElements()  // Bloques, palancas, plataformas, etc.
         self.setupDiamonds()
         self.setupCharacters()
@@ -90,7 +91,8 @@ class Level {
 object level1 inherits Level {
     
     // --------------------- Referencias -------------------------
-    
+    override method image() = "F_nivel_1.png"
+
     // Personajes 
 
     const fireboy = new Fireboy(position = new MutablePosition (x=13, y=1), oldPosition = new MutablePosition (x=13, y=1), nivelActual = self, zonasProhibidas = zonasProhibidasFuego, invalidPositions = positions) //Depende del nivel
@@ -113,12 +115,11 @@ object level1 inherits Level {
 
     // Plataforma Amarilla y Elementos Asociados
 
-    const extensionPlatAmarilla1 = new ExtensionPlataformaMovible(posX = 2, posY = 9)
-    const extensionPlatAmarilla2 = new ExtensionPlataformaMovible(posX = 3, posY = 9)
+    const extensionPlatAmarilla1 = new ExtensionPlataformaMovible(position = new MutablePosition(x=2, y=9))
+    const extensionPlatAmarilla2 = new ExtensionPlataformaMovible(position = new MutablePosition(x=3, y=9))
 
     const plataformaAmarilla = new PlataformaMovible(
-        posX = 1,
-        posY = 9,
+        position = new MutablePosition(x=1, y=9),
         maxAltura = 13,
         minAltura = 9,
         platAsocs = [extensionPlatAmarilla1, extensionPlatAmarilla2]
@@ -136,12 +137,11 @@ object level1 inherits Level {
 
     // Plataforma Bordo y Elementos Asociados
 
-    const extensionPlatBordo1 = new ExtensionPlataformaMovible(posX = 35, posY = 13)
-    const extensionPlatBordo2 = new ExtensionPlataformaMovible(posX = 36, posY = 13)
+    const extensionPlatBordo1 = new ExtensionPlataformaMovible(position = new MutablePosition(x=35, y=13))
+    const extensionPlatBordo2 = new ExtensionPlataformaMovible(position = new MutablePosition(x=36, y=13))
 
     const plataformaBordo = new PlataformaMovible(
-        posX = 34,
-        posY = 13,
+        position = new MutablePosition(x=34, y=13),
         maxAltura = 16,
         minAltura =13,
         platAsocs = [extensionPlatBordo1, extensionPlatBordo2]
@@ -176,6 +176,7 @@ object level1 inherits Level {
     }
 
     method setupMechanicsInit(){
+        game.addVisual(self)
         self.setupMechanics(fireboy)
         self.setupMechanics(watergirl)
     }
@@ -339,6 +340,8 @@ object level1 inherits Level {
         // Pisos
 
         positions.clear()
+
+        // game.removeVisual(self)
     }
 
     // Métodos Propios
@@ -351,9 +354,9 @@ object level1 inherits Level {
     }
 }
 
-object level2 inherits Level {} // DEJENLO, NO LO SAQUEN
-object level3 inherits Level {} // DEJENLO, NO LO SAQUEN
-object level4 inherits Level {} // DEJENLO, NO LO SAQUEN
+//object level2 inherits Level {} // DEJENLO, NO LO SAQUEN
+//object level3 inherits Level {} // DEJENLO, NO LO SAQUEN
+//object level4 inherits Level {} // DEJENLO, NO LO SAQUEN
 
 object puntajes{
     method position() = game.center()

@@ -10,10 +10,6 @@ UTN - Facultad Regional Buenos Aires - Materia Paradigmas de Programación
 - Alejo Scarlato
 - Elín Winter
 
-## Capturas 
-
-![pepita](assets/golondrina.png)
-
 ## Reglas de Juego / Instrucciones
 
 Los jugadores deben completar los niveles del mapa guiando a los dos personajes, FireBoy y WaterGirl, hacia sus respectivas puertas. Para avanzar, deben recolectar la mayor cantidad de diamantes posible y evitar obstáculos mortales que correspondan a cada personaje, como agua para FireBoy y fuego para WaterGirl.
@@ -31,6 +27,3 @@ Los jugadores deben completar los niveles del mapa guiando a los dos personajes,
 - ```w``` para saltar 5 unidades.
 - ```a``` para dirigirse 1 unidad a la derecha. 
 - ```d``` para dirigirse 1 unidad a la izquierda. 
-
-
-

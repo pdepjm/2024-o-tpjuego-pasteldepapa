@@ -100,11 +100,11 @@ class Character {
     method collect () {puntos += 100}
     
     method die (){        
-        //game.sound("S_muerte.mp3").play()
+        game.sound("S_muerte.mp3").play()
         game.addVisual(muerte)
         game.sound("S_game_over.mp3").play()
         game.schedule(3000,{game.removeVisual(muerte)})
-        nivelActual.cleanVisuals()
+        nivelActual.cleanVisuals() ///
         game.schedule(4000, {nivelActual.start()}) // Reiniciamos el nivel 
         // RESTART LEVEL1
     }    

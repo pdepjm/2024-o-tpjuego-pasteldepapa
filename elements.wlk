@@ -165,7 +165,7 @@ class Boton {
                 plataformaAsoc.moveUp()
                 game.schedule(200, {self.colision(personaje)})
             }
-    }
+        }
     }
 
     method personajeMovido(personaje) {
@@ -178,7 +178,7 @@ class Boton {
         }
     }
     
-    method image() = "E_cubee.png"
+    method image() = "E_buttonn.png"
 
     method hastaMaxAltura() = plataformaAsoc.position().y() != plataformaAsoc.maxAltura()
     method hastaMinAltura() = plataformaAsoc.position().y() != plataformaAsoc.minAltura()  
@@ -188,11 +188,9 @@ class Boton {
 
 class PlataformaMovible {
 
-    const posX
-    const posY
     const maxAltura
     const minAltura
-    const position = new MutablePosition(x=posX, y=posY)
+    const position
     const unidadMovimiento = 1
     const platAsocs
     
@@ -225,9 +223,7 @@ class PlataformaMovible {
 
 class ExtensionPlataformaMovible {
 
-    const posX
-    const posY
-    const position = new MutablePosition(x=posX, y=posY)
+    const position
 
     method esAtravesable() = false
     method esColisionable() = true

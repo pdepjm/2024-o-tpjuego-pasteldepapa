@@ -3,17 +3,17 @@ import config.*
 
 program FireBoyWaterGirlGame {
 
-    
     const fondo = game.sound("S_fondo.mp3")
     fondo.shouldLoop(true)
     game.schedule(500, { fondo.play() fondo.volume(0.3)} )
     // Inicial
-    settings.init("F_nivel_1.png", 29, 39, 36)
+    settings.init("FireBoyAndWaterGirl", "F_lobby.png", 29, 39, 36)
 
     // Sonidos
-    level1.setupMechanicsInit()
+    keyboard.enter().onPressDo({level1.setupMechanicsInit()})
     // Mecanica del Juego
-    level1.start() 
+  
+    keyboard.enter().onPressDo({level1.start()})
 
 
 }
