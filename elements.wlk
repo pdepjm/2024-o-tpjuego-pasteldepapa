@@ -6,19 +6,27 @@ import config.*
 
 class Diamante {
 
+    // ---------------- Referencias
+
     const posX
     const posY
     
+    // ---------------- Métodos
+
+    // Metodos Sobrescritos en las Subclases
+
     method tipo() = "" 
+
+    method image() {
+        return "" 
+    }
+
+    // Métodos Propios
 
     method esAtravesable() = true
     method esColisionable () = true
 
     method position() = game.at(posX,posY)
-
-    // Métodos Sobrescritos en las Subclases
-
-   
 
     method colision(personaje) {
         
@@ -31,9 +39,7 @@ class Diamante {
     }
 
     method canCollect(personaje) = personaje.tipo() == self.tipo()
- method image() {
-        return "" 
-    }
+    
 }
 
 class DiamanteRojo inherits Diamante {
@@ -42,7 +48,6 @@ class DiamanteRojo inherits Diamante {
     override method image() {
         return "E_f_diamond.png" 
     }
-
 }
 
 class DiamanteAzul inherits Diamante {
@@ -51,7 +56,6 @@ class DiamanteAzul inherits Diamante {
     override method image() {
         return "E_w_diamond.png" 
     }
-
 }
 
 class DiamanteGris inherits Diamante {
@@ -69,11 +73,38 @@ class DiamanteGris inherits Diamante {
 class Puerta {
     const posX
     const posY
+    const tipo
+    var otrasPuertas = []
+    var personaEnPuerta = false
 
     method position() = game.at(posX, posY)
     method esAtravesable () = true
     method esColisionable() = false 
 
+    method colision(personaje){
+        if(self.mismoTipo(personaje)) {
+            if(self.mismaPosicion(personaje) and self.otraPuertaOcupada()) {
+                settings.pasarSgteNivel()
+            } else if(personaje.position() == self.position()) {
+                personaEnPuerta = true
+                game.schedule(100, {self.colision(personaje)})
+            } else {
+                personaEnPuerta = false
+            }
+        }
+    }
+
+    method otrasPuertas(puertas) {
+        otrasPuertas = puertas
+    }
+
+    method otraPuertaOcupada() = otrasPuertas.any { x => x.personaEnPuerta()}
+
+    method mismoTipo(personaje) = personaje.tipo() == tipo
+
+    method mismaPosicion(personaje) = personaje.position() == self.position()
+
+    method personaEnPuerta() = personaEnPuerta
 }
 
 // ------------------ Caja
@@ -132,7 +163,7 @@ class Boton {
         if(personaje.position() == self.position()) {
             if(self.hastaMaxAltura()) {
                 plataformaAsoc.moveUp()
-                game.schedule(100, {self.colision(personaje)})
+                game.schedule(200, {self.colision(personaje)})
             }
     }
     }
@@ -142,12 +173,12 @@ class Boton {
         if(personaje.position() != self.position()) {
             if(self.hastaMinAltura()) {
                 plataformaAsoc.moveDown()
-                game.schedule(100, {self.personajeMovido(personaje)})
+                game.schedule(200, {self.personajeMovido(personaje)})
             }
         }
     }
     
-    method image() = "E_cube.png"
+    method image() = "E_cubee.png"
 
     method hastaMaxAltura() = plataformaAsoc.position().y() != plataformaAsoc.maxAltura()
     method hastaMinAltura() = plataformaAsoc.position().y() != plataformaAsoc.minAltura()  
@@ -163,47 +194,59 @@ class PlataformaMovible {
     const minAltura
     const position = new MutablePosition(x=posX, y=posY)
     const unidadMovimiento = 1
+    const platAsocs
     
     method maxAltura() = maxAltura
     method minAltura() = minAltura
 
     method position() = position
 
-    method colision(personaje) {}
+    method colision(personaje) {
+
+    }
 
     method esAtravesable() = false
     method esColisionable() = true
 
     method moveUp() {
         position.goUp(unidadMovimiento)
+        platAsocs.forEach { x => x.position().goUp(unidadMovimiento)}
     }
 
     method moveDown() {
         position.goDown(unidadMovimiento)
+        platAsocs.forEach { x => x.position().goDown(unidadMovimiento)}
     }
 
     method image() = "E_horizontal_gate.png"
 
 }
 
-/*
+
+class ExtensionPlataformaMovible {
+
+    const posX
+    const posY
+    const position = new MutablePosition(x=posX, y=posY)
+
+    method esAtravesable() = false
+    method esColisionable() = true
+    method colision(personaje) {}
+
+    method position() = position
+}
+
+
+
+// ------------------ Nuevo fondo
+class BackgroundCover {
+    const posX = 0
+    const posY = 0
+
+    method position() = game.at(posX, posY)
+    method image() = "nivel_2.png"
+}
 
 // ------------------ Plataformas 
 
-class Platform {
-    var positionX
-    var positionY
-
-    constructor(x, y) {
-        positionX = x
-        positionY = y
-    }
-
-    method support(character) {
-        // Mantiene al personaje en la plataforma
-        if (character.position.y <= positionY) {
-            character.position.goTo(positionX, positionY); // Coloca al personaje en la plataforma
-        }
-    }
-}*/
 

@@ -12,8 +12,6 @@ class Character {
 
     const invalidPositions = [] // Lista de posiciones invalidas (se la pasamos al incio)
     const zonasProhibidas = [] // Lista de charcos de distinto tipo (se la pasamos al incio)
-    
-    var property enPuerta = false
 
     const nivelActual
 
@@ -21,20 +19,20 @@ class Character {
 
     // Métodos Sobrescritos en las Subclases
 
-    method image() = "" 
-    method tipo() = ""
-    method setupControls() {} 
+    method image() = "" //
+    method tipo() = "" //
+    method setupControls() {} //
 
     // Métodos Propios
 
-    method setPosition (posX, posY){
+    method setPosition (posX, posY){ //
         position = new MutablePosition(x=posX, y=posY)
     }
 
-    method colision(personaje) {}  // Para que no genere error si colisionan entre personajes
+    method colision(personaje) {}  // // Para que no genere error si colisionan entre personajes
 
-    method esColisionable () = true // Para los bordes y pisos
-    method esAtravesable () = true
+    method esColisionable () = true // // Para los bordes y pisos
+    method esAtravesable () = true // 
     
     // Movimientos
 
@@ -106,7 +104,8 @@ class Character {
         game.addVisual(muerte)
         game.sound("S_game_over.mp3").play()
         game.schedule(3000,{game.removeVisual(muerte)})
-        game.schedule(3000, {nivelActual.start()}) // Reiniciamos el nivel 
+        nivelActual.cleanVisuals()
+        game.schedule(4000, {nivelActual.start()}) // Reiniciamos el nivel 
         // RESTART LEVEL1
     }    
 }
