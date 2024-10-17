@@ -197,6 +197,8 @@ class PlataformaMovible {
     const position
     const unidadMovimiento = 1
     const platAsocs
+
+    var personajeAdherido = null
     
     method maxAltura() = maxAltura
     method minAltura() = minAltura
@@ -204,11 +206,9 @@ class PlataformaMovible {
     method position() = position
 
     method colision(personaje) {
-        personaje.moveUp()
-        personaje.moveUp()
-        personaje.moveUp()
-        personaje.moveUp()
-        personaje.moveUp()
+        personaje.desactivarGravedad()
+        personaje.moverALaPar(self)
+        personajeAdherido = personaje
     }
 
     method esAtravesable() = false
@@ -216,28 +216,68 @@ class PlataformaMovible {
 
     method moveUp() {
         position.goUp(unidadMovimiento)
-        platAsocs.forEach { x => x.position().goUp(unidadMovimiento)}
+        platAsocs.forEach { x => x.moveUp()}
+        self.moverPersonajeAdherido()
     }
 
     method moveDown() {
         position.goDown(unidadMovimiento)
-        platAsocs.forEach { x => x.position().goDown(unidadMovimiento)}
+        platAsocs.forEach { x => x.moveDown()}
+        self.moverPersonajeAdherido()
     }
 
     method image() = "E_horizontal_gate.png"
 
+
+    method moverPersonajeAdherido() {
+        if (personajeAdherido != null) { 
+            personajeAdherido.setPosition(personajeAdherido.position().x(), self.position().y() + 1)
+        } else {
+            self.detachCharacter()  // lo pusimos porque sino causa error
+        }
+    }
+    method detachCharacter() {
+        personajeAdherido = null
+    }
 }
 
 
 class ExtensionPlataformaMovible {
 
     const position
+    const unidadMovimiento = 1
+    var personajeAdherido = null
 
     method esAtravesable() = false
     method esColisionable() = true
-    method colision(personaje) {}
+    method colision(personaje) {
+        personaje.desactivarGravedad()
+        personaje.moverALaPar(self)
+        personajeAdherido = personaje
+    }
 
     method position() = position
+
+    method moveUp() {
+        self.position().goUp(unidadMovimiento)
+        self.moverPersonajeAdherido()
+    }
+
+    method moveDown() {
+        self.position().goDown(unidadMovimiento)
+        self.moverPersonajeAdherido()
+    }
+
+    method moverPersonajeAdherido() {
+        if (personajeAdherido != null) { 
+            personajeAdherido.setPosition(personajeAdherido.position().x(), self.position().y() + 1)
+        } else {
+            self.detachCharacter()  // lo pusimos porque sino causa error
+        }
+    }
+    method detachCharacter() {
+        personajeAdherido = null
+    }
 }
 
 

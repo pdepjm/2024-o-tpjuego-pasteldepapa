@@ -16,6 +16,8 @@ class Character {
     const nivelActual
     var murioPersonaje = false
 
+    var plataformaAdherida = null
+
     // -------------------- Métodos
 
     // Métodos Sobrescritos en las Subclases
@@ -76,6 +78,12 @@ class Character {
     }
 
     method jump() {
+
+        if(plataformaAdherida != null) {
+            plataformaAdherida.detachCharacter()
+            plataformaAdherida = null
+        }
+
         self.desactivarGravedad()
         [100, 200, 300, 400].forEach { num => game.schedule(num, { self.moveUp() }) }        
         game.schedule(900, {self.gravedad()})
@@ -110,7 +118,12 @@ class Character {
         nivelActual.cleanVisuals() ///
         game.schedule(4000, {nivelActual.start()}) // Reiniciamos el nivel 
         // RESTART LEVEL1
-    }   
+    } 
+
+    method moverALaPar(plataforma) {
+        plataformaAdherida = plataforma
+    } 
+    
 }
 
 class Fireboy inherits Character {
