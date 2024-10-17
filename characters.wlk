@@ -40,6 +40,9 @@ class Character {
     // Movimientos
 
     method moveLeft() {
+
+        self.plataformaDesadherida()
+
         const nuevaPosicion = [position.left(unidadMovimiento).x(), position.y()]   
         
         if(!invalidPositions.contains(nuevaPosicion) && self.puedeColisionar(nuevaPosicion))
@@ -48,6 +51,9 @@ class Character {
     }
 
     method moveRight() {
+
+        self.plataformaDesadherida()
+
         const nuevaPosicion = [position.right(unidadMovimiento).x(), position.y()]
 
         if (!invalidPositions.contains(nuevaPosicion) && self.puedeColisionar(nuevaPosicion))
@@ -79,10 +85,7 @@ class Character {
 
     method jump() {
 
-        if(plataformaAdherida != null) {
-            plataformaAdherida.detachCharacter()
-            plataformaAdherida = null
-        }
+        self.plataformaDesadherida()
 
         self.desactivarGravedad()
         [100, 200, 300, 400].forEach { num => game.schedule(num, { self.moveUp() }) }        
@@ -123,6 +126,14 @@ class Character {
     method moverALaPar(plataforma) {
         plataformaAdherida = plataforma
     } 
+
+    method plataformaDesadherida() {
+        if(plataformaAdherida != null) {
+            plataformaAdherida.detachCharacter()
+            plataformaAdherida = null
+            self.gravedad()
+        }
+    }
     
 }
 
@@ -167,7 +178,7 @@ class Watergirl inherits Character {
         keyboard.w().onPressDo  ({ self.jump() })
     }
     override method gravedad(){
-            game.onTick(100, "W_Gravedad", {self.moveDown()})
+        game.onTick(100, "W_Gravedad", {self.moveDown()})
     }
 
     override method desactivarGravedad (){
