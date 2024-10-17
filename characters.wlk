@@ -73,19 +73,18 @@ class Character {
             position.goDown(unidadMovimiento)
             oldPosition = new MutablePosition(x = self.position().x(), y = self.position().y() + unidadMovimiento)
         }
-
     }
 
     method jump() {
-        game.removeTickEvent("Gravedad")
+        self.desactivarGravedad()
         [100, 200, 300, 400].forEach { num => game.schedule(num, { self.moveUp() }) }        
-        game.schedule(900, {game.onTick(100, "Gravedad", {self.moveDown()} )})
+        game.schedule(900, {self.gravedad()})
     }
 
-    method gravedad(){
-        game.onTick(100, "Gravedad", {self.moveDown()})
-    }
+    method gravedad(){}
 
+    method desactivarGravedad(){}
+    
     method setupCollisions() {
         game.onCollideDo(self, {element => element.colision(self)}) 
     }
@@ -129,6 +128,14 @@ class Fireboy inherits Character {
         keyboard.right().onPressDo  ({ self.moveRight() })
         keyboard.up().onPressDo     ({ self.jump() })
     }
+
+    override method gravedad(){
+        game.onTick(100, "F_Gravedad", {self.moveDown()})
+    }
+
+    override method desactivarGravedad (){
+        game.removeTickEvent("F_Gravedad")
+    }
 }
 
 class Watergirl inherits Character {
@@ -145,6 +152,13 @@ class Watergirl inherits Character {
         keyboard.a().onPressDo  ({ self.moveLeft() })
         keyboard.d().onPressDo  ({ self.moveRight() })
         keyboard.w().onPressDo  ({ self.jump() })
+    }
+    override method gravedad(){
+            game.onTick(100, "W_Gravedad", {self.moveDown()})
+    }
+
+    override method desactivarGravedad (){
+        game.removeTickEvent("W_Gravedad")
     }
 }
 
