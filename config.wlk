@@ -392,3 +392,13 @@ object nivelSuperado{
     method text1()  {Fireboy.puntaje()}
     method text2()  {Watergirl.puntaje()}
 }
+
+//Fin de juego 
+
+object finJuego{
+
+    method position() = game.origin()
+
+    method image () = "F_Fin_De_Juego.png"
+
+}
