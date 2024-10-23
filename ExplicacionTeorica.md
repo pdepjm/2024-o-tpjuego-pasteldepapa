@@ -25,5 +25,4 @@ El *polimorfismo* también se aplica a los objetos del juego, como los diamantes
 A partir de esto, apreciamos que el polimorfismo otorga flexibilidad y facilita la reutilización de código, además de tornarlo más extensible y fácil de mantener.
 
 # Diagrama de Clases
-
 ![alt text](Diagrama.png)

@@ -82,7 +82,7 @@ object level2 inherits Level {
         marcoJuego.add(new Zona (xMin = 22, xMax = 30, yMin = 23, yMax = 23 ))
     }
 
-        //Agregamos elementos 
+    //Agregamos elementos 
 
     override method setupElements() {
         elementosNivel2.forEach({lista => lista.forEach({element => game.addVisual(element)})})

@@ -157,7 +157,6 @@ object finJuego{
     method position() = game.origin()
 
     method image () = "F_Fin_De_Juego.png"
-
 }
 
 //Manejo de Zonas y Charcos

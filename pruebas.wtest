@@ -30,6 +30,7 @@ describe "Movimientos de los Personajes" {
         assert.equals(6, watergirl.position().x()) // Debería moverse 1 unidad a la derecha
         assert.equals(5, watergirl.position().y()) // La coordenada y no debería cambiar
     }
+    
     test "Fireboy - No atraviesa los pisos intermedios"{
         const invalidPositions = [[2,3]] 
         

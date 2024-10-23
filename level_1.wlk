@@ -136,7 +136,6 @@ object level1 inherits Level {
 
     // Limpieza al final del juego
 
-    // Lista de elementos del nivel 1
     const elementosNivel1 = [[fireboy, watergirl, caja, puertaFireboy1, puertaFireboy2, puertaWatergirl1, puertaWatergirl2, extensionPlatAmarilla1, extensionPlatAmarilla2, plataformaAmarilla, botonAmarilloA, botonAmarilloB, botonInvAmarilloBDer, botonInvAmarilloBIzq, botonInvAmarilloDer, botonInvAmarilloIzq, botonInvBordoADer, botonInvBordoAIzq, botonInvBordoBDer, botonInvBordoBIzq, extensionPlatBordo1, plataformaBordo, extensionPlatBordo2, botonBordoA, botonBordoB], diamantes]
 
     override method cleanVisuals() {

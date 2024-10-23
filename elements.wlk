@@ -35,14 +35,12 @@ class Diamante {
             game.removeVisual(self) 
             game.sound("S_diamante.mp3").play()
             // efecto visual, sonido, palabritas
-            
         }
     }
 
     method fuiRecolectado() = fuiRecolectado
 
     method canCollect(personaje) = personaje.tipo() == self.tipo()
-    
 }
 
 class DiamanteRojo inherits Diamante {
