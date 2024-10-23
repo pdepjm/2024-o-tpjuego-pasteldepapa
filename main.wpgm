@@ -1,5 +1,6 @@
 import wollok.game.*
 import config.*
+import level_1.*
 
 program FireBoyWaterGirlGame {
 
@@ -14,5 +15,4 @@ program FireBoyWaterGirlGame {
 
     // Mecanica del Juego
     keyboard.enter().onPressDo({level1.start()})
-
 }

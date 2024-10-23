@@ -18,7 +18,7 @@ Esta estructura facilita la reutilización de código, ya que los comportamiento
 
 En el código y el contexto del juego, el *polimorfismo* se utiliza para manejar de manera uniforme objetos que comparten una estructura básica, pero responden de forma diferente a ciertos eventos del juego. Un claro ejemplo es la gestión de colisiones: en lugar de diferenciar entre diamantes, plataformas u otros personajes, se utiliza una interfaz común llamada `colision()`. Cada objeto colisionable implementa este método de manera específica, adaptándose a su comportamiento particular. Por ejemplo, mientras que `Caja` se desplaza a la par que el personaje con el que colisionó, un `Diamante` es recolectado por personajes de su mismo tipo. 
 
-Además, utilizamos referencias comunes para varios objetos, como `esAtravesable`, `esColisionable` y el método `tipo()`. Estas características compartidas permiten tratar distintos elementos del juego de manera consistente.
+Además, utilizamos referencias comunes para varios objetos, como `esAtravesable` y el método `tipo()`. Estas características compartidas permiten tratar distintos elementos del juego de manera consistente.
 
 El *polimorfismo* también se aplica a los objetos del juego, como los diamantes. Al utilizar una clase base llamada `Diamante` y subclases específicas como `DiamanteRojo` y `DiamanteAzul`, se pueden manejar los diamantes de manera genérica en el código. Sin embargo, las diferencias en su comportamiento, como su imagen o tipo, se implementan en cada subclase. Esto facilita la incorporación de nuevos tipos de diamantes sin necesidad de modificar el código central del juego. Ocurre lo mismo con `Personaje`, `Fireboy` y `Watergirl`. 
 

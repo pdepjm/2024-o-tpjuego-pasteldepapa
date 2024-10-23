@@ -2,16 +2,14 @@ import wollok.game.*
 import config.*
 import characters.*
 import elements.*
-
+import level_1.*
 
 describe "Movimientos de los Personajes" {
     test "Fireboy - Movimiento a Izquierda Correcto" {
         const fireboy = new Fireboy(
             position = new MutablePosition (x=0, y=0), 
             oldPosition = new MutablePosition (x=0, y=0), 
-            nivelActual = 0, 
-            zonasProhibidas = [], 
-            invalidPositions = []) 
+            nivelActual = 0) 
 
         fireboy.setPosition(5, 5)
         fireboy.moveLeft()
@@ -24,9 +22,7 @@ describe "Movimientos de los Personajes" {
         const watergirl = new Watergirl(
                 position = new MutablePosition (x=0, y=0), 
                 oldPosition = new MutablePosition (x=0, y=0), 
-                nivelActual = level1, 
-                zonasProhibidas = [], 
-                invalidPositions = []) 
+                nivelActual = level1) 
 
         watergirl.setPosition(5, 5)
         watergirl.moveRight()
@@ -40,9 +36,7 @@ describe "Movimientos de los Personajes" {
         const fireboy = new Fireboy(
                 position = new MutablePosition (x=2, y=4), 
                 oldPosition = new MutablePosition (x=2, y=4), 
-                nivelActual = level1, 
-                zonasProhibidas = [], 
-                invalidPositions = invalidPositions)
+                nivelActual = level1)
         
         fireboy.setPosition(2, 4)
         fireboy.moveDown()
@@ -54,9 +48,7 @@ describe "Movimientos de los Personajes" {
         const watergirl = new Watergirl(
                 position = new MutablePosition (x=0, y=0), 
                 oldPosition = new MutablePosition (x=0, y=0), 
-                nivelActual = level1, 
-                zonasProhibidas = [], 
-                invalidPositions = []) 
+                nivelActual = level1) 
 
         watergirl.setPosition(1, 1)
         watergirl.jump()
@@ -74,9 +66,7 @@ describe "Zonas Prohibidas" {
         const fireboy = new Fireboy(
                 position = new MutablePosition (x=2, y=2), 
                 oldPosition = new MutablePosition (x=2, y=2), 
-                nivelActual = level1, 
-                zonasProhibidas = zonasProhibidasFireboy, 
-                invalidPositions = []) 
+                nivelActual = level1) 
         
         fireboy.setPosition(2, 1)
         fireboy.moveDown()
@@ -87,10 +77,7 @@ describe "Zonas Prohibidas" {
             const fireboy = new Fireboy(
                 position = new MutablePosition(x=2, y=2), 
                 oldPosition = new MutablePosition(x=2, y=2), 
-                nivelActual = 0, 
-                zonasProhibidas = zonasProhibidasFireboy, 
-                invalidPositions = []
-            )
+                nivelActual = 0)
             
             fireboy.setPosition(1, 1)
             fireboy.moveRight()
@@ -108,9 +95,7 @@ describe "Diamantes" {
         const fireboy = new Fireboy(
             position = new MutablePosition (x=0, y=0), 
             oldPosition = new MutablePosition (x=0, y=0), 
-            nivelActual = level1, 
-            zonasProhibidas = [], 
-            invalidPositions = []) 
+            nivelActual = level1) 
 
         fireboy.setPosition(1, 1)
         fireboy.moveRight()
@@ -127,9 +112,7 @@ describe "Diamantes" {
         const watergirl = new Watergirl(
             position = new MutablePosition (x=0, y=0), 
             oldPosition = new MutablePosition (x=0, y=0), 
-            nivelActual = level1, 
-            zonasProhibidas = [], 
-            invalidPositions = []) 
+            nivelActual = level1) 
 
         watergirl.setPosition(1, 1)
         watergirl.moveRight()
@@ -144,9 +127,7 @@ describe "Diamantes" {
         const fireboy = new Fireboy(
             position = new MutablePosition (x=0, y=0), 
             oldPosition = new MutablePosition (x=0, y=0), 
-            nivelActual = level1, 
-            zonasProhibidas = [], 
-            invalidPositions = []) 
+            nivelActual = level1) 
 
         fireboy.setPosition(1, 1)
         fireboy.moveRight() // el movimiento no afecta  ala colision y no la toma
@@ -161,9 +142,7 @@ describe "Diamantes" {
         const watergirl = new Watergirl(
             position = new MutablePosition (x=0, y=0), 
             oldPosition = new MutablePosition (x=0, y=0), 
-            nivelActual = level1, 
-            zonasProhibidas = [], 
-            invalidPositions = []) 
+            nivelActual = level1) 
 
         watergirl.setPosition(1, 1)
         watergirl.jump()

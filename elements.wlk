@@ -25,7 +25,6 @@ class Diamante {
     // Métodos Propios
 
     method esAtravesable() = true
-    method esColisionable () = true
 
     method position() = game.at(posX,posY)
 
@@ -83,7 +82,6 @@ class Puerta {
 
     method position() = game.at(posX, posY)
     method esAtravesable () = true
-    method esColisionable() = false 
 
     method colision(personaje){
         if(self.mismoTipo(personaje)) {
@@ -119,7 +117,7 @@ class Caja {
     method image() = "E_cube.png"
 
     method esAtravesable() = false
-    method esColisionable() = true
+    
 
     method colision (personaje){
         if(personaje.oldPosition().x() > self.position().x() && position.left(1).x().between(6, 18)){
@@ -140,7 +138,6 @@ class BotonInvisible {
     const botonAsoc
 
     method esAtravesable() = true
-    method esColisionable() = true
 
     method position() = game.at(posX, posY)
 
@@ -159,7 +156,6 @@ class Boton {
 
 
     method esAtravesable() = false
-    method esColisionable() = true
 
     method position() = game.at(posX, posY)
 
@@ -212,8 +208,7 @@ class PlataformaMovible {
     }
 
     method esAtravesable() = false
-    method esColisionable() = true
-
+    
     method moveUp() {
         position.goUp(unidadMovimiento)
         platAsocs.forEach { x => x.moveUp()}
@@ -249,7 +244,6 @@ class ExtensionPlataformaMovible {
     var personajeAdherido = null
 
     method esAtravesable() = false
-    method esColisionable() = true
     method colision(personaje) {
         personaje.desactivarGravedad()
         personaje.moverALaPar(self)
