@@ -1,5 +1,8 @@
 import characters.*
 import config.*
+import level_1.*
+import level_2.*
+import visualCarteles.*
 
 
 // ------------------ Diamantes
@@ -10,7 +13,6 @@ class Diamante {
 
     const posX
     const posY
-    var fuiRecolectado = false
     
     // ---------------- Métodos
 
@@ -31,14 +33,10 @@ class Diamante {
     method colision(personaje) {
         
         if (self.canCollect(personaje)) { // Personaje puede recogerlo y todavia no fue recogido
-            fuiRecolectado = true 
             game.removeVisual(self) 
             game.sound("S_diamante.mp3").play()
-            // efecto visual, sonido, palabritas
         }
     }
-
-    method fuiRecolectado() = fuiRecolectado
 
     method canCollect(personaje) = personaje.tipo() == self.tipo()
 }
@@ -77,20 +75,23 @@ class Puerta {
     const tipo
     var otrasPuertas = []
     var personaEnPuerta = false
+    var personaParaPuerta = null
 
     method position() = game.at(posX, posY)
     method esAtravesable () = true
 
-    method colision(personaje){
+    method setupCollisions() {
+        game.whenCollideDo(self, {x => x.colisionEspecial(self)}) 
+    }
+
+    method colisionEspecial(personaje) {
         if(self.mismoTipo(personaje)) {
-            if(self.mismaPosicion(personaje) and self.otraPuertaOcupada()) {
+            
+            personaEnPuerta = true
+            personaParaPuerta = personaje
+
+            if(self.otraPuertaOcupada())
                 settings.pasarSgteNivel()
-            } else if(personaje.position() == self.position()) {
-                personaEnPuerta = true
-                game.schedule(100, {self.colision(personaje)})
-            } else {
-                personaEnPuerta = false
-            }
         }
     }
 
@@ -100,11 +101,13 @@ class Puerta {
 
     method otraPuertaOcupada() = otrasPuertas.any { x => x.personaEnPuerta()}
 
+    method personaEnPuerta() = personaEnPuerta && self.mismaPosicion(personaParaPuerta)
+
     method mismoTipo(personaje) = personaje.tipo() == tipo
 
     method mismaPosicion(personaje) = personaje.position() == self.position()
 
-    method personaEnPuerta() = personaEnPuerta
+    method colision(x) {}
 }
 
 // ------------------ Caja
@@ -116,7 +119,6 @@ class Caja {
 
     method esAtravesable() = false
     
-
     method colision (personaje){
         if(personaje.oldPosition().x() > self.position().x() && position.left(1).x().between(6, 18)){
             position = self.position().left(1)
@@ -129,119 +131,74 @@ class Caja {
 
 // ------------------ Boton para Plataforma
 
-class BotonInvisible {
-
-    const posX
-    const posY
-    const botonAsoc
-
-    method esAtravesable() = true
-
-    method position() = game.at(posX, posY)
-
-    method colision(personaje) {
-        botonAsoc.personajeMovido(personaje)
-    }
-
-}
-
-
 class Boton {
 
     const posX
     const posY
     const plataformaAsoc
+    var botonAsoc = null
+    var presionado = false
 
 
     method esAtravesable() = false
 
     method position() = game.at(posX, posY)
 
-    method colision(personaje){
-        if(personaje.position() == self.position()) {
-            if(self.hastaMaxAltura()) {
-                plataformaAsoc.moveUp()
-                game.schedule(300, {self.colision(personaje)})
-            }
+    method setupCollisions() {
+        game.whenCollideDo(self, {x => x.colisionEspecial(self)}) 
+    }
+
+    method colisionEspecial(personaje) {
+        if(self.hastaMaxAltura()) {
+            plataformaAsoc.moveUp()
         }
+
+        presionado = true
+        self.personajeMovido(personaje)
     }
 
     method personajeMovido(personaje) {
-        
-        if(personaje.position() != self.position()) {
-            if(self.hastaMinAltura()) {
+        if(!self.mismaPosicion(personaje)) {
+            
+            presionado = false
+
+            if(!botonAsoc.presionado()) {
+                if(self.hastaMinAltura()) {
                 plataformaAsoc.moveDown()
                 game.schedule(300, {self.personajeMovido(personaje)})
+                } 
             }
-        }
+
+        } else 
+            game.schedule(300, {self.personajeMovido(personaje)})
     }
+
+    method mismaPosicion(obj) = obj.position() == self.position()
     
     method image() = "E_buttonn.png"
 
+    method presionado() = presionado
+
+    method botonAsoc(nuevoBoton) {
+        botonAsoc = nuevoBoton
+    }
+
     method hastaMaxAltura() = plataformaAsoc.position().y() != plataformaAsoc.maxAltura()
-    method hastaMinAltura() = plataformaAsoc.position().y() != plataformaAsoc.minAltura()  
+    method hastaMinAltura() = plataformaAsoc.position().y() != plataformaAsoc.minAltura() 
+
+    method colision(obj) {} 
 }
 
 // ------------------ Plataforma Movible
 
-class PlataformaMovible {
-
-    const maxAltura
-    const minAltura
-    const position
-    const unidadMovimiento = 1
-    const platAsocs
-
-    var personajeAdherido = null
-    
-    method maxAltura() = maxAltura
-    method minAltura() = minAltura
-
-    method position() = position
-
-    method colision(personaje) {
-        personaje.desactivarGravedad()
-        personaje.moverALaPar(self)
-        personajeAdherido = personaje
-    }
-
-    method esAtravesable() = false
-    
-    method moveUp() {
-        position.goUp(unidadMovimiento)
-        platAsocs.forEach { x => x.moveUp()}
-        self.moverPersonajeAdherido()
-    }
-
-    method moveDown() {
-        position.goDown(unidadMovimiento)
-        platAsocs.forEach { x => x.moveDown()}
-        self.moverPersonajeAdherido()
-    }
-
-    method image() = "E_horizontal_gate.png"
-
-
-    method moverPersonajeAdherido() {
-        if (personajeAdherido != null) { 
-            personajeAdherido.setPosition(personajeAdherido.position().x(), self.position().y() + 1)
-        } else {
-            self.detachCharacter()  // lo pusimos porque sino causa error
-        }
-    }
-    method detachCharacter() {
-        personajeAdherido = null
-    }
-}
-
-
-class ExtensionPlataformaMovible {
+class PlataformaBase {
 
     const position
     const unidadMovimiento = 1
     var personajeAdherido = null
 
     method esAtravesable() = false
+    
     method colision(personaje) {
         personaje.desactivarGravedad()
         personaje.moverALaPar(self)
@@ -270,9 +227,31 @@ class ExtensionPlataformaMovible {
     method detachCharacter() {
         personajeAdherido = null
     }
+
 }
 
+class PlataformaMovible inherits PlataformaBase {
 
+    const maxAltura
+    const minAltura
+    const platAsocs
+
+    method maxAltura() = maxAltura
+    method minAltura() = minAltura
+
+    override method moveUp() {
+        super()
+        platAsocs.forEach { x => x.moveUp()} 
+    }
+
+    override method moveDown() {
+        super()
+        platAsocs.forEach { x => x.moveDown()} 
+    }
+
+    method image() = "E_horizontal_gate.png"
+
+}
 
 // ------------------ Nuevo fondo
 class BackgroundCover {
@@ -283,6 +262,21 @@ class BackgroundCover {
     method image() = "nivel_2.png"
 }
 
-// ------------------ Plataformas 
+// ------------------ Zona
+class Zona {
 
+    const xMin
+    const xMax
+    const yMin
+    const yMax
 
+    method posicionProhibida (posicion) = posicion.x().between(xMin, xMax) && posicion.y().between(yMin, yMax)
+}
+
+// ------------------ Charco
+
+class Charco inherits Zona {
+    const tipo
+
+    method mismoTipo (personaje) = personaje.tipo() == tipo
+}

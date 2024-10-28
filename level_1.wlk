@@ -5,26 +5,85 @@ import characters.*
 object level1 inherits Level {
     
     // --------------------- Referencias -------------------------
-    override method image() = "F_nivel_1.png"
-   
-    override method positionF() = new MutablePosition (x = 4, y= 5)
-    override method positionW() = new MutablePosition (x = 4, y= 1)
 
-    override method nivelActual () = self
+    // Diamantes
 
-    // ---------------------- Elementos
+    const diamantes = []
 
-    // Puertas Finales
+    // Puertas
+
     const puertaFireboy1 = new Puerta(posX = 32, posY = 23, tipo = fuego)
     const puertaFireboy2 = new Puerta(posX = 33, posY = 23, tipo = fuego)
     const puertaWatergirl1 = new Puerta(posX = 35, posY = 23, tipo = agua)
     const puertaWatergirl2 = new Puerta(posX = 36, posY = 23, tipo = agua)
 
+    // Plataforma Amarilla y Elementos Asociados
+
+    const extensionPlatAmarilla1 = new PlataformaBase(position = new MutablePosition(x=2, y=9))
+    const extensionPlatAmarilla2 = new PlataformaBase(position = new MutablePosition(x=3, y=9))
+
+    const plataformaAmarilla = new PlataformaMovible(
+        position = new MutablePosition(x=1, y=9),
+        maxAltura = 13,
+        minAltura = 9,
+        platAsocs = [extensionPlatAmarilla1, extensionPlatAmarilla2]
+    )
+
+    const botonAmarilloA = new Boton(posX = 10, posY = 9, plataformaAsoc = plataformaAmarilla) // Boton Abajo
+    const botonAmarilloB = new Boton(posX = 13, posY = 14, plataformaAsoc = plataformaAmarilla) // Boton Arriba
+
+    // Plataforma Bordo y Elementos Asociados
+
+    const extensionPlatBordo1 = new PlataformaBase(position = new MutablePosition(x=35, y=13))
+    const extensionPlatBordo2 = new PlataformaBase(position = new MutablePosition(x=36, y=13))
+
+    const plataformaBordo = new PlataformaMovible(
+        position = new MutablePosition(x=34, y=13),
+        maxAltura = 16,
+        minAltura =13,
+        platAsocs = [extensionPlatBordo1, extensionPlatBordo2]
+    )
+
+    const botonBordoA = new Boton(posX = 30, posY = 18, plataformaAsoc = plataformaBordo) // Boton Arriba
+    const botonBordoB = new Boton(posX = 29, posY = 13, plataformaAsoc = plataformaBordo) // Boton Abajo
+    
+    // Caja
+    const caja = new Caja(position = new MutablePosition (x=13, y=18))
+
+    // Lista con Todos los Elementos - Para la limpieza luego
+
+    const elementosNivel1 = [
+        fireboy, watergirl, 
+        caja, 
+        puertaFireboy1, puertaFireboy2, puertaWatergirl1, puertaWatergirl2, 
+        extensionPlatAmarilla1, extensionPlatAmarilla2, 
+        plataformaAmarilla,
+        botonAmarilloA, botonAmarilloB, 
+        extensionPlatBordo1, extensionPlatBordo2,
+        plataformaBordo,  
+        botonBordoA, botonBordoB]
+    
+    // Lista con Elementos con Colision Especial
+
+    const elemsColisionEspecial = [
+        botonAmarilloA, botonAmarilloB,
+        botonBordoA, botonBordoB,
+        puertaFireboy1, puertaFireboy2,
+        puertaWatergirl1, puertaWatergirl2
+    ]
+
     // --------------------- Métodos
 
-    //Diamantes
+    // Basicos
 
-    const diamantes = []
+    override method image() = "F_nivel_1.png"
+   
+    override method positionF() = new MutablePosition (x = 8, y= 18)
+    override method positionW() = new MutablePosition (x = 6, y= 18)
+
+    override method nivelActual () = self
+
+    // Diamantes
 
     override method setupDiamonds() {
         diamantes.add(new DiamanteRojo(posX = 28, posY = 3))
@@ -36,15 +95,16 @@ object level1 inherits Level {
         diamantes.add(new DiamanteAzul(posX = 4, posY = 22))
         diamantes.add(new DiamanteAzul(posX = 18, posY = 23))
         diamantes.add(new DiamanteGris(posX = 6, posY = 5))
-
     }
 
-    // Seteo de charcos
+    // Charcos
     override method setupCharcos() {
         charcos.add(new Charco(xMin = 18, xMax = 22, yMin = 0, yMax = 0, tipo = agua))
         charcos.add(new Charco(xMin = 26, xMax = 30, yMin = 0, yMax = 0, tipo = fuego))
         charcos.add(new Charco(xMin = 24, xMax = 28, yMin = 6, yMax = 6, tipo = acido))
     }
+
+    // Marcos
     
     override method setupMarco(){
         marcoJuego.add(new Zona (xMin = 0, xMax = 38, yMin = 0, yMax = 0   ))
@@ -75,9 +135,10 @@ object level1 inherits Level {
         marcoJuego.add(new Zona (xMin = 9, xMax = 11, yMin = 24, yMax = 24 ))
     }
 
-    //Agregamos elementos 
+    // Agregamos Elementos
     override method setupElements() {
-       elementosNivel1.forEach({lista => lista.forEach({element => game.addVisual(element)})})
+        elementosNivel1.forEach({element => game.addVisual(element)})
+        diamantes.forEach({x => game.addVisual(x)})
 
         // Puertas
         puertaFireboy1.otrasPuertas([puertaWatergirl1, puertaWatergirl2])
@@ -85,61 +146,23 @@ object level1 inherits Level {
 
         puertaWatergirl1.otrasPuertas([puertaFireboy1, puertaFireboy2])
         puertaWatergirl2.otrasPuertas([puertaFireboy1, puertaFireboy2])
+
+        // Boton
+
+        botonAmarilloA.botonAsoc(botonAmarilloB) 
+        botonAmarilloB.botonAsoc(botonAmarilloA)
+        botonBordoA.botonAsoc(botonBordoB) 
+        botonBordoB.botonAsoc(botonBordoA)
+
+        // Elementos con Colision Especial
+        elemsColisionEspecial.forEach({x => x.setupCollisions()})
     }
 
-        // Plataforma Amarilla y Elementos Asociados
-
-    const extensionPlatAmarilla1 = new ExtensionPlataformaMovible(position = new MutablePosition(x=2, y=9))
-    const extensionPlatAmarilla2 = new ExtensionPlataformaMovible(position = new MutablePosition(x=3, y=9))
-
-    const plataformaAmarilla = new PlataformaMovible(
-        position = new MutablePosition(x=1, y=9),
-        maxAltura = 13,
-        minAltura = 9,
-        platAsocs = [extensionPlatAmarilla1, extensionPlatAmarilla2]
-    )
-
-    const botonAmarilloA = new Boton(posX = 10, posY = 9, plataformaAsoc = plataformaAmarilla) // Boton Abajo
-    const botonAmarilloB = new Boton(posX = 13, posY = 14, plataformaAsoc = plataformaAmarilla) // Boton Arriba
-
-    const botonInvAmarilloDer = new BotonInvisible(posX = 11, posY = 9, botonAsoc = botonAmarilloA)
-    const botonInvAmarilloIzq = new BotonInvisible(posX = 9, posY = 9, botonAsoc = botonAmarilloA)
-
-    const botonInvBordoADer = new BotonInvisible(posX = 14, posY = 14, botonAsoc = botonAmarilloB)
-    const botonInvBordoAIzq = new BotonInvisible(posX = 12, posY = 14, botonAsoc = botonAmarilloB)
-
-
-    // Plataforma Bordo y Elementos Asociados
-
-    const extensionPlatBordo1 = new ExtensionPlataformaMovible(position = new MutablePosition(x=35, y=13))
-    const extensionPlatBordo2 = new ExtensionPlataformaMovible(position = new MutablePosition(x=36, y=13))
-
-    const plataformaBordo = new PlataformaMovible(
-        position = new MutablePosition(x=34, y=13),
-        maxAltura = 16,
-        minAltura =13,
-        platAsocs = [extensionPlatBordo1, extensionPlatBordo2]
-    )
-
-
-    const botonBordoA = new Boton(posX = 30, posY = 18, plataformaAsoc = plataformaBordo) // Boton Arriba
-    const botonBordoB = new Boton(posX = 29, posY = 13, plataformaAsoc = plataformaBordo) // Boton Abajo
+    // Limpieza Final
     
-    const botonInvBordoBDer = new BotonInvisible(posX = 30, posY = 13, botonAsoc = botonBordoB)
-    const botonInvBordoBIzq = new BotonInvisible(posX = 28, posY = 13, botonAsoc = botonBordoB)
-
-    const botonInvAmarilloBDer = new BotonInvisible(posX = 31, posY = 18, botonAsoc = botonBordoA)
-    const botonInvAmarilloBIzq = new BotonInvisible(posX = 29, posY = 18, botonAsoc = botonBordoA)
-    
-    // Caja
-    const caja = new Caja(position = new MutablePosition (x=13, y=18))
-
-    // Limpieza al final del juego
-
-    const elementosNivel1 = [[fireboy, watergirl, caja, puertaFireboy1, puertaFireboy2, puertaWatergirl1, puertaWatergirl2, extensionPlatAmarilla1, extensionPlatAmarilla2, plataformaAmarilla, botonAmarilloA, botonAmarilloB, botonInvAmarilloBDer, botonInvAmarilloBIzq, botonInvAmarilloDer, botonInvAmarilloIzq, botonInvBordoADer, botonInvBordoAIzq, botonInvBordoBDer, botonInvBordoBIzq, extensionPlatBordo1, plataformaBordo, extensionPlatBordo2, botonBordoA, botonBordoB], diamantes]
-
     override method cleanVisuals() {
-        elementosNivel1.forEach({lista => lista.forEach({element => game.removeVisual(element)})})
+        elementosNivel1.forEach({element => game.removeVisual(element)})
+        diamantes.forEach({x => game.removeVisual(x)})
         charcos.clear()
     }
 }

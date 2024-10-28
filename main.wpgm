@@ -12,7 +12,5 @@ program FireBoyWaterGirlGame {
     // Inicio del nivel 1
     settings.init("FireBoyAndWaterGirl", "F_lobby.png", 29, 39, 36)
     keyboard.enter().onPressDo({level1.setupMechanicsInit()})
-
-    // Mecanica del Juego
     keyboard.enter().onPressDo({level1.start()})
 }

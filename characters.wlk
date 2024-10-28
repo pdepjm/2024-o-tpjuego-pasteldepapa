@@ -1,4 +1,5 @@
 import config.*
+import visualCarteles.*
 
 class Character {
     
@@ -21,19 +22,19 @@ class Character {
 
     // Métodos Sobrescritos en las Subclases
 
-    method image() = "" //
-    method tipo() = "" //
-    method setupControls() {} //
+    method image() = "" 
+    method tipo() = "" 
+    method setupControls() 
 
     // Métodos Propios
 
-    method setPosition (posX, posY){ //
+    method setPosition (posX, posY){ 
         position = new MutablePosition(x=posX, y=posY)
     }
 
-    method colision(personaje) {}  // // Para que no genere error si colisionan entre personajes
+    method colision(personaje) {} // Para que no genere error si colisionan entre personajes
 
-    method esAtravesable () = true // 
+    method esAtravesable () = true  
     
     // Movimientos
 
@@ -97,7 +98,7 @@ class Character {
        }
     }
 
-    //Gravedad
+    // Gravedad
 
     method eventoGravedad ()
 
@@ -109,7 +110,7 @@ class Character {
         game.removeTickEvent(self.eventoGravedad())
     }
     
-    //Colisiones
+    // Colisiones
 
     method setupCollisions() {
         game.onCollideDo(self, {element => element.colision(self)}) 
@@ -121,21 +122,23 @@ class Character {
 
     method collect () {puntos += 100}
 
-    //Muerte de personaje 
+    // Muerte de personaje 
 
     method murioPersonaje() = murioPersonaje
     
     method die (){ 
         murioPersonaje = true       
         game.sound("S_muerte.mp3").play()
-        game.addVisual(muerte)
+        game.addVisual(muerteCartel)
         game.sound("S_game_over.mp3").play()
-        game.schedule(3000,{game.removeVisual(muerte)})
+        game.schedule(3000,{game.removeVisual(muerteCartel)})
         nivelActual.cleanVisuals() ///
         
         game.schedule(3500, {nivelActual.start()}) // Reiniciamos el nivel 
- 
     } 
+
+
+    // Con Elementos
 
     method moverALaPar(plataforma) {
         plataformaAdherida = plataforma
@@ -147,6 +150,10 @@ class Character {
             plataformaAdherida = null
             self.gravedad()
         }
+    }
+
+    method colisionEspecial(objeto) {   // SI HAY ALGO MEJOR, CAMBIAR
+        objeto.colisionEspecial(self)
     }   
 }
 

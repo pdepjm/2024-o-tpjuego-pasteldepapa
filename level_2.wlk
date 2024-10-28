@@ -5,26 +5,37 @@ import characters.*
 object level2 inherits Level {
 
     // --------------------- Referencias -------------------------
-    override method image() = "F_nivel_2.png"
 
-    override method positionF() = new MutablePosition (x = 2, y= 1)
-    override method positionW() = new MutablePosition (x = 4, y= 1)
+    // Diamantes
 
-    override method nivelActual () = self
+    const diamantes = []
 
-    // ---------------------- Elementos
+    // Puertas
 
-    // Puertas Finales
     const puertaFireboy1 = new Puerta(posX = 6, posY = 24, tipo = fuego)
     const puertaFireboy2 = new Puerta(posX = 7, posY = 24, tipo = fuego)
     const puertaWatergirl1 = new Puerta(posX = 2, posY = 24, tipo = agua)
     const puertaWatergirl2 = new Puerta(posX = 3, posY = 24, tipo = agua)
 
+    // Lista con Todos los Elementos - Para la limpieza luego
+
+    const elementosNivel2 = [
+        fireboy, watergirl, 
+        puertaFireboy1, puertaFireboy2, 
+        puertaWatergirl1, puertaWatergirl2] 
+
     // --------------------- Métodos
 
-    //Diamantes
+    // Basicos
 
-    const diamantes = []
+    override method image() = "F_nivel_2.png"
+
+    override method positionF() = new MutablePosition (x = 2, y= 15)
+    override method positionW() = new MutablePosition (x = 4, y= 15)
+
+    override method nivelActual () = self
+
+    // Diamantes
 
     override method setupDiamonds() {
         diamantes.add(new DiamanteRojo(posX = 8, posY = 1))
@@ -46,7 +57,7 @@ object level2 inherits Level {
         diamantes.add(new DiamanteGris(posX = 18, posY = 3))
     }
 
-    //Charcos 
+    // Charcos 
 
     override method setupCharcos() {
         charcos.add(new Charco(xMin = 6, xMax = 14, yMin = 0, yMax = 0, tipo = fuego))
@@ -56,6 +67,8 @@ object level2 inherits Level {
         charcos.add(new Charco(xMin = 8, xMax = 16, yMin = 12, yMax = 12, tipo = acido))
         charcos.add(new Charco(xMin = 22, xMax = 29, yMin = 12, yMax = 12, tipo = acido))
     }
+
+    // Marcos
 
     override method setupMarco (){
         // Borde del juego
@@ -82,10 +95,11 @@ object level2 inherits Level {
         marcoJuego.add(new Zona (xMin = 22, xMax = 30, yMin = 23, yMax = 23 ))
     }
 
-    //Agregamos elementos 
+    // Agregamos Elementos 
 
     override method setupElements() {
-        elementosNivel2.forEach({lista => lista.forEach({element => game.addVisual(element)})})
+        elementosNivel2.forEach({element => game.addVisual(element)})
+        diamantes.forEach({x => game.addVisual(x)})
 
         // Puertas
         puertaFireboy1.otrasPuertas([puertaWatergirl1, puertaWatergirl2])
@@ -95,12 +109,12 @@ object level2 inherits Level {
         puertaWatergirl2.otrasPuertas([puertaFireboy1, puertaFireboy2])
     }
 
-    //Lista de elementos del nivel 2
-    const elementosNivel2 = [diamantes, [fireboy, watergirl, puertaFireboy1, puertaFireboy2, puertaWatergirl1, puertaWatergirl2]] // Faltan botones y gates
-
-    // Eliminamos visuales (ver de implementar generico en la clase)
+    // Limpieza Final
+    
     override method cleanVisuals() {
-        elementosNivel2.forEach({lista => lista.forEach({element => game.removeVisual(element)})})
+        elementosNivel2.forEach({element => game.removeVisual(element)})
+        diamantes.forEach({x => game.removeVisual(x)})
         charcos.clear()
     }
+
 }
