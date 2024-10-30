@@ -76,6 +76,7 @@ class Character {
         if (nivelActual.esZonaProhibida(self, nuevaPosicion)){
             self.die()
         }
+        
         else if(!nivelActual.estaFueraDelMarco(nuevaPosicion) && self.puedeAtravesar(nuevaPosicion)){
             position.goDown(unidadMovimiento)
             oldPosition = new MutablePosition(x = self.position().x(), y = self.position().y() + unidadMovimiento)

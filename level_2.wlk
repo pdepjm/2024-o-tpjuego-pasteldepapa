@@ -22,7 +22,15 @@ object level2 inherits Level {
     const elementosNivel2 = [
         fireboy, watergirl, 
         puertaFireboy1, puertaFireboy2, 
-        puertaWatergirl1, puertaWatergirl2] 
+        puertaWatergirl1, puertaWatergirl2
+    ] 
+
+    const elemsColisionEspecial = [
+        puertaFireboy1, puertaFireboy2,
+        puertaWatergirl1, puertaWatergirl2
+    ]
+
+        
 
     // --------------------- Métodos
 
@@ -30,8 +38,8 @@ object level2 inherits Level {
 
     override method image() = "F_nivel_2.png"
 
-    override method positionF() = new MutablePosition (x = 2, y= 15)
-    override method positionW() = new MutablePosition (x = 4, y= 15)
+    override method positionF() = new MutablePosition (x = 5, y= 24)
+    override method positionW() = new MutablePosition (x = 5, y= 24)
 
     override method nivelActual () = self
 
@@ -79,6 +87,8 @@ object level2 inherits Level {
 
         // Zonas intermedias
         marcoJuego.add(new Zona (xMin = 35, xMax = 37, yMin = 1, yMax = 2   ))
+        marcoJuego.add(new Zona (xMin = 6, xMax = 14, yMin = 3, yMax = 3    ))
+        marcoJuego.add(new Zona (xMin = 22, xMax = 29, yMin = 3, yMax = 3   ))
         marcoJuego.add(new Zona (xMin = 37, xMax = 37, yMin = 3, yMax = 4   ))
         marcoJuego.add(new Zona (xMin = 1, xMax = 33, yMin = 7, yMax = 7    ))
         marcoJuego.add(new Zona (xMin = 1, xMax = 3, yMin = 8, yMax = 10    ))
@@ -107,6 +117,8 @@ object level2 inherits Level {
 
         puertaWatergirl1.otrasPuertas([puertaFireboy1, puertaFireboy2])
         puertaWatergirl2.otrasPuertas([puertaFireboy1, puertaFireboy2])
+
+        elemsColisionEspecial.forEach({x => x.setupCollisions()})
     }
 
     // Limpieza Final
@@ -114,6 +126,7 @@ object level2 inherits Level {
     override method cleanVisuals() {
         elementosNivel2.forEach({element => game.removeVisual(element)})
         diamantes.forEach({x => game.removeVisual(x)})
+        marcoJuego.clear()
         charcos.clear()
     }
 

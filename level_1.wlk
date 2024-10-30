@@ -78,8 +78,8 @@ object level1 inherits Level {
 
     override method image() = "F_nivel_1.png"
    
-    override method positionF() = new MutablePosition (x = 8, y= 18)
-    override method positionW() = new MutablePosition (x = 6, y= 18)
+    override method positionF() = new MutablePosition (x = 32, y= 23)
+    override method positionW() = new MutablePosition (x = 32, y= 23)
 
     override method nivelActual () = self
 
@@ -163,6 +163,7 @@ object level1 inherits Level {
     override method cleanVisuals() {
         elementosNivel1.forEach({element => game.removeVisual(element)})
         diamantes.forEach({x => game.removeVisual(x)})
+        marcoJuego.clear()
         charcos.clear()
     }
 }

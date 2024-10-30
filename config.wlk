@@ -8,6 +8,11 @@ object settings {
 
     // ---------------------- Métodos
 
+    const cantNiveles = 2
+    const niveles = [level1, level2]
+
+    var nivelActual = 0 
+
     method init(title, boardground, height, width, cellSize){
         game.title(title)
         game.boardGround(boardground)
@@ -18,12 +23,24 @@ object settings {
     }
 
     method pasarSgteNivel(){
-        game.addVisual(nivelSuperadoCartel)
+
+        niveles.get(nivelActual).cleanVisuals()
         game.sound("S_nivel_pasado.mp3").play()
-        game.schedule(2000,{game.removeVisual(nivelSuperadoCartel)})
-        game.schedule(2000,{level1.cleanVisuals()})
-        game.schedule(3000,{level2.setupMechanicsInit()})
-        game.schedule(3500,{level2.start()}) 
+        nivelActual += 1
+        if(nivelActual == cantNiveles){
+            nivelActual = 0
+            self.finDeJuego()
+        } else {
+            game.addVisual(nivelSuperadoCartel)
+            game.schedule(2000,{game.removeVisual(nivelSuperadoCartel)})
+            game.schedule(3500,{niveles.get(nivelActual).start()}) 
+        }
+    }
+
+    method finDeJuego () {
+        game.addVisual(finJuegoCartel)
+        game.schedule(4000, {game.removeVisual(finJuegoCartel)})
+        niveles.forEach{nivel => game.schedule(4000, {game.removeVisual(nivel)})}
     }
 }
 
@@ -50,6 +67,8 @@ class Level {
     // Inicialización
 
     method start() {
+        //self.setupMechanicsInit()
+        game.addVisual(self.nivelActual())
         self.setupMarco()
         self.setupDiamonds()
         self.setupCharacters()
@@ -73,8 +92,8 @@ class Level {
         watergirl.setPosition(self.positionW().x(),self.positionW().y())    
     }
 
+
     method setupMechanicsInit(){
-        game.addVisual(self.nivelActual())
         self.setupMechanics(fireboy)
         self.setupMechanics(watergirl)
     }
@@ -96,5 +115,4 @@ class Level {
     method positionW()
     method nivelActual()
     method image()
-
 }
