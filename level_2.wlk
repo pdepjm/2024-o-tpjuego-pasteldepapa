@@ -6,10 +6,6 @@ object level2 inherits Level {
 
     // --------------------- Referencias -------------------------
 
-    // Diamantes
-
-    const diamantes = []
-
     // Puertas
 
     const puertaFireboy1 = new Puerta(posX = 6, posY = 24, tipo = fuego)
@@ -17,20 +13,12 @@ object level2 inherits Level {
     const puertaWatergirl1 = new Puerta(posX = 2, posY = 24, tipo = agua)
     const puertaWatergirl2 = new Puerta(posX = 3, posY = 24, tipo = agua)
 
-    // Lista con Todos los Elementos - Para la limpieza luego
-
-    const elementosNivel2 = [
-        fireboy, watergirl, 
-        puertaFireboy1, puertaFireboy2, 
-        puertaWatergirl1, puertaWatergirl2
-    ] 
+    // Lista con Todos los Elementos Especiales - Para la limpieza luego
 
     const elemsColisionEspecial = [
         puertaFireboy1, puertaFireboy2,
         puertaWatergirl1, puertaWatergirl2
     ]
-
-        
 
     // --------------------- Métodos
 
@@ -76,42 +64,33 @@ object level2 inherits Level {
         charcos.add(new Charco(xMin = 22, xMax = 29, yMin = 12, yMax = 12, tipo = acido))
     }
 
-    // Marcos
+    // Pisos intermedios
 
-    override method setupMarco (){
-        // Borde del juego
-        marcoJuego.add(new Zona (xMin = 0, xMax = 38, yMin = 0, yMax = 0   ))
-        marcoJuego.add(new Zona (xMin = 0, xMax = 0, yMin = 1, yMax = 27   ))
-        marcoJuego.add(new Zona (xMin = 0, xMax = 38, yMin = 28, yMax = 28 ))
-        marcoJuego.add(new Zona (xMin = 38, xMax = 38, yMin = 1, yMax = 27 ))
-
-        // Zonas intermedias
-        marcoJuego.add(new Zona (xMin = 35, xMax = 37, yMin = 1, yMax = 2   ))
-        marcoJuego.add(new Zona (xMin = 6, xMax = 14, yMin = 3, yMax = 3    ))
-        marcoJuego.add(new Zona (xMin = 22, xMax = 29, yMin = 3, yMax = 3   ))
-        marcoJuego.add(new Zona (xMin = 37, xMax = 37, yMin = 3, yMax = 4   ))
-        marcoJuego.add(new Zona (xMin = 1, xMax = 33, yMin = 7, yMax = 7    ))
-        marcoJuego.add(new Zona (xMin = 1, xMax = 3, yMin = 8, yMax = 10    ))
-        marcoJuego.add(new Zona (xMin = 6, xMax = 16, yMin = 12, yMax = 12  ))
-        marcoJuego.add(new Zona (xMin = 17, xMax = 21, yMin = 12, yMax = 13 ))
-        marcoJuego.add(new Zona (xMin = 22, xMax = 37, yMin = 12, yMax = 12 ))
-        marcoJuego.add(new Zona (xMin = 33, xMax = 37, yMin = 13, yMax = 15 ))
-        marcoJuego.add(new Zona (xMin = 35, xMax = 37, yMin = 16, yMax = 18 ))
-        marcoJuego.add(new Zona (xMin = 11, xMax = 13, yMin = 15, yMax = 15 ))
-        marcoJuego.add(new Zona (xMin = 25, xMax = 26, yMin = 15, yMax = 15 ))
-        marcoJuego.add(new Zona (xMin = 30, xMax = 33, yMin = 21, yMax = 21 ))
-        marcoJuego.add(new Zona (xMin = 29, xMax = 31, yMin = 22, yMax = 22 ))
-        marcoJuego.add(new Zona (xMin = 1, xMax = 16, yMin = 23, yMax = 23  ))
-        marcoJuego.add(new Zona (xMin = 22, xMax = 30, yMin = 23, yMax = 23 ))
+    override method setupPisos (){
+        pisosJuego.add(new Zona (xMin = 35, xMax = 37, yMin = 1, yMax = 2   ))
+        pisosJuego.add(new Zona (xMin = 6, xMax = 14, yMin = 3, yMax = 3    ))
+        pisosJuego.add(new Zona (xMin = 22, xMax = 29, yMin = 3, yMax = 3   ))
+        pisosJuego.add(new Zona (xMin = 37, xMax = 37, yMin = 3, yMax = 4   ))
+        pisosJuego.add(new Zona (xMin = 1, xMax = 33, yMin = 7, yMax = 7    ))
+        pisosJuego.add(new Zona (xMin = 1, xMax = 3, yMin = 8, yMax = 10    ))
+        pisosJuego.add(new Zona (xMin = 6, xMax = 16, yMin = 12, yMax = 12  ))
+        pisosJuego.add(new Zona (xMin = 17, xMax = 21, yMin = 12, yMax = 13 ))
+        pisosJuego.add(new Zona (xMin = 22, xMax = 37, yMin = 12, yMax = 12 ))
+        pisosJuego.add(new Zona (xMin = 33, xMax = 37, yMin = 13, yMax = 15 ))
+        pisosJuego.add(new Zona (xMin = 35, xMax = 37, yMin = 16, yMax = 18 ))
+        pisosJuego.add(new Zona (xMin = 11, xMax = 13, yMin = 15, yMax = 15 ))
+        pisosJuego.add(new Zona (xMin = 25, xMax = 26, yMin = 15, yMax = 15 ))
+        pisosJuego.add(new Zona (xMin = 30, xMax = 33, yMin = 21, yMax = 21 ))
+        pisosJuego.add(new Zona (xMin = 29, xMax = 31, yMin = 22, yMax = 22 ))
+        pisosJuego.add(new Zona (xMin = 1, xMax = 16, yMin = 23, yMax = 23  ))
+        pisosJuego.add(new Zona (xMin = 22, xMax = 30, yMin = 23, yMax = 23 ))
     }
 
     // Agregamos Elementos 
 
     override method setupElements() {
-        elementosNivel2.forEach({element => game.addVisual(element)})
         diamantes.forEach({x => game.addVisual(x)})
 
-        // Puertas
         puertaFireboy1.otrasPuertas([puertaWatergirl1, puertaWatergirl2])
         puertaFireboy2.otrasPuertas([puertaWatergirl1, puertaWatergirl2])
 
@@ -119,15 +98,15 @@ object level2 inherits Level {
         puertaWatergirl2.otrasPuertas([puertaFireboy1, puertaFireboy2])
 
         elemsColisionEspecial.forEach({x => x.setupCollisions()})
+        
+        // Agregamos Elementos a la lista de elementos del Nivel
+        self.agregarElementosNivel()
+        elementosNivel.forEach({element => game.addVisual(element)})
     }
 
-    // Limpieza Final
-    
-    override method cleanVisuals() {
-        elementosNivel2.forEach({element => game.removeVisual(element)})
-        diamantes.forEach({x => game.removeVisual(x)})
-        marcoJuego.clear()
-        charcos.clear()
-    }
+    // Agregamos los elementos del nivel
 
+    override method agregarElementosNivel (){
+        [fireboy, watergirl, puertaFireboy1, puertaFireboy2, puertaWatergirl1, puertaWatergirl2].forEach({x => elementosNivel.add(x)})
+    }
 }

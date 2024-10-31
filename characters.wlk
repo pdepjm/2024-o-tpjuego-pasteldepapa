@@ -12,7 +12,7 @@ class Character {
     var puntos = 0
 
     const nivelActual
-    var murioPersonaje = false
+    var property murioPersonaje = false
 
     var plataformaAdherida = null
 
@@ -22,8 +22,8 @@ class Character {
 
     // Métodos Sobrescritos en las Subclases
 
-    method image() = "" 
-    method tipo() = "" 
+    method image()
+    method tipo()
     method setupControls() 
 
     // Métodos Propios
@@ -73,7 +73,7 @@ class Character {
 
         const nuevaPosicion = position.down(unidadMovimiento)
 
-        if (nivelActual.esZonaProhibida(self, nuevaPosicion)){
+        if (nivelActual.esZonaProhibida(self, nuevaPosicion) && nivelActual.todosVivos()) {
             self.die()
         }
         
@@ -94,9 +94,9 @@ class Character {
         if (!jumping){
             self.desactivarGravedad()
             jumping = true
-            [100, 200, 300, 400].forEach { num => game.schedule(num, { self.moveUp() }) }        
-            game.schedule(900, {self.gravedad()})
-       }
+            [150, 300, 450, 600].forEach { num => game.schedule(num, { self.moveUp() }) }        
+            game.schedule(800, {self.gravedad()})
+        }
     }
 
     // Gravedad
@@ -104,7 +104,7 @@ class Character {
     method eventoGravedad ()
 
     method gravedad(){
-        game.onTick(100, self.eventoGravedad(), {self.moveDown()})
+        game.onTick(250, self.eventoGravedad(), {self.moveDown()})
     }
 
     method desactivarGravedad (){
@@ -124,18 +124,16 @@ class Character {
     method collect () {puntos += 100}
 
     // Muerte de personaje 
-
-    method murioPersonaje() = murioPersonaje
     
     method die (){ 
-        murioPersonaje = true       
+        self.murioPersonaje(true)       
         game.sound("S_muerte.mp3").play()
         game.addVisual(muerteCartel)
+        nivelActual.cleanVisuals()
         game.sound("S_game_over.mp3").play()
         game.schedule(3000,{game.removeVisual(muerteCartel)})
-        nivelActual.cleanVisuals() ///
-        
-        game.schedule(3500, {nivelActual.start()}) // Reiniciamos el nivel 
+        game.schedule(3000, {nivelActual.restart()}) // Reiniciamos el nivel 
+        game.schedule(3000, {self.murioPersonaje(false)}) // Reiniciamos el flag de muerte
     } 
 
 
@@ -164,9 +162,7 @@ class Fireboy inherits Character {
 
     override method tipo() = fuego
 
-    override method image() {
-        return "P_Fireboy.png" 
-    }
+    override method image() = "P_Fireboy.png" 
 
     override method eventoGravedad () = "F_Gravedad"
 
@@ -183,9 +179,7 @@ class Watergirl inherits Character {
       
     override method tipo() = agua
 
-    override method image() {
-        return "P_Watergirl.png" 
-    }
+    override method image() = "P_Watergirl.png" 
 
     override method setupControls(){
         keyboard.a().onPressDo  ({ self.moveLeft() })
