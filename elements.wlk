@@ -273,15 +273,15 @@ class PlataformaMovimientoHorizontal inherits PlataformaBase{
 
     override method move(movimiento) {
         super(movimiento)
-        platAsocs.forEach { x => x.move("up")}
+        platAsocs.forEach { x => x.move("Left")}
     }
 
     override method moveBack(movimiento) {
         super(movimiento)
-        platAsocs.forEach { x => x.moveBack("down")} 
+        platAsocs.forEach { x => x.moveBack("Right")} 
     }
 
-    method image() = "E_horizontal_gate.png"
+    method image() = "E_horizontal_gate_long.png"
 }
 
 // ------------------ Nuevo fondo

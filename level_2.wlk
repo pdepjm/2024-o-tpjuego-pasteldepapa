@@ -13,14 +13,16 @@ object level2 inherits Level {
     const puertaWatergirl1 = new Puerta(posX = 2, posY = 24, tipo = agua)
     const puertaWatergirl2 = new Puerta(posX = 3, posY = 24, tipo = agua)
 
-    const extensionPlatVioleta1 = new PlataformaBase(position = new MutablePosition(x=21, y=23))
-    const extensionPlatVioleta2 = new PlataformaBase(position = new MutablePosition(x=20, y=23))
+    const extensionPlatVioleta1 = new PlataformaBase(position = new MutablePosition(x=23, y=23))
+    const extensionPlatVioleta2 = new PlataformaBase(position = new MutablePosition(x=24, y=23))
+    const extensionPlatVioleta3 = new PlataformaBase(position = new MutablePosition(x=25, y=23))
+    const extensionPlatVioleta4 = new PlataformaBase(position = new MutablePosition(x=26, y=23))
 
     const plataformaVioleta = new PlataformaMovimientoHorizontal(
         position = new MutablePosition(x=22, y=23),
         maxPosicion = 17,
         minPosicion = 22,
-        platAsocs = [extensionPlatVioleta1, extensionPlatVioleta2]
+        platAsocs = [extensionPlatVioleta1, extensionPlatVioleta2,extensionPlatVioleta3,extensionPlatVioleta4]
     )
 
     const botonVioletaA = new Boton(posX = 12, posY = 24, plataformaAsoc = plataformaVioleta,movimiento = "Left",vuelta = "Right") // Boton izquierda
@@ -141,6 +143,6 @@ object level2 inherits Level {
     // Agregamos los elementos del nivel
 
     override method agregarElementosNivel (){
-        [fireboy, watergirl, puertaFireboy1, puertaFireboy2, puertaWatergirl1, puertaWatergirl2, extensionPlatVioleta1, extensionPlatVioleta2, plataformaVioleta,botonVioletaA, botonVioletaB,extensionPlatAmarilla1,extensionPlatAmarilla2,extensionPlatAmarilla3,plataformaAmarilla,botonAmarilloA,botonAmarilloB].forEach({x => elementosNivel.add(x)})
+        [fireboy, watergirl, puertaFireboy1, puertaFireboy2, puertaWatergirl1, puertaWatergirl2, extensionPlatVioleta1, extensionPlatVioleta2,extensionPlatVioleta3,extensionPlatVioleta4, plataformaVioleta,botonVioletaA, botonVioletaB,extensionPlatAmarilla1,extensionPlatAmarilla2,extensionPlatAmarilla3,plataformaAmarilla,botonAmarilloA,botonAmarilloB].forEach({x => elementosNivel.add(x)})
     }
 }
