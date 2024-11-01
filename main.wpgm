@@ -8,7 +8,7 @@ program FireBoyWaterGirlGame {
     // Sonidos
     const fondo = game.sound("S_fondo.mp3")
     fondo.shouldLoop(true)
-    game.schedule(500, { fondo.play() fondo.volume(0.3)} )
+    game.schedule(2000, { fondo.play() fondo.volume(0.3)} )
     
     // Inicio del nivel 1
     settings.init("FireBoyAndWaterGirl", "F_lobby.png", 29, 39, 36)

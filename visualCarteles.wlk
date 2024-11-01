@@ -35,5 +35,5 @@ object finJuegoCartel{
 
     method esAtravesable () = true
     
-    method image () = "F_Fin_De_Juego.png"
+    method image () = "F_Fin_De_Juego2.png"
 }
