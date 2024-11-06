@@ -37,7 +37,7 @@ class Diamante {
         }
     }
 
-    method canCollect(personaje) = personaje.tipo() == self.tipo() and !fuiRecolectado
+    method canCollect(personaje) = personaje.tipo() == self.tipo()
 }
 
 class DiamanteRojo inherits Diamante {
