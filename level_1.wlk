@@ -18,30 +18,32 @@ object level1 inherits Level {
     const extensionPlatAmarilla1 = new PlataformaBase(position = new MutablePosition(x=2, y=9))
     const extensionPlatAmarilla2 = new PlataformaBase(position = new MutablePosition(x=3, y=9))
 
-    const plataformaAmarilla = new PlataformaMovimientoVertical(
+    const plataformaAmarilla = new PlataformaMoviVertical(
         position = new MutablePosition(x=1, y=9),
-        maxPosicion = 13,
-        minPosicion = 9,
-        platAsocs = [extensionPlatAmarilla1, extensionPlatAmarilla2]
+        maxAltura = 13,
+        minAltura = 9,
+        platAsocs = [extensionPlatAmarilla1, extensionPlatAmarilla2],
+        image = "E_horizontal_gate.png"
     )
 
-    const botonAmarilloA = new Boton(posX = 10, posY = 9, plataformaAsoc = plataformaAmarilla,movimiento = "up",vuelta = "down") // Boton Abajo
-    const botonAmarilloB = new Boton(posX = 13, posY = 14, plataformaAsoc = plataformaAmarilla,movimiento = "up",vuelta = "down") // Boton Arriba
+    const botonAmarilloA = new Boton(posX = 10, posY = 9, plataformaAsoc = plataformaAmarilla) // Boton Abajo
+    const botonAmarilloB = new Boton(posX = 13, posY = 14, plataformaAsoc = plataformaAmarilla) // Boton Arriba
 
     // Plataforma Bordo y Elementos Asociados
 
     const extensionPlatBordo1 = new PlataformaBase(position = new MutablePosition(x=35, y=13))
     const extensionPlatBordo2 = new PlataformaBase(position = new MutablePosition(x=36, y=13))
 
-    const plataformaBordo = new PlataformaMovimientoVertical(
+    const plataformaBordo = new PlataformaMoviVertical(
         position = new MutablePosition(x=34, y=13),
-        maxPosicion = 16,
-        minPosicion = 13,
-        platAsocs = [extensionPlatBordo1, extensionPlatBordo2]
+        maxAltura = 16,
+        minAltura = 13,
+        platAsocs = [extensionPlatBordo1, extensionPlatBordo2],
+        image = "E_horizontal_gate.png"
     )
 
-    const botonBordoA = new Boton(posX = 30, posY = 18, plataformaAsoc = plataformaBordo,movimiento = "up",vuelta = "down") // Boton Arriba
-    const botonBordoB = new Boton(posX = 29, posY = 13, plataformaAsoc = plataformaBordo,movimiento = "up",vuelta = "down") // Boton Abajo
+    const botonBordoA = new Boton(posX = 30, posY = 18, plataformaAsoc = plataformaBordo) // Boton Arriba
+    const botonBordoB = new Boton(posX = 29, posY = 13, plataformaAsoc = plataformaBordo) // Boton Abajo
     
     // Caja
     const caja = new Caja(position = new MutablePosition (x=13, y=18))

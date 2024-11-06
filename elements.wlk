@@ -138,6 +138,258 @@ class Boton {
     const plataformaAsoc
     var botonAsoc = null
     var presionado = false
+
+
+    method esAtravesable() = false
+
+    method position() = game.at(posX, posY)
+
+    method setupCollisions() {
+        game.whenCollideDo(self, {x => x.colisionEspecial(self)}) 
+    }
+
+    method colisionEspecial(personaje) {
+        if(plataformaAsoc.hastaMaxPosicion()) {
+            plataformaAsoc.move()
+        }
+
+        presionado = true
+        self.personajeMovido(personaje)
+    }
+
+    method personajeMovido(personaje) {
+        if(!self.mismaPosicion(personaje)) {
+            
+            presionado = false
+
+            if(!botonAsoc.presionado()) {
+                if(plataformaAsoc.hastaMinPosicion()) {
+                plataformaAsoc.moveBack()
+                game.schedule(300, {self.personajeMovido(personaje)})
+                } 
+            }
+
+        } else 
+            game.schedule(300, {self.personajeMovido(personaje)})
+    }
+
+    method mismaPosicion(obj) = obj.position() == self.position()
+    
+    method image() = "E_buttonn.png"
+
+    method presionado() = presionado
+
+    method botonAsoc(nuevoBoton) {
+        botonAsoc = nuevoBoton
+    }
+
+    method colision(obj) {} 
+}
+
+// ------------------ Plataforma Movible
+
+class PlataformaBase {
+
+    const position
+    const unidadMovimiento = 1
+    var personajeAdherido = null
+
+    // ---------------------- Metodos
+
+    // Basicos
+    
+    method esAtravesable() = false
+    method position() = position
+
+    // Colision
+    
+    method colision(personaje) {
+        personaje.desactivarGravedad()
+        personaje.moverALaPar(self)
+        personajeAdherido = personaje
+    }
+
+    // Movimientos
+
+    method moveUp() {
+        self.position().goUp(unidadMovimiento)
+        self.moverPersonajeAdherido()
+    }
+
+    method moveDown() {
+        self.position().goDown(unidadMovimiento)
+        self.moverPersonajeAdherido()
+    }
+
+    method moveRight() {
+        self.position().goRight(unidadMovimiento)
+        // agregar mover personaje adherido?
+    }
+
+    method moveLeft() {
+        self.position().goLeft(unidadMovimiento)
+    }
+
+    // Personaje
+    
+    
+    method moverPersonajeAdherido() {
+        if (personajeAdherido != null) { 
+            personajeAdherido.setPosition(personajeAdherido.position().x(), self.position().y() + 1)
+        } else {
+            self.detachCharacter()  // lo pusimos porque sino causa error
+        }
+    }
+    method detachCharacter() {
+        personajeAdherido = null
+    }
+
+    // Los dejo así porque la clase no tiene que ser abstracta
+
+    method hastaMinPosicion() {}
+    method hastaMaxPosicion() {}
+    method move() {}
+    method moveBack() {}
+
+}
+
+class PlataformaMoviVertical inherits PlataformaBase {
+
+    const maxAltura
+    const minAltura
+    const platAsocs
+    const image
+
+    method image() = image
+
+    override method hastaMinPosicion() = self.position().y() != minAltura 
+    override method hastaMaxPosicion() = self.position().y() != maxAltura   
+
+    override method moveUp() {
+        super()
+        platAsocs.forEach { x => x.moveUp()} 
+    }
+
+    override method moveDown() {
+        super()
+        platAsocs.forEach { x => x.moveDown()} 
+    }
+
+    override method move() {self.moveUp()}
+    override method moveBack() {self.moveDown()}
+
+}
+
+class PlataformaMoviHorizontal inherits PlataformaBase {
+
+    const maxDistancia
+    const minDistancia
+    const platAsocs
+
+    override method hastaMinPosicion() = self.position().x() != minDistancia
+    override method hastaMaxPosicion() = self.position().x() != maxDistancia 
+
+    override method moveRight() {
+        super()
+        platAsocs.forEach { x => x.moveRight()} 
+    }
+
+    override method moveLeft() {
+        super()
+        platAsocs.forEach { x => x.moveLeft()} 
+    }
+
+    method image() = "E_horizontal_gate_long.png"
+
+    override method move() {self.moveLeft()}
+    override method moveBack() {self.moveRight()}
+
+}
+
+// ------------------ Nuevo fondo
+class BackgroundCover {
+    const posX = 0
+    const posY = 0
+
+    method position() = game.at(posX, posY)
+    method image() = "nivel_2.png"
+}
+
+// ------------------ Zona
+class Zona {
+
+    const xMin
+    const xMax
+    const yMin
+    const yMax
+
+    method posicionProhibida (posicion) = posicion.x().between(xMin, xMax) && posicion.y().between(yMin, yMax)
+}
+
+// ------------------ Charco
+
+class Charco inherits Zona {
+    const tipo
+
+    method mismoTipo (personaje) = personaje.tipo() == tipo
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//////////////////////////// ELIN
+
+/*
+
+
+//////////// ELIN SIN MODIFICAR
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//////////// CHICOS MODIFICADO
+
+
+// ------------------ Boton para Plataforma
+
+class Boton {
+
+    const posX
+    const posY
+    const plataformaAsoc
+    var botonAsoc = null
+    var presionado = false
+
+
     const movimiento
     const vuelta
 
@@ -284,30 +536,4 @@ class PlataformaMovimientoHorizontal inherits PlataformaBase{
     method image() = "E_horizontal_gate_long.png"
 }
 
-// ------------------ Nuevo fondo
-class BackgroundCover {
-    const posX = 0
-    const posY = 0
-
-    method position() = game.at(posX, posY)
-    method image() = "nivel_2.png"
-}
-
-// ------------------ Zona
-class Zona {
-
-    const xMin
-    const xMax
-    const yMin
-    const yMax
-
-    method posicionProhibida (posicion) = posicion.x().between(xMin, xMax) && posicion.y().between(yMin, yMax)
-}
-
-// ------------------ Charco
-
-class Charco inherits Zona {
-    const tipo
-
-    method mismoTipo (personaje) = personaje.tipo() == tipo
-}
+*/

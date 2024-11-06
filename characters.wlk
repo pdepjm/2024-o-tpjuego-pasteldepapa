@@ -9,7 +9,6 @@ class Character {
     var property oldPosition
 
     const unidadMovimiento = 1
-    var puntos = 0
 
     const nivelActual
     var property murioPersonaje = false
@@ -121,8 +120,6 @@ class Character {
 
     // Puntos y Mecanica del Juego
 
-    method collect () {puntos += 100}
-
     // Muerte de personaje 
     
     method die (){ 
@@ -135,7 +132,6 @@ class Character {
         game.schedule(3000, {nivelActual.restart()}) // Reiniciamos el nivel 
         game.schedule(3000, {self.murioPersonaje(false)}) // Reiniciamos el flag de muerte
     } 
-
 
     // Con Elementos
 
@@ -158,8 +154,6 @@ class Character {
 
 class Fireboy inherits Character {
 
-    method puntaje() = puntos
-
     override method tipo() = fuego
 
     override method image() = "P_Fireboy.png" 
@@ -174,8 +168,6 @@ class Fireboy inherits Character {
 }
 
 class Watergirl inherits Character {
-
-    method puntaje() = puntos 
       
     override method tipo() = agua
 

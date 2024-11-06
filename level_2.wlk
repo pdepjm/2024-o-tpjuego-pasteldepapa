@@ -18,29 +18,30 @@ object level2 inherits Level {
     const extensionPlatVioleta3 = new PlataformaBase(position = new MutablePosition(x=25, y=23))
     const extensionPlatVioleta4 = new PlataformaBase(position = new MutablePosition(x=26, y=23))
 
-    const plataformaVioleta = new PlataformaMovimientoHorizontal(
+    const plataformaVioleta = new PlataformaMoviHorizontal(
         position = new MutablePosition(x=22, y=23),
-        maxPosicion = 17,
-        minPosicion = 22,
+        maxDistancia = 17,
+        minDistancia = 22,
         platAsocs = [extensionPlatVioleta1, extensionPlatVioleta2,extensionPlatVioleta3,extensionPlatVioleta4]
     )
 
-    const botonVioletaA = new Boton(posX = 12, posY = 24, plataformaAsoc = plataformaVioleta,movimiento = "Left",vuelta = "Right") // Boton izquierda
-    const botonVioletaB = new Boton(posX = 28, posY = 24, plataformaAsoc = plataformaVioleta,movimiento = "Left",vuelta = "Right") // Boton derecha
+    const botonVioletaA = new Boton(posX = 12, posY = 24, plataformaAsoc = plataformaVioleta) // Boton izquierda
+    const botonVioletaB = new Boton(posX = 28, posY = 24, plataformaAsoc = plataformaVioleta) // Boton derecha
 
     const extensionPlatAmarilla1 = new PlataformaBase(position = new MutablePosition(x=19, y=9))
     const extensionPlatAmarilla2 = new PlataformaBase(position = new MutablePosition(x=19, y=10))
     const extensionPlatAmarilla3 = new PlataformaBase(position = new MutablePosition(x=19, y=11))
 
-    const plataformaAmarilla = new PuertaMovimientoVertical(
+    const plataformaAmarilla = new PlataformaMoviVertical(
         position = new MutablePosition(x=19, y=8),
-        maxPosicion = 12,
-        minPosicion = 8,
-        platAsocs = [extensionPlatAmarilla1, extensionPlatAmarilla2]
+        maxAltura = 12,
+        minAltura = 8,
+        platAsocs = [extensionPlatAmarilla1, extensionPlatAmarilla2],
+        image = "E_vertical_gate2.png"
     )
 
-    const botonAmarilloA = new Boton(posX = 8, posY = 8, plataformaAsoc = plataformaAmarilla,movimiento = "up",vuelta = "down") // Boton izquierda
-    const botonAmarilloB = new Boton(posX = 31, posY = 8, plataformaAsoc = plataformaAmarilla,movimiento = "up",vuelta = "down") // Boton derecha
+    const botonAmarilloA = new Boton(posX = 8, posY = 8, plataformaAsoc = plataformaAmarilla) // Boton izquierda
+    const botonAmarilloB = new Boton(posX = 31, posY = 8, plataformaAsoc = plataformaAmarilla) // Boton derecha
 
     // Lista con Todos los Elementos Especiales - Para la limpieza luego
 
