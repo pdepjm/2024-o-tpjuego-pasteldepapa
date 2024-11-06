@@ -16,13 +16,16 @@ Los jugadores deben completar los niveles del mapa guiando a los dos personajes,
 
 ## Controles:
 
-**Controles para Fireboy:**
+**Controles Generales**
+- ```ENTER``` para comenzar el juego. 
+
+**Controles para Fireboy**
 
 - ```↑``` para saltar 5 unidades.
 - ```→``` para dirigirse 1 unidad a la derecha. 
 - ```←``` para dirigirse 1 unidad a la izquierda. 
 
-**Controles para Watergirl:**
+**Controles para Watergirl**
 
 - ```w``` para saltar 5 unidades.
 - ```a``` para dirigirse 1 unidad a la derecha. 
