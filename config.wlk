@@ -8,10 +8,10 @@ object settings {
 
     // ---------------------- Métodos
 
+    const cantNiveles = 2
     const niveles = [level1, level2]
-    const cantNiveles = niveles.size()
 
-    const property bordeJuego = [] // Guardamos todos los bordes
+    const property bordeJuego = [] //Guardamos todos los bordes
 
     var nivelActual = 0 
 
@@ -56,7 +56,7 @@ object settings {
         game.addVisual(finJuegoCartel)
         game.removeVisual(niveles.get(nivelActual - 1))
         game.schedule(4000, {game.removeVisual(finJuegoCartel)})
-        nivelActual = 0 // empezamos los niveles de 0
+        nivelActual = 0 //empezamos los niveles de 0
     }
 
     method startGame(){
@@ -122,6 +122,8 @@ class Level {
 
     method esZonaProhibida(personaje, nuevaPosicion) = charcos.any({charco => charco.posicionProhibida(nuevaPosicion) && !charco.mismoTipo(personaje)})
 
+    method estaDentroDelMarco (nuevaPosicion) = !self.estaFueraDelMarco(nuevaPosicion)
+
     // Mecanica de los Personajes
 
     method setupCharacters() {
@@ -146,7 +148,7 @@ class Level {
         elementosNivel.forEach({x=> game.removeVisual(x)})
     }
 
-    // Para que no se pueda morir el otro personaje cuando ya se murio uno
+    //Para que no se pueda morir el otro personaje cuando ya se murio uno
     method todosVivos() = !fireboy.murioPersonaje() && !watergirl.murioPersonaje()
     
     // Métodos Sobrescritos en los Niveles

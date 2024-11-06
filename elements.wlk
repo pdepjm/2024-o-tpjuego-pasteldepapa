@@ -1,7 +1,5 @@
 import characters.*
 import config.*
-import level_1.*
-import level_2.*
 import visualCarteles.*
 
 

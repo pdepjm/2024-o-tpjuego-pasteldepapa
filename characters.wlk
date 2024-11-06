@@ -8,14 +8,14 @@ class Character {
     var property position
     var property oldPosition
 
-    const unidadMovimiento = 1
-
-    const nivelActual
+    const property nivelActual
     var property murioPersonaje = false
 
     var plataformaAdherida = null
 
-    var jumping = false
+    var property jumping = false
+
+    const unidadMovimiento = 1
 
     // -------------------- Métodos
 
@@ -37,64 +37,27 @@ class Character {
     
     // Movimientos
 
-    method moveLeft() {
+    method move (direction){
 
         self.plataformaDesadherida()
+    
+        const nuevaPosicion = direction.calcularNuevaPosicion(self)
+
+    
+        if(direction.puedeMoverse(self, nuevaPosicion))
+            direction.actualizarPosicion(self, nuevaPosicion)
         
-        const nuevaPosicion = position.left(unidadMovimiento)
-
-        if(!nivelActual.estaFueraDelMarco(nuevaPosicion) && self.puedeDesplazarse(nuevaPosicion))
-            position.goLeft(unidadMovimiento)
-            oldPosition = new MutablePosition(x = self.position().x() + 1, y = self.position().y())
     }
-
-    method moveRight() {
-
-        self.plataformaDesadherida()
-
-        const nuevaPosicion = position.right(unidadMovimiento)
-
-        if (!nivelActual.estaFueraDelMarco(nuevaPosicion) && self.puedeDesplazarse(nuevaPosicion))
-            position.goRight(unidadMovimiento)
-            oldPosition = new MutablePosition(x = self.position().x() - unidadMovimiento, y = self.position().y())
-    }
-
-    method moveUp() {
-      
-        const nuevaPosicion = position.up(unidadMovimiento)
-        
-        if(!nivelActual.estaFueraDelMarco(nuevaPosicion) && self.puedeDesplazarse(nuevaPosicion))
-            position.goUp(unidadMovimiento)
-            oldPosition = new MutablePosition(x = self.position().x(), y = self.position().y() - unidadMovimiento)
-    }
-
-    method moveDown() {
-
-        const nuevaPosicion = position.down(unidadMovimiento)
-
-        if (nivelActual.esZonaProhibida(self, nuevaPosicion) && nivelActual.todosVivos()) {
-            self.die()
-        }
-        
-        else if(!nivelActual.estaFueraDelMarco(nuevaPosicion) && self.puedeAtravesar(nuevaPosicion)){
-            position.goDown(unidadMovimiento)
-            oldPosition = new MutablePosition(x = self.position().x(), y = self.position().y() + unidadMovimiento)
-        }
-        else {
-        // SETEAMOS FLAG SALTANDO = FALSE (para evitar doble salto)
-            jumping = false
-        }
-    }
-
+   
     method jump() {
 
         self.plataformaDesadherida()
         const nuevaPosicion = position.down(unidadMovimiento)
         
-        if (!jumping && (nivelActual.estaFueraDelMarco(nuevaPosicion) || !self.puedeAtravesar(nuevaPosicion))){
+        if (!jumping && (self.nivelActual().estaFueraDelMarco(nuevaPosicion) || !self.puedeAtravesar(nuevaPosicion))){
             self.desactivarGravedad()
             jumping = true
-            [150, 300, 450, 600].forEach { num => game.schedule(num, { self.moveUp() }) }        
+            [150, 300, 450, 600].forEach { num => game.schedule(num, { self.move(up) }) }        
             game.schedule(800, {self.gravedad()})
         }
     }
@@ -104,7 +67,7 @@ class Character {
     method eventoGravedad ()
 
     method gravedad(){
-        game.onTick(250, self.eventoGravedad(), {self.moveDown()})
+        game.onTick(250, self.eventoGravedad(), {self.move(down)})
     }
 
     method desactivarGravedad (){
@@ -117,11 +80,15 @@ class Character {
         game.onCollideDo(self, {element => element.colision(self)}) 
     }
 
+    //Control movimiento
+
     method puedeDesplazarse(nuevaPosicion) = self.puedeAtravesar(nuevaPosicion) || self.puedeColisionar(nuevaPosicion)
-
+    
     method puedeAtravesar(nuevaPosicion) = game.getObjectsIn(nuevaPosicion).all{obj => obj.esAtravesable()}
-
+ 
     method puedeColisionar(nuevaPosicion) = game.getObjectsIn(nuevaPosicion).all{obj => obj.esColisionable()}
+    
+    method estaDentroDelMarco (nuevaPosicion) = !self.nivelActual().estaFueraDelMarco(nuevaPosicion)
 
     // Puntos y Mecanica del Juego
 
@@ -137,6 +104,7 @@ class Character {
         game.schedule(3000, {nivelActual.restart()}) // Reiniciamos el nivel 
         game.schedule(3000, {self.murioPersonaje(false)}) // Reiniciamos el flag de muerte
     } 
+
 
     // Con Elementos
 
@@ -166,8 +134,8 @@ class Fireboy inherits Character {
     override method eventoGravedad () = "F_Gravedad"
 
     override method setupControls(){
-        keyboard.left().onPressDo   ({ self.moveLeft() })
-        keyboard.right().onPressDo  ({ self.moveRight() })
+        keyboard.left().onPressDo   ({ self.move(left) })
+        keyboard.right().onPressDo  ({ self.move(right) })
         keyboard.up().onPressDo     ({ self.jump() })
     }
 }
@@ -179,8 +147,8 @@ class Watergirl inherits Character {
     override method image() = "P_Watergirl.png" 
 
     override method setupControls(){
-        keyboard.a().onPressDo  ({ self.moveLeft() })
-        keyboard.d().onPressDo  ({ self.moveRight() })
+        keyboard.a().onPressDo  ({ self.move(left) })
+        keyboard.d().onPressDo  ({ self.move(right) })
         keyboard.w().onPressDo  ({ self.jump() })
     }
     
@@ -192,3 +160,67 @@ object fuego {}
 object agua {}
 
 object acido {}
+
+object left {
+    
+    method calcularNuevaPosicion(character) = character.position().left(1)
+    
+    method puedeMoverse(character, nuevaPosicion)= character.estaDentroDelMarco(nuevaPosicion) && character.puedeDesplazarse(nuevaPosicion)
+
+    method actualizarPosicion(character, nuevaPosicion){
+        character.position().goLeft(1)
+        character.oldPosition(new MutablePosition(x = character.position().x() + 1, y = character.position().y()))
+    }
+}
+
+object right {
+    
+    method calcularNuevaPosicion(character) = character.position().right(1)
+
+    method puedeMoverse(character, nuevaPosicion)= character.estaDentroDelMarco(nuevaPosicion) && character.puedeDesplazarse(nuevaPosicion)
+
+    method actualizarPosicion(character, nuevaPosicion){
+        character.position().goRight(1)
+        character.oldPosition(new MutablePosition(x = character.position().x() - 1, y = character.position().y()))
+    }
+}
+
+object up {
+    
+    method calcularNuevaPosicion(character) = character.position().up(1)
+
+    method puedeMoverse(character, nuevaPosicion)= character.estaDentroDelMarco(nuevaPosicion) && character.puedeDesplazarse(nuevaPosicion)
+
+    method actualizarPosicion(character, nuevaPosicion){
+        character.position().goUp(1)
+        character.oldPosition(new MutablePosition(x = character.position().x(), y = character.position().y() - 1))
+    }
+}
+
+object down {
+    
+    method puedeMoverse(character, nuevaPosicion) = true
+
+    method calcularNuevaPosicion(character) = character.position().down(1)
+    
+    method actualizarPosicion(character, nuevaPosicion) {
+
+        if (character.nivelActual().esZonaProhibida(self, nuevaPosicion) && character.nivelActual().todosVivos()) {
+          
+            character.die()
+        }
+        else if(character.estaDentroDelMarco(nuevaPosicion) && character.puedeAtravesar(nuevaPosicion)){
+       
+            character.position().goDown(1)
+            character.oldPosition(new MutablePosition(x = character.position().x(), y = character.position().y() + 1))
+        }
+        else{
+
+        // SETEAMOS FLAG SALTANDO = FALSE (para evitar doble salto)
+            character.jumping(false)
+        }
+
+
+    }
+
+}

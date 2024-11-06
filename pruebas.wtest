@@ -70,7 +70,7 @@ describe "Zonas Prohibidas" {
                 nivelActual = level1) 
         
         fireboy.setPosition(2, 1)
-        fireboy.moveDown()
+        fireboy.move(down)
         assert.that(fireboy.murioPersonaje())}
         
     test "Fireboy no muere al moverse a posiciones no peligrosas" {
@@ -81,7 +81,7 @@ describe "Zonas Prohibidas" {
                 nivelActual = 0)
             
             fireboy.setPosition(1, 1)
-            fireboy.moveRight()
+            fireboy.move(right)
             assert.notThat(fireboy.murioPersonaje())
     }
 }
