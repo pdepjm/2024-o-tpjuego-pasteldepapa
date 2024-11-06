@@ -187,7 +187,7 @@ class Boton {
         }
 
         presionado = true
-        self.personajeMovido(personaje)
+        game.schedule(300, {self.personajeMovido(personaje)})
     }
 
     // Personaje ya no está en el boton
@@ -204,8 +204,7 @@ class Boton {
                 } 
             }
 
-        } else 
-            game.schedule(300, {self.personajeMovido(personaje)}) // ESTO PROBABLEMENTE CAUSA EL LAG, NO SE COMO ARREGLARLO
+        } 
     }
 
     // Auxiliares

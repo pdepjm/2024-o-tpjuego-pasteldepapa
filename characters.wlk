@@ -33,6 +33,7 @@ class Character {
     method tipo()
     method setupControls() 
     method eventoGravedad ()
+    method esColisionable() = false
 
     // Generales
 
