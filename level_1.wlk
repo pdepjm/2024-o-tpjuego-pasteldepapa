@@ -46,8 +46,8 @@ object level1 inherits Level {
     const botonBordoB = new Boton(posX = 29, posY = 13, plataformaAsoc = plataformaBordo) // Boton Abajo
     
     // Caja
-    const caja = new Caja(position = new MutablePosition (x=13, y=18))
 
+    const caja = new Caja(position = new MutablePosition (x=13, y=18))
     
     // Lista con Elementos con Colision Especial
 
@@ -64,8 +64,8 @@ object level1 inherits Level {
 
     override method image() = "F_nivel_1.png"
    
-    override method positionF() = new MutablePosition (x = 32, y= 23)
-    override method positionW() = new MutablePosition (x = 32, y= 23)
+    override method positionF() = new MutablePosition (x = 3, y = 2)
+    override method positionW() = new MutablePosition (x = 5, y = 2)
 
     override method nivelActual () = self
 
@@ -85,6 +85,7 @@ object level1 inherits Level {
     }
 
     // Charcos
+
     override method setupCharcos() {
         charcos.add(new Charco(xMin = 18, xMax = 22, yMin = 0, yMax = 0, tipo = agua))
         charcos.add(new Charco(xMin = 26, xMax = 30, yMin = 0, yMax = 0, tipo = fuego))
@@ -120,6 +121,8 @@ object level1 inherits Level {
 
     // Agregamos Elementos
     override method setupElements() {
+
+        // Diamantes
         diamantes.forEach({x => game.addVisual(x)})
 
         // Puertas
@@ -129,7 +132,7 @@ object level1 inherits Level {
         puertaWatergirl1.otrasPuertas([puertaFireboy1, puertaFireboy2])
         puertaWatergirl2.otrasPuertas([puertaFireboy1, puertaFireboy2])
 
-        // Botones y Plataformas
+        // Botones 
         botonAmarilloA.botonAsoc(botonAmarilloB) 
         botonAmarilloB.botonAsoc(botonAmarilloA)
         botonBordoA.botonAsoc(botonBordoB) 
@@ -146,6 +149,14 @@ object level1 inherits Level {
     // Lista con Todos los Elementos - Para la limpieza luego
 
     override method agregarElementosNivel (){
-        [fireboy, watergirl, caja, puertaFireboy1, puertaFireboy2, puertaWatergirl1, puertaWatergirl2, extensionPlatAmarilla1, extensionPlatAmarilla2, plataformaAmarilla, botonAmarilloA, botonAmarilloB, extensionPlatBordo1, extensionPlatBordo2, plataformaBordo, botonBordoA, botonBordoB].forEach({element => elementosNivel.add(element)})
+        [fireboy, watergirl, 
+        caja, 
+        puertaFireboy1, puertaFireboy2, puertaWatergirl1, puertaWatergirl2, 
+        extensionPlatAmarilla1, extensionPlatAmarilla2, 
+        plataformaAmarilla, 
+        botonAmarilloA, botonAmarilloB, 
+        extensionPlatBordo1, extensionPlatBordo2, 
+        plataformaBordo, 
+        botonBordoA, botonBordoB].forEach({element => elementosNivel.add(element)})
     }
 }

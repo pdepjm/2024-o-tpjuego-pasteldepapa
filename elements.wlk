@@ -26,18 +26,18 @@ class Diamante {
 
     method esAtravesable() = true
     method esColisionable() = false
-
-    method position() = game.at(posX,posY)
-
+    var property fuiRecolectado = false // para tests
+    method position() = game.at(posX,posY) 
+   
     method colision(personaje) {
-        
         if (self.canCollect(personaje)) { // Personaje puede recogerlo y todavia no fue recogido
             game.removeVisual(self) 
             game.sound("S_diamante.mp3").play()
+            self.fuiRecolectado(true) // para tests
         }
     }
 
-    method canCollect(personaje) = personaje.tipo() == self.tipo()
+    method canCollect(personaje) = personaje.tipo() == self.tipo() and !fuiRecolectado
 }
 
 class DiamanteRojo inherits Diamante {
@@ -69,16 +69,29 @@ class DiamanteGris inherits Diamante {
 // ------------------ Puerta
 
 class Puerta {
+    
+    // ---------------- Referencias
     const posX
     const posY
     const tipo
+
     var otrasPuertas = []
     var personaEnPuerta = false
     var personaParaPuerta = null
 
+    // ---------------- Metodos
+
+    // Basicos
+
     method position() = game.at(posX, posY)
     method esAtravesable () = true
     method esColisionable() = false
+
+    method otrasPuertas(puertas) {
+        otrasPuertas = puertas
+    }
+
+    // Colisiones
 
     method setupCollisions() {
         game.whenCollideDo(self, {x => x.colisionEspecial(self)}) 
@@ -95,9 +108,7 @@ class Puerta {
         }
     }
 
-    method otrasPuertas(puertas) {
-        otrasPuertas = puertas
-    }
+    // Auxiliares
 
     method otraPuertaOcupada() = otrasPuertas.any { x => x.personaEnPuerta()}
 
@@ -107,13 +118,14 @@ class Puerta {
 
     method mismaPosicion(personaje) = personaje.position() == self.position()
 
-    method colision(x) {}
+    method colision(x) {} // para no generar error
 }
 
 // ------------------ Caja
 
 class Caja {
     var property position
+    const unidadMovimiento = 1
 
     method image() = "E_cube.png"
 
@@ -121,33 +133,50 @@ class Caja {
     method esColisionable() = true
     
     method colision (personaje){
-        if(self.personajeADer(personaje) && position.left(1).x().between(6, 18)){
-            position = self.position().left(1)
-        }
-        else if (!self.personajeADer(personaje) && position.right(1).x().between(6, 18)) {
-            position = self.position().right(1)
+
+        if(self.personajeADer(personaje)) {
+            if(self.posicionValida(position.left(unidadMovimiento)))
+                position = self.position().left(1)
+        } else {
+            if(self.posicionValida(position.right(unidadMovimiento)))
+                position = self.position().right(1)
         }
     }
 
     method personajeADer(personaje) = personaje.oldPosition().x() > self.position().x()
+    method posicionValida(posicion) = posicion.x().between(6, 18)
 }
 
 // ------------------ Boton para Plataforma
 
 class Boton {
 
+    // ---------------- Referencias
     const posX
     const posY
     const plataformaAsoc
+
     var botonAsoc = null
     var presionado = false
 
+    // ---------------- Metodos
 
+    // Basicos
     method esAtravesable() = true
     method esColisionable() = false
-
+    
     method position() = game.at(posX, posY)
+    method image() = "E_buttonn.png"
 
+    // Accesors
+
+    method presionado() = presionado
+
+    method botonAsoc(nuevoBoton) {
+        botonAsoc = nuevoBoton
+    }
+
+    // Colisiones
     method setupCollisions() {
         game.whenCollideDo(self, {x => x.colisionEspecial(self)}) 
     }
@@ -160,6 +189,8 @@ class Boton {
         presionado = true
         self.personajeMovido(personaje)
     }
+
+    // Personaje ya no está en el boton
 
     method personajeMovido(personaje) {
         if(!self.mismaPosicion(personaje)) {
@@ -174,20 +205,13 @@ class Boton {
             }
 
         } else 
-            game.schedule(300, {self.personajeMovido(personaje)})
+            game.schedule(300, {self.personajeMovido(personaje)}) // ESTO PROBABLEMENTE CAUSA EL LAG, NO SE COMO ARREGLARLO
     }
+
+    // Auxiliares
 
     method mismaPosicion(obj) = obj.position() == self.position()
-    
-    method image() = "E_buttonn.png"
-
-    method presionado() = presionado
-
-    method botonAsoc(nuevoBoton) {
-        botonAsoc = nuevoBoton
-    }
-
-    method colision(obj) {} 
+    method colision(obj) {}  // Para que no cause error
 }
 
 // ------------------ Plataforma Movible
@@ -205,6 +229,8 @@ class PlataformaBase {
     method esAtravesable() = false
     method esColisionable() = false 
     method position() = position
+    
+    method personajeAdherido () = personajeAdherido
 
     // Colision
     
@@ -214,7 +240,6 @@ class PlataformaBase {
         personajeAdherido = personaje
     }
 
-    method personajeAdherido () = personajeAdherido
     // Movimientos
 
     method moveUp() {
@@ -238,7 +263,6 @@ class PlataformaBase {
 
     // Personaje
     
-    
     method moverPersonajeAdherido() {
         if (personajeAdherido != null) { 
             personajeAdherido.setPosition(personajeAdherido.position().x(), self.position().y() + 1)
@@ -250,13 +274,13 @@ class PlataformaBase {
         personajeAdherido = null
     }
 
-    // Los dejo así porque la clase no tiene que ser abstracta
+    // Sobrescritos en las Subclases
+    // (Los dejo con {}, porque no debe ser abstracta)
 
     method hastaMinPosicion() {}
     method hastaMaxPosicion() {}
     method move() {}
     method moveBack() {}
-
 }
 
 class PlataformaMoviVertical inherits PlataformaBase {
@@ -269,7 +293,10 @@ class PlataformaMoviVertical inherits PlataformaBase {
     method image() = image
 
     override method hastaMinPosicion() = self.position().y() != minAltura 
-    override method hastaMaxPosicion() = self.position().y() != maxAltura   
+    override method hastaMaxPosicion() = self.position().y() != maxAltura
+
+    override method move() {self.moveUp()}
+    override method moveBack() {self.moveDown()}   
 
     override method moveUp() {
         super()
@@ -280,10 +307,6 @@ class PlataformaMoviVertical inherits PlataformaBase {
         super()
         platAsocs.forEach { x => x.moveDown()} 
     }
-
-    override method move() {self.moveUp()}
-    override method moveBack() {self.moveDown()}
-
 }
 
 class PlataformaMoviHorizontal inherits PlataformaBase {
@@ -292,8 +315,13 @@ class PlataformaMoviHorizontal inherits PlataformaBase {
     const minDistancia
     const platAsocs
 
+    method image() = "E_horizontal_gate_long.png"
+
     override method hastaMinPosicion() = self.position().x() != minDistancia
     override method hastaMaxPosicion() = self.position().x() != maxDistancia 
+
+    override method move() {self.moveLeft()}
+    override method moveBack() {self.moveRight()}
 
     override method moveRight() {
         super()
@@ -304,12 +332,6 @@ class PlataformaMoviHorizontal inherits PlataformaBase {
         super()
         platAsocs.forEach { x => x.moveLeft()} 
     }
-
-    method image() = "E_horizontal_gate_long.png"
-
-    override method move() {self.moveLeft()}
-    override method moveBack() {self.moveRight()}
-
 }
 
 // ------------------ Nuevo fondo
@@ -329,217 +351,13 @@ class Zona {
     const yMin
     const yMax
 
-    method posicionProhibida (posicion) = posicion.x().between(xMin, xMax) && posicion.y().between(yMin, yMax)
+    method posicionProhibida (posicion) = 
+        posicion.x().between(xMin, xMax) && posicion.y().between(yMin, yMax)
 }
 
 // ------------------ Charco
 
 class Charco inherits Zona {
     const tipo
-
     method mismoTipo (personaje) = personaje.tipo() == tipo
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//////////////////////////// ELIN
-
-/*
-
-
-//////////// ELIN SIN MODIFICAR
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//////////// CHICOS MODIFICADO
-
-
-// ------------------ Boton para Plataforma
-
-class Boton {
-
-    const posX
-    const posY
-    const plataformaAsoc
-    var botonAsoc = null
-    var presionado = false
-
-
-    const movimiento
-    const vuelta
-
-    method esAtravesable() = true
-
-    method position() = game.at(posX, posY)
-
-    method setupCollisions() {
-        game.whenCollideDo(self, {x => x.colisionEspecial(self)}) 
-    }
-
-    method colisionEspecial(personaje) {
-        if(self.hastaMaxPosicion()) {
-            plataformaAsoc.move(movimiento)
-    }
-
-        presionado = true
-        self.personajeMovido(personaje)
-    }
-
-    method personajeMovido(personaje) {
-        if(!self.mismaPosicion(personaje)) {
-            
-            presionado = false
-
-            if(!botonAsoc.presionado()) {
-                if(self.hastaMinPosicion()) {
-                plataformaAsoc.moveBack(vuelta)
-                game.schedule(300, {self.personajeMovido(personaje)})
-                } 
-            }
-
-        } else 
-            game.schedule(300, {self.personajeMovido(personaje)})
-    }
-
-    method mismaPosicion(obj) = obj.position() == self.position()
-    
-    method image() = "E_buttonn.png"
-
-    method presionado() = presionado
-
-    method botonAsoc(nuevoBoton) {
-        botonAsoc = nuevoBoton
-    }
-
-    method hastaMaxPosicion() = plataformaAsoc.position().y() != plataformaAsoc.maxPosicion()
-    method hastaMinPosicion() = plataformaAsoc.position().y() != plataformaAsoc.minPosicion() 
-
-    method colision(obj) {} 
-}
-
-// ------------------ Plataforma Movible
-
-class PlataformaBase {
-
-    const position
-    const unidadMovimiento = 1
-    var personajeAdherido = null
-
-    method esAtravesable() = false
-    
-    method colision(personaje) {
-        personaje.desactivarGravedad()
-        personaje.moverALaPar(self)
-        personajeAdherido = personaje
-    }
-
-    method position() = position
-
-    method move(movimiento) {
-        if(movimiento == "up"){
-        self.position().goUp(unidadMovimiento)}
-        else{
-           self.position().goLeft(unidadMovimiento)}
-        self.moverPersonajeAdherido()
-    }
-
-    method moveBack(vuelta) {
-        if(vuelta == "down"){
-        self.position().goDown(unidadMovimiento)}
-        else{
-        self.position().goRight(unidadMovimiento)}
-        self.moverPersonajeAdherido()
-    }
-
-    method moverPersonajeAdherido() {
-        if (personajeAdherido != null) { 
-            personajeAdherido.setPosition(personajeAdherido.position().x(), self.position().y() + 1)
-        } else {
-            self.detachCharacter()  // lo pusimos porque sino causa error
-        }
-    }
-    method detachCharacter() {
-        personajeAdherido = null
-    }
-
-
-}
-
-class PlataformaMovimientoVertical inherits PlataformaBase{
-    const maxPosicion
-    const minPosicion
-
-    method maxPosicion() = maxPosicion
-    method minPosicion() = minPosicion
-
-    const platAsocs
-
-    override method move(movimiento) {
-        super(movimiento)
-        platAsocs.forEach { x => x.move("up")} 
-    }
-
-    override method moveBack(movimiento) {
-        super(movimiento)
-        platAsocs.forEach { x => x.moveBack("down")} 
-    }
-
-    method image() = "E_horizontal_gate.png"
-}
-
-class PuertaMovimientoVertical inherits PlataformaMovimientoVertical{override method image() = "E_vertical_gate2.png"} //pueden agregarse mas en otros niveles
-
-class PlataformaMovimientoHorizontal inherits PlataformaBase{
-    const maxPosicion
-    const minPosicion
-
-    method maxPosicion() = maxPosicion
-    method minPosicion() = minPosicion
-
-    const platAsocs
-
-    override method move(movimiento) {
-        super(movimiento)
-        platAsocs.forEach { x => x.move("Left")}
-    }
-
-    override method moveBack(movimiento) {
-        super(movimiento)
-        platAsocs.forEach { x => x.moveBack("Right")} 
-    }
-
-    method image() = "E_horizontal_gate_long.png"
-}
-
-*/

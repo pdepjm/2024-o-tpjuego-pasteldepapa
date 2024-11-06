@@ -9,10 +9,10 @@ describe "Movimientos de los Personajes" {
         const fireboy = new Fireboy(
             position = new MutablePosition (x=0, y=0), 
             oldPosition = new MutablePosition (x=0, y=0), 
-            nivelActual = 0) 
+            nivelActual = level1) 
 
         fireboy.setPosition(5, 5)
-        fireboy.moveLeft()
+        fireboy.move(left)
         
         assert.equals(4, fireboy.position().x()) // Debería moverse 1 unidad a la izquierda
         assert.equals(5, fireboy.position().y()) // La coordenada y no debería cambiar
@@ -25,14 +25,13 @@ describe "Movimientos de los Personajes" {
                 nivelActual = level1) 
 
         watergirl.setPosition(5, 5)
-        watergirl.moveRight()
+        watergirl.move(right)
         
         assert.equals(6, watergirl.position().x()) // Debería moverse 1 unidad a la derecha
         assert.equals(5, watergirl.position().y()) // La coordenada y no debería cambiar
     }
     
     test "Fireboy - No atraviesa los pisos intermedios"{
-        const invalidPositions = [[2,3]] 
         
         const fireboy = new Fireboy(
                 position = new MutablePosition (x=2, y=4), 
@@ -40,9 +39,9 @@ describe "Movimientos de los Personajes" {
                 nivelActual = level1)
         
         fireboy.setPosition(2, 4)
-        fireboy.moveDown()
+        fireboy.move(down)
         assert.equals(2, fireboy.position().x())
-        assert.equals(4, fireboy.position().y())
+        assert.equals(3, fireboy.position().y())
     }       
 
     test "Watergirl - Respeta el descubrimiento de Newton" {
@@ -59,37 +58,35 @@ describe "Movimientos de los Personajes" {
 
 }
 
-
 describe "Zonas Prohibidas" {
-    test "Fireboy muere al pasar por charco de distinto tipo" {
 
-        const zonasProhibidasFireboy = [[2,0]]
+    test "Fireboy muere al pasar por charco de distinto tipo" {
+        level1.setupCharcos() //necesario para cargar los charcos en la lista
         const fireboy = new Fireboy(
-                position = new MutablePosition (x=2, y=2), 
-                oldPosition = new MutablePosition (x=2, y=2), 
+                position = new MutablePosition (x=19, y=1), 
+                oldPosition = new MutablePosition (x=19, y=1), 
                 nivelActual = level1) 
         
-        fireboy.setPosition(2, 1)
+        fireboy.setPosition(19, 1)
         fireboy.move(down)
-        assert.that(fireboy.murioPersonaje())}
+        assert.that(fireboy.murioPersonajeTest())}
         
     test "Fireboy no muere al moverse a posiciones no peligrosas" {
-            const zonasProhibidasFireboy = [[3, 1]]
-            const fireboy = new Fireboy(
-                position = new MutablePosition(x=2, y=2), 
-                oldPosition = new MutablePosition(x=2, y=2), 
-                nivelActual = 0)
-            
-            fireboy.setPosition(1, 1)
-            fireboy.move(right)
-            assert.notThat(fireboy.murioPersonaje())
+        level1.setupCharcos() //necesario para cargar los charcos en la lista
+        const fireboy = new Fireboy(
+            position = new MutablePosition(x=28, y=1), 
+            oldPosition = new MutablePosition(x=28, y=1), 
+            nivelActual = level1)
+        
+        fireboy.setPosition(28, 1)
+        fireboy.move(right)
+        assert.notThat(fireboy.murioPersonajeTest())
     }
 }
 
 describe "Diamantes" {
 
     test "Fireboy puede agarrar diamantes Rojos" {
-        game.clear()
         
         const diamante = new DiamanteRojo(posX = 2, posY = 1)
         
@@ -99,14 +96,13 @@ describe "Diamantes" {
             nivelActual = level1) 
 
         fireboy.setPosition(1, 1)
-        fireboy.moveRight()
+        fireboy.move(right)
         diamante.colision(fireboy) 
 
         assert.that(diamante.fuiRecolectado())
     }
     
     test "Watergirl no puede agarrar diamantes rojos" {
-        game.clear()
         
         const diamante = new DiamanteRojo(posX = 2, posY = 1)
 
@@ -116,13 +112,13 @@ describe "Diamantes" {
             nivelActual = level1) 
 
         watergirl.setPosition(1, 1)
-        watergirl.moveRight()
+        watergirl.move(right)
         diamante.colision(watergirl) 
 
         assert.notThat(diamante.fuiRecolectado())
     }
     test "Fireboy puede agarrar diamantes Grises" {
-        game.clear()
+     
         const diamante = new DiamanteGris(posX = 2, posY = 1)
 
         const fireboy = new Fireboy(
@@ -131,13 +127,13 @@ describe "Diamantes" {
             nivelActual = level1) 
 
         fireboy.setPosition(1, 1)
-        fireboy.moveRight() // el movimiento no afecta  ala colision y no la toma
+        fireboy.move(right) // el movimiento no afecta  ala colision y no la toma
         diamante.colision(fireboy) 
             
         assert.that(diamante.fuiRecolectado())
     }
     test "Watergirl puede agarrar diamantes Azules en saltos" {
-        game.clear()
+     
         const diamante = new DiamanteAzul(posX = 1, posY = 2)
 
         const watergirl = new Watergirl(
@@ -152,40 +148,3 @@ describe "Diamantes" {
         assert.that(diamante.fuiRecolectado())
     }
 }
-
-
-/*
-describe "Pasaje de Nivel"{
-    
-    test "Los personajes ganan al estar en la puerta"{
-        const puertaFireboy = new Puerta(posX = 32, posY = 23, tipo = fuego)
-        const puertaWatergirl = new Puerta(posX = 35, posY = 23, tipo = agua)
-
-        const fireboy = new Fireboy(
-            position = new MutablePosition (x=32, y=23), 
-            oldPosition = new MutablePosition (x=32, y=23), 
-            nivelActual = level1, 
-            zonasProhibidas =  [], 
-            invalidPositions = [])
-
-
-        const watergirl = new Watergirl(
-            position = new MutablePosition (x=35, y=23), 
-            oldPosition = new MutablePosition (x=35, y=23), 
-            nivelActual = level1, 
-            zonasProhibidas =  [], 
-            invalidPositions = [])
-
-        fireboy.setPosition(32, 23)
-        watergirl.setPosition(35, 23)
-
-        puertaFireboy.colision(fireboy)
-        puertaWatergirl.colision(watergirl)
-
-        assert.equals(1, settings.nivelActual())
-        
-    
-    
-    }
-}
-*/

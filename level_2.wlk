@@ -13,6 +13,8 @@ object level2 inherits Level {
     const puertaWatergirl1 = new Puerta(posX = 2, posY = 24, tipo = agua)
     const puertaWatergirl2 = new Puerta(posX = 3, posY = 24, tipo = agua)
 
+    // Plataforma Violeta y Elementos Asociados
+
     const extensionPlatVioleta1 = new PlataformaBase(position = new MutablePosition(x=23, y=23))
     const extensionPlatVioleta2 = new PlataformaBase(position = new MutablePosition(x=24, y=23))
     const extensionPlatVioleta3 = new PlataformaBase(position = new MutablePosition(x=25, y=23))
@@ -27,6 +29,8 @@ object level2 inherits Level {
 
     const botonVioletaA = new Boton(posX = 12, posY = 24, plataformaAsoc = plataformaVioleta) // Boton izquierda
     const botonVioletaB = new Boton(posX = 28, posY = 24, plataformaAsoc = plataformaVioleta) // Boton derecha
+
+    // Plataforma Amarilla y Elementos Asociados
 
     const extensionPlatAmarilla1 = new PlataformaBase(position = new MutablePosition(x=19, y=9))
     const extensionPlatAmarilla2 = new PlataformaBase(position = new MutablePosition(x=19, y=10))
@@ -43,7 +47,7 @@ object level2 inherits Level {
     const botonAmarilloA = new Boton(posX = 8, posY = 8, plataformaAsoc = plataformaAmarilla) // Boton izquierda
     const botonAmarilloB = new Boton(posX = 31, posY = 8, plataformaAsoc = plataformaAmarilla) // Boton derecha
 
-    // Lista con Todos los Elementos Especiales - Para la limpieza luego
+    // Lista con Todos los Elementos Especiales 
 
     const elemsColisionEspecial = [
         puertaFireboy1, puertaFireboy2,
@@ -121,19 +125,24 @@ object level2 inherits Level {
     // Agregamos Elementos 
 
     override method setupElements() {
+
+        // Diamantes
         diamantes.forEach({x => game.addVisual(x)})
 
+        // Puertas
         puertaFireboy1.otrasPuertas([puertaWatergirl1, puertaWatergirl2])
         puertaFireboy2.otrasPuertas([puertaWatergirl1, puertaWatergirl2])
 
         puertaWatergirl1.otrasPuertas([puertaFireboy1, puertaFireboy2])
         puertaWatergirl2.otrasPuertas([puertaFireboy1, puertaFireboy2])
 
+        // Botones
         botonVioletaA.botonAsoc(botonVioletaB) 
         botonVioletaB.botonAsoc(botonVioletaA)
         botonAmarilloA.botonAsoc(botonAmarilloB) 
         botonAmarilloB.botonAsoc(botonAmarilloA)
 
+        // Elementos con Colision Especial
         elemsColisionEspecial.forEach({x => x.setupCollisions()})
         
         // Agregamos Elementos a la lista de elementos del Nivel
@@ -144,6 +153,14 @@ object level2 inherits Level {
     // Agregamos los elementos del nivel
 
     override method agregarElementosNivel (){
-        [fireboy, watergirl, puertaFireboy1, puertaFireboy2, puertaWatergirl1, puertaWatergirl2, extensionPlatVioleta1, extensionPlatVioleta2,extensionPlatVioleta3,extensionPlatVioleta4, plataformaVioleta,botonVioletaA, botonVioletaB,extensionPlatAmarilla1,extensionPlatAmarilla2,extensionPlatAmarilla3,plataformaAmarilla,botonAmarilloA,botonAmarilloB].forEach({x => elementosNivel.add(x)})
+        [fireboy, watergirl, 
+        puertaFireboy1, puertaFireboy2, puertaWatergirl1, puertaWatergirl2, 
+        extensionPlatVioleta1, extensionPlatVioleta2,
+        extensionPlatVioleta3,extensionPlatVioleta4, 
+        plataformaVioleta,
+        botonVioletaA, botonVioletaB,
+        extensionPlatAmarilla1,extensionPlatAmarilla2,extensionPlatAmarilla3,
+        plataformaAmarilla,
+        botonAmarilloA,botonAmarilloB].forEach({x => elementosNivel.add(x)})
     }
 }
