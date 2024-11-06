@@ -43,7 +43,7 @@ class Character {
         
         const nuevaPosicion = position.left(unidadMovimiento)
 
-        if(!nivelActual.estaFueraDelMarco(nuevaPosicion))
+        if(!nivelActual.estaFueraDelMarco(nuevaPosicion) && self.puedeDesplazarse(nuevaPosicion))
             position.goLeft(unidadMovimiento)
             oldPosition = new MutablePosition(x = self.position().x() + 1, y = self.position().y())
     }
@@ -54,7 +54,7 @@ class Character {
 
         const nuevaPosicion = position.right(unidadMovimiento)
 
-        if (!nivelActual.estaFueraDelMarco(nuevaPosicion))
+        if (!nivelActual.estaFueraDelMarco(nuevaPosicion) && self.puedeDesplazarse(nuevaPosicion))
             position.goRight(unidadMovimiento)
             oldPosition = new MutablePosition(x = self.position().x() - unidadMovimiento, y = self.position().y())
     }
@@ -63,7 +63,7 @@ class Character {
       
         const nuevaPosicion = position.up(unidadMovimiento)
         
-        if(!nivelActual.estaFueraDelMarco(nuevaPosicion))
+        if(!nivelActual.estaFueraDelMarco(nuevaPosicion) && self.puedeDesplazarse(nuevaPosicion))
             position.goUp(unidadMovimiento)
             oldPosition = new MutablePosition(x = self.position().x(), y = self.position().y() - unidadMovimiento)
     }
@@ -89,8 +89,9 @@ class Character {
     method jump() {
 
         self.plataformaDesadherida()
-
-        if (!jumping){
+        const nuevaPosicion = position.down(unidadMovimiento)
+        
+        if (!jumping && (nivelActual.estaFueraDelMarco(nuevaPosicion) || !self.puedeAtravesar(nuevaPosicion))){
             self.desactivarGravedad()
             jumping = true
             [150, 300, 450, 600].forEach { num => game.schedule(num, { self.moveUp() }) }        
@@ -116,7 +117,11 @@ class Character {
         game.onCollideDo(self, {element => element.colision(self)}) 
     }
 
+    method puedeDesplazarse(nuevaPosicion) = self.puedeAtravesar(nuevaPosicion) || self.puedeColisionar(nuevaPosicion)
+
     method puedeAtravesar(nuevaPosicion) = game.getObjectsIn(nuevaPosicion).all{obj => obj.esAtravesable()}
+
+    method puedeColisionar(nuevaPosicion) = game.getObjectsIn(nuevaPosicion).all{obj => obj.esColisionable()}
 
     // Puntos y Mecanica del Juego
 
