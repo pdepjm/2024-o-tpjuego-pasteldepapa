@@ -28,4 +28,4 @@ A partir de esto, apreciamos que el polimorfismo otorga flexibilidad y facilita 
 
 El siguiente link los llevará a un documento de LucidChart, cada página en él es un diagrama diferente. Realizamos dos, uno mostrando las relaciones entre las distintas clases con Character y otro mostrando las relaciones con Level. 
 
-[Link a los Diagramas de Clases]([https://www.genome.gov/](https://lucid.app/lucidchart/e5a4730b-5a7a-4a26-9742-a7a7002d4637/edit?viewport_loc=-6225%2C-6225%2C13408%2C7723%2C0_0&invitationId=inv_f7be2161-30e6-4d28-b5ac-74f68b785bac))
+[Link a los Diagramas de Clases](https://www.genome.gov/](https://lucid.app/lucidchart/e5a4730b-5a7a-4a26-9742-a7a7002d4637/edit?viewport_loc=-6225%2C-6225%2C13408%2C7723%2C0_0&invitationId=inv_f7be2161-30e6-4d28-b5ac-74f68b785bac)
