@@ -7,11 +7,9 @@ import level_1.*
 describe "Movimientos de los Personajes" {
     test "Fireboy - Movimiento a Izquierda Correcto" {
         const fireboy = new Fireboy(
-            position = new MutablePosition (x=0, y=0), 
-            oldPosition = new MutablePosition (x=0, y=0), 
-            nivelActual = level1) 
-
-        fireboy.setPosition(5, 5)
+            position = new MutablePosition (x=5, y=5), 
+            lastMovement = null) 
+            
         fireboy.move(left)
         
         assert.equals(4, fireboy.position().x()) // Debería moverse 1 unidad a la izquierda
@@ -20,11 +18,10 @@ describe "Movimientos de los Personajes" {
 
     test "Watergirl - Movimiento a Derecha Correcto" {
         const watergirl = new Watergirl(
-                position = new MutablePosition (x=0, y=0), 
-                oldPosition = new MutablePosition (x=0, y=0), 
-                nivelActual = level1) 
+            position = new MutablePosition (x=5, y=5), 
+            lastMovement = null
+        ) 
 
-        watergirl.setPosition(5, 5)
         watergirl.move(right)
         
         assert.equals(6, watergirl.position().x()) // Debería moverse 1 unidad a la derecha
@@ -33,12 +30,11 @@ describe "Movimientos de los Personajes" {
     
     test "Fireboy - No atraviesa los pisos intermedios"{
         
+        level1.setupCharcos ()
         const fireboy = new Fireboy(
                 position = new MutablePosition (x=2, y=4), 
-                oldPosition = new MutablePosition (x=2, y=4), 
-                nivelActual = level1)
-        
-        fireboy.setPosition(2, 4)
+                lastMovement = null)
+
         fireboy.move(down)
         assert.equals(2, fireboy.position().x())
         assert.equals(3, fireboy.position().y())
@@ -46,11 +42,9 @@ describe "Movimientos de los Personajes" {
 
     test "Watergirl - Respeta el descubrimiento de Newton" {
         const watergirl = new Watergirl(
-                position = new MutablePosition (x=0, y=0), 
-                oldPosition = new MutablePosition (x=0, y=0), 
-                nivelActual = level1) 
+                position = new MutablePosition (x=1, y=1), 
+                lastMovement = null) 
 
-        watergirl.setPosition(1, 1)
         watergirl.jump()
         
         assert.equals(1, watergirl.position().y()) // La coordenada y no debería cambiar
@@ -62,12 +56,11 @@ describe "Zonas Prohibidas" {
 
     test "Fireboy muere al pasar por charco de distinto tipo" {
         level1.setupCharcos() //necesario para cargar los charcos en la lista
+        console.println("Charcos: " + level1.charcos().size())
         const fireboy = new Fireboy(
                 position = new MutablePosition (x=19, y=1), 
-                oldPosition = new MutablePosition (x=19, y=1), 
-                nivelActual = level1) 
-        
-        fireboy.setPosition(19, 1)
+                lastMovement = null) 
+
         fireboy.move(down)
         assert.that(fireboy.murioPersonajeTest())}
         
@@ -75,10 +68,8 @@ describe "Zonas Prohibidas" {
         level1.setupCharcos() //necesario para cargar los charcos en la lista
         const fireboy = new Fireboy(
             position = new MutablePosition(x=28, y=1), 
-            oldPosition = new MutablePosition(x=28, y=1), 
-            nivelActual = level1)
-        
-        fireboy.setPosition(28, 1)
+            lastMovement = null)
+
         fireboy.move(right)
         assert.notThat(fireboy.murioPersonajeTest())
     }
@@ -91,11 +82,9 @@ describe "Diamantes" {
         const diamante = new DiamanteRojo(posX = 2, posY = 1)
         
         const fireboy = new Fireboy(
-            position = new MutablePosition (x=0, y=0), 
-            oldPosition = new MutablePosition (x=0, y=0), 
-            nivelActual = level1) 
-
-        fireboy.setPosition(1, 1)
+            position = new MutablePosition (x=1, y=1), 
+            lastMovement = null)
+            
         fireboy.move(right)
         diamante.colision(fireboy) 
 
@@ -107,11 +96,10 @@ describe "Diamantes" {
         const diamante = new DiamanteRojo(posX = 2, posY = 1)
 
         const watergirl = new Watergirl(
-            position = new MutablePosition (x=0, y=0), 
-            oldPosition = new MutablePosition (x=0, y=0), 
-            nivelActual = level1) 
+            position = new MutablePosition (x=1, y=1), 
+            lastMovement = null
+        ) 
 
-        watergirl.setPosition(1, 1)
         watergirl.move(right)
         diamante.colision(watergirl) 
 
@@ -122,11 +110,10 @@ describe "Diamantes" {
         const diamante = new DiamanteGris(posX = 2, posY = 1)
 
         const fireboy = new Fireboy(
-            position = new MutablePosition (x=0, y=0), 
-            oldPosition = new MutablePosition (x=0, y=0), 
-            nivelActual = level1) 
+            position = new MutablePosition (x=1, y=1), 
+            lastMovement = null
+        ) 
 
-        fireboy.setPosition(1, 1)
         fireboy.move(right) // el movimiento no afecta  ala colision y no la toma
         diamante.colision(fireboy) 
             
@@ -137,11 +124,10 @@ describe "Diamantes" {
         const diamante = new DiamanteAzul(posX = 1, posY = 2)
 
         const watergirl = new Watergirl(
-            position = new MutablePosition (x=0, y=0), 
-            oldPosition = new MutablePosition (x=0, y=0), 
-            nivelActual = level1) 
+            position = new MutablePosition (x=1, y=1), 
+            lastMovement = null
+        ) 
 
-        watergirl.setPosition(1, 1)
         watergirl.jump()
         diamante.colision(watergirl) 
 

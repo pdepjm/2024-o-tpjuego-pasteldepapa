@@ -135,15 +135,16 @@ class Caja {
     method colision (personaje){
 
         if(self.personajeADer(personaje)) {
+            if(self.posicionValida(position.right(unidadMovimiento)))
+                position = self.position().right(1)     
+        } else if (self.personajeAIzq(personaje)){
             if(self.posicionValida(position.left(unidadMovimiento)))
                 position = self.position().left(1)
-        } else {
-            if(self.posicionValida(position.right(unidadMovimiento)))
-                position = self.position().right(1)
         }
     }
 
-    method personajeADer(personaje) = personaje.oldPosition().x() > self.position().x()
+    method personajeADer(personaje) = personaje.lastMovement() == right
+    method personajeAIzq(personaje) = personaje.lastMovement() == left
     method posicionValida(posicion) = posicion.x().between(6, 18)
 }
 
@@ -264,7 +265,8 @@ class PlataformaBase {
     
     method moverPersonajeAdherido() {
         if (personajeAdherido != null) { 
-            personajeAdherido.setPosition(personajeAdherido.position().x(), self.position().y() + 1)
+            const offset = self.position().y() + 1 - personajeAdherido.position().y() 
+            personajeAdherido.position().goUp(offset)
         } else {
             self.detachCharacter()  // lo pusimos porque sino causa error
         }
@@ -282,7 +284,7 @@ class PlataformaBase {
     method moveBack() {}
 }
 
-class PlataformaMoviVertical inherits PlataformaBase {
+class PlataformaMoviVertical inherits PlataformaBase { // diferenciar solo por asociada y base, ademas fijarse si es posible o q base no heredde o hacerla abstracta
 
     const maxAltura
     const minAltura
@@ -314,17 +316,29 @@ class PlataformaMoviHorizontal inherits PlataformaBase {
     const minDistancia
     const platAsocs
 
+    // var direccion = derecha
     method image() = "E_horizontal_gate_long.png"
 
     override method hastaMinPosicion() = self.position().x() != minDistancia
     override method hastaMaxPosicion() = self.position().x() != maxDistancia 
 
-    override method move() {self.moveLeft()}
+    override method move() {self.moveLeft()} // Reversionar metodo
+
+    /*
+    method move(){
+        direccion.mover(self)
+    }
+    */
+    /*
+    method moveBack(){
+        direccion.opuesta().mover(self)
+    }
+    */
     override method moveBack() {self.moveRight()}
 
     override method moveRight() {
         super()
-        platAsocs.forEach { x => x.moveRight()} 
+        platAsocs.forEach { x => x.moveRight()} // direccion.mover()
     }
 
     override method moveLeft() {
@@ -359,4 +373,15 @@ class Zona {
 class Charco inherits Zona {
     const tipo
     method mismoTipo (personaje) = personaje.tipo() == tipo
+    
+    method soyZonaProhibida(character, nuevaPosicion) = settings.objNivelActual().esZonaProhibida(character, nuevaPosicion)
+
+    method puedeMorirPersonaje(character, nuevaPosicion){
+        if(self.soyZonaProhibida(character, nuevaPosicion) && self.personajesVivos(character)){
+            character.die()        
+        }
+    }
+
+    method personajesVivos(character) = settings.objNivelActual().todosVivos()
+
 }

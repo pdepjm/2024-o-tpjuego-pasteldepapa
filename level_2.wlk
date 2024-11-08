@@ -92,6 +92,7 @@ object level2 inherits Level {
     // Charcos 
 
     override method setupCharcos() {
+       
         charcos.add(new Charco(xMin = 6, xMax = 14, yMin = 0, yMax = 0, tipo = fuego))
         charcos.add(new Charco(xMin = 22, xMax = 29, yMin = 3, yMax = 3, tipo = fuego))
         charcos.add(new Charco(xMin = 6, xMax = 14, yMin = 3, yMax = 3, tipo = agua))
@@ -124,7 +125,7 @@ object level2 inherits Level {
 
     // Agregamos Elementos 
 
-    override method setupElements() {
+    override method setupElements() { // ABSTRAER
 
         // Diamantes
         diamantes.forEach({x => game.addVisual(x)})
@@ -153,7 +154,7 @@ object level2 inherits Level {
     // Agregamos los elementos del nivel
 
     override method agregarElementosNivel (){
-        [fireboy, watergirl, 
+        elementosNivel.addAll([fireboy, watergirl, 
         puertaFireboy1, puertaFireboy2, puertaWatergirl1, puertaWatergirl2, 
         extensionPlatVioleta1, extensionPlatVioleta2,
         extensionPlatVioleta3,extensionPlatVioleta4, 
@@ -161,6 +162,6 @@ object level2 inherits Level {
         botonVioletaA, botonVioletaB,
         extensionPlatAmarilla1,extensionPlatAmarilla2,extensionPlatAmarilla3,
         plataformaAmarilla,
-        botonAmarilloA,botonAmarilloB].forEach({x => elementosNivel.add(x)})
+        botonAmarilloA,botonAmarilloB])
     }
 }

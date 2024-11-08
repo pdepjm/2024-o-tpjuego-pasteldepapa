@@ -14,10 +14,12 @@ object settings {
     const niveles = [level1, level2]
     const cantNiveles = niveles.size()
     var nivelActual = 0 
+    var objNivelActual = niveles.get(nivelActual)
     var nivelesInicializados = false //Para saber si hay que hacer start o restart
 
     const property bordeJuego = [] // Guardamos todos los bordes
 
+    method objNivelActual () = objNivelActual
     // ---------------------- Métodos
 
     // Inicialización
@@ -30,6 +32,15 @@ object settings {
         self.initLimitesJuego()
         game.start()
     }
+
+   // method newLevel(){
+   //      nivelActual1 =new Nivel(
+//
+//
+//
+//
+   //     )
+   // }
 
     method initLimitesJuego (){
         bordeJuego.add(new Zona (xMin = 0, xMax = 38, yMin = 0, yMax = 0   ))
@@ -51,6 +62,7 @@ object settings {
 
     method pasarSgteNivel(){
 
+        
         niveles.get(nivelActual).cleanVisuals()
         game.sound("S_nivel_pasado.mp3").play()
         nivelActual += 1
@@ -60,8 +72,10 @@ object settings {
             game.addVisual(nivelSuperadoCartel)
             game.schedule(2000,{game.removeVisual(nivelSuperadoCartel)})
             game.schedule(2000,{game.removeVisual(niveles.get(nivelActual - 1))})
+            game.schedule(2000, {objNivelActual = niveles.get(nivelActual)})
             game.schedule(2000, {self.startGame()})
         }
+
     }
 
     method finDeJuego () {
@@ -70,6 +84,7 @@ object settings {
         game.removeVisual(niveles.get(nivelActual - 1))
         game.schedule(4000, {game.removeVisual(finJuegoCartel)})
         nivelActual = 0 //empezamos los niveles de 0
+        objNivelActual = niveles.get(nivelActual)
     }
 }
 
@@ -80,21 +95,20 @@ class Level {
     // ---------------------- Referencias
 
     const pisosJuego = [] // Zonas de cada nivel
-    const charcos = [] // Lista de charcos de cada nivel
+    const property charcos = [] // Lista de charcos de cada nivel
     const diamantes = [] // Diamantes   
     const elementosNivel = [] // Lista de elementos de cada nivel
     const bordeJuego = [] // Bordes del juego
 
     // Personajes 
-    const fireboy = new Fireboy(position = self.positionF(), 
-        oldPosition = self.positionF(),
-        nivelActual = self.nivelActual()
+    const fireboy = new Fireboy(
+        position = self.positionF(), 
+        lastMovement = null
     ) 
 
     const watergirl = new Watergirl(
         position = self.positionW(), 
-        oldPosition = self.positionW(),
-        nivelActual = self.nivelActual()
+        lastMovement = null
     ) 
 
     // ---------------------- Métodos 
@@ -108,7 +122,7 @@ class Level {
         self.setupMechanicsInit()
         self.setupPisos()
         self.setupDiamonds()
-        self.setupCharacters()
+       // self.setupCharacters()
         self.setupCharcos()
         self.setupElements()  // Bloques, palancas, plataformas, etc.
     }
@@ -133,8 +147,8 @@ class Level {
 
     method setupCharacters() {
         // Volver a posicion inicial al resetear el nivel
-        fireboy.setPosition(self.positionF().x(),self.positionF().y())
-        watergirl.setPosition(self.positionW().x(),self.positionW().y())    
+        fireboy.setPosition(self.positionF())
+        watergirl.setPosition(self.positionW())    
     }
 
     method setupMechanicsInit(){

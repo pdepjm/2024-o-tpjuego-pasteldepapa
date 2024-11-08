@@ -2,6 +2,9 @@ import config.*
 import elements.*
 import characters.*
 
+// class level1
+// objetc nivelActual inherits 
+
 object level1 inherits Level {
     
     // --------------------- Referencias -------------------------
@@ -48,6 +51,8 @@ object level1 inherits Level {
     // Caja
 
     const caja = new Caja(position = new MutablePosition (x=13, y=18))
+
+  
     
     // Lista con Elementos con Colision Especial
 
@@ -64,8 +69,8 @@ object level1 inherits Level {
 
     override method image() = "F_nivel_1.png"
    
-    override method positionF() = new MutablePosition (x = 3, y = 2)
-    override method positionW() = new MutablePosition (x = 5, y = 2)
+    override method positionF() = new MutablePosition (x = 35, y = 25)
+    override method positionW() = new MutablePosition (x = 35, y = 25)
 
     override method nivelActual () = self
 
@@ -149,7 +154,7 @@ object level1 inherits Level {
     // Lista con Todos los Elementos - Para la limpieza luego
 
     override method agregarElementosNivel (){
-        [fireboy, watergirl, 
+        elementosNivel.addAll([fireboy, watergirl, 
         caja, 
         puertaFireboy1, puertaFireboy2, puertaWatergirl1, puertaWatergirl2, 
         extensionPlatAmarilla1, extensionPlatAmarilla2, 
@@ -157,6 +162,6 @@ object level1 inherits Level {
         botonAmarilloA, botonAmarilloB, 
         extensionPlatBordo1, extensionPlatBordo2, 
         plataformaBordo, 
-        botonBordoA, botonBordoB].forEach({element => elementosNivel.add(element)})
+        botonBordoA, botonBordoB])
     }
 }
