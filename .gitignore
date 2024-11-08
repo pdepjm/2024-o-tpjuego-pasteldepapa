@@ -1,6 +1,1 @@
-
-# Local history
-.history
-
-# Wollok Log
-*.log
+log/
