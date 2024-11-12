@@ -57,7 +57,6 @@ describe "Zonas Prohibidas" {
 
     test "Fireboy muere al pasar por charco de distinto tipo" {
         level1.setupCharcos() //necesario para cargar los charcos en la lista
-        console.println("Charcos: " + level1.charcos().size())
         const fireboy = new Fireboy(
                 position = new MutablePosition (x=19, y=1), 
                 lastMovement = null) 

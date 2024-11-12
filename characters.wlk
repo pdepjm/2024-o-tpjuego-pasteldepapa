@@ -49,7 +49,6 @@ class Character {
     
     if (direction.puedeMoverse(self, nuevaPosicion))
       direction.actualizarPosicion(self, nuevaPosicion)
-      self.lastMovement(direction)
   }
   
   method jump() {
@@ -142,8 +141,8 @@ class Fireboy inherits Character {
   override method eventoGravedad() = "F_Gravedad"
   
   override method setupControls() {
-    keyboard.left().onPressDo({ self.move(left) })
-    keyboard.right().onPressDo({ self.move(right) })
+    keyboard.left().onPressDo({ self.move(left) self.lastMovement(left)})
+    keyboard.right().onPressDo({ self.move(right) self.lastMovement(right)})
     keyboard.up().onPressDo({ self.jump() })
   }
 }
@@ -154,8 +153,8 @@ class Watergirl inherits Character {
   override method image() = "P_Watergirl.png"
   
   override method setupControls() {
-    keyboard.a().onPressDo({ self.move(left) })
-    keyboard.d().onPressDo({ self.move(right) })
+    keyboard.a().onPressDo({ self.move(left) self.lastMovement(left)})
+    keyboard.d().onPressDo({ self.move(right) self.lastMovement(right)})
     keyboard.w().onPressDo({ self.jump() })
   }
   

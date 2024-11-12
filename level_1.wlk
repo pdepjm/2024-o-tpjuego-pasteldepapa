@@ -73,8 +73,8 @@ object level1 inherits Level {
 
     override method image() = "F_nivel_1.png"
    
-    override method positionF() = new MutablePosition (x = 35, y = 25)
-    override method positionW() = new MutablePosition (x = 35, y = 25)
+    override method positionF() = new MutablePosition (x = 35, y = 23)
+    override method positionW() = new MutablePosition (x = 35, y = 23)
 
     override method nivelActual () = self
 
