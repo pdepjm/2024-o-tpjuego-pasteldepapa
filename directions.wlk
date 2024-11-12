@@ -77,7 +77,6 @@ object down inherits Direction {
     override method actualizarPosicion(character, _) {
         character.position().goDown(unidadMovimiento)
     }
-
 }
 
 

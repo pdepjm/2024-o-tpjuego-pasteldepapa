@@ -260,14 +260,6 @@ class PlataformaBase {
     method detachCharacter() {
         personajeAdherido = null
     }
-
-    // Sobrescritos en las Subclases
-    // (Los dejo con {}, porque no debe ser abstracta)
-
-    method hastaMinPosicion() {}
-    method hastaMaxPosicion() {}
-    method move() {}
-    method moveBack() {}
 }
 
 class PlataformaMovible inherits PlataformaBase {
@@ -280,8 +272,8 @@ class PlataformaMovible inherits PlataformaBase {
 
     method image() = image
 
-    override method hastaMinPosicion() = self.checkPosition() != posicionMin
-    override method hastaMaxPosicion() = self.checkPosition() != posicionMax
+    method hastaMinPosicion() = self.checkPosition() != posicionMin
+    method hastaMaxPosicion() = self.checkPosition() != posicionMax
 
 
     method checkPosition() {
@@ -296,8 +288,8 @@ class PlataformaMovible inherits PlataformaBase {
         platAsocs.forEach { x => x.moveDirection(direction)}
     }
 
-    override method move() {self.moveDirection(dirOriginal)}
-    override method moveBack() {self.moveDirection(dirVuelta)}
+    method move() {self.moveDirection(dirOriginal)}
+    method moveBack() {self.moveDirection(dirVuelta)}
 }
 
 
