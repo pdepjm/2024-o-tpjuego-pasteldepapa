@@ -3,6 +3,7 @@ import elements.*
 import level_1.*
 import level_2.*
 import visualCarteles.*
+import directions.*
 
 
 ////////////////////////////////// CONFIGURACION GENERAL
@@ -33,15 +34,6 @@ object settings {
         game.start()
     }
 
-   // method newLevel(){
-   //      nivelActual1 =new Nivel(
-//
-//
-//
-//
-   //     )
-   // }
-
     method initLimitesJuego (){
         bordeJuego.add(new Zona (xMin = 0, xMax = 38, yMin = 0, yMax = 0   ))
         bordeJuego.add(new Zona (xMin = 0, xMax = 0, yMin = 1, yMax = 27   ))
@@ -62,7 +54,6 @@ object settings {
 
     method pasarSgteNivel(){
 
-        
         niveles.get(nivelActual).cleanVisuals()
         game.sound("S_nivel_pasado.mp3").play()
         nivelActual += 1
@@ -79,7 +70,7 @@ object settings {
     }
 
     method finDeJuego () {
-        nivelesInicializados = true //Una vez que finalizamos el juego, ya no hay que volver a crear todos los elementos, solo hacemos addVisual y removeVisual
+        nivelesInicializados = true // Con juego finalizado, no se vuelven a crear todos los elems
         game.addVisual(finJuegoCartel)
         game.removeVisual(niveles.get(nivelActual - 1))
         game.schedule(4000, {game.removeVisual(finJuegoCartel)})
@@ -99,6 +90,14 @@ class Level {
     const diamantes = [] // Diamantes   
     const elementosNivel = [] // Lista de elementos de cada nivel
     const bordeJuego = [] // Bordes del juego
+
+    const movePlatMoviVertical = up
+    const moveBackPlatMoviVertical = down
+    const movePlatMoviHorizontal = left
+    const moveBackPlatMoviHorizontal = right
+    const imagePlatVertical = "E_vertical_gate2.png"
+    const imagePlatHorizontal = "E_horizontal_gate.png"
+    const imagePlatHorizontalLong = "E_horizontal_gate_long.png"
 
     // Personajes 
     const fireboy = new Fireboy(
@@ -141,7 +140,8 @@ class Level {
 
     method estaDentroDelMarco (nuevaPosicion) = !self.estaFueraDelMarco(nuevaPosicion)
 
-    method esZonaProhibida(personaje, nuevaPosicion) = charcos.any({charco => charco.posicionProhibida(nuevaPosicion) && !charco.mismoTipo(personaje)})
+    method esZonaProhibida(personaje, nuevaPosicion) = 
+        charcos.any({charco => charco.posicionProhibida(nuevaPosicion) && !charco.mismoTipo(personaje)})
 
     // --- Mecanica de los Personajes
 

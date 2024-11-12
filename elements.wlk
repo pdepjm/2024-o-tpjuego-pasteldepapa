@@ -1,6 +1,7 @@
 import characters.*
 import config.*
 import visualCarteles.*
+import directions.*
 
 
 // ------------------ Diamantes
@@ -204,7 +205,6 @@ class Boton {
                 game.schedule(300, {self.personajeMovido(personaje)})
                 } 
             }
-
         } 
     }
 
@@ -242,23 +242,9 @@ class PlataformaBase {
 
     // Movimientos
 
-    method moveUp() {
-        self.position().goUp(unidadMovimiento)
+    method moveDirection(direction) {
+        direction.actualizarPosicion(self, 0)
         self.moverPersonajeAdherido()
-    }
-
-    method moveDown() {
-        self.position().goDown(unidadMovimiento)
-        self.moverPersonajeAdherido()
-    }
-
-    method moveRight() {
-        self.position().goRight(unidadMovimiento)
-        // agregar mover personaje adherido?
-    }
-
-    method moveLeft() {
-        self.position().goLeft(unidadMovimiento)
     }
 
     // Personaje
@@ -284,68 +270,36 @@ class PlataformaBase {
     method moveBack() {}
 }
 
-class PlataformaMoviVertical inherits PlataformaBase { // diferenciar solo por asociada y base, ademas fijarse si es posible o q base no heredde o hacerla abstracta
-
-    const maxAltura
-    const minAltura
+class PlataformaMovible inherits PlataformaBase {
+    const posicionMax 
+    const posicionMin
     const platAsocs
     const image
+    const dirOriginal
+    const dirVuelta
 
     method image() = image
 
-    override method hastaMinPosicion() = self.position().y() != minAltura 
-    override method hastaMaxPosicion() = self.position().y() != maxAltura
+    override method hastaMinPosicion() = self.checkPosition() != posicionMin
+    override method hastaMaxPosicion() = self.checkPosition() != posicionMax
 
-    override method move() {self.moveUp()}
-    override method moveBack() {self.moveDown()}   
 
-    override method moveUp() {
-        super()
-        platAsocs.forEach { x => x.moveUp()} 
+    method checkPosition() {
+        if(dirOriginal == up) 
+            return self.position().y()
+        else 
+            return self.position().x()
     }
 
-    override method moveDown() {
-        super()
-        platAsocs.forEach { x => x.moveDown()} 
+    override method moveDirection(direction) {
+        super(direction)
+        platAsocs.forEach { x => x.moveDirection(direction)}
     }
+
+    override method move() {self.moveDirection(dirOriginal)}
+    override method moveBack() {self.moveDirection(dirVuelta)}
 }
 
-class PlataformaMoviHorizontal inherits PlataformaBase {
-
-    const maxDistancia
-    const minDistancia
-    const platAsocs
-
-    // var direccion = derecha
-    method image() = "E_horizontal_gate_long.png"
-
-    override method hastaMinPosicion() = self.position().x() != minDistancia
-    override method hastaMaxPosicion() = self.position().x() != maxDistancia 
-
-    override method move() {self.moveLeft()} // Reversionar metodo
-
-    /*
-    method move(){
-        direccion.mover(self)
-    }
-    */
-    /*
-    method moveBack(){
-        direccion.opuesta().mover(self)
-    }
-    */
-    override method moveBack() {self.moveRight()}
-
-    override method moveRight() {
-        super()
-        platAsocs.forEach { x => x.moveRight()} // direccion.mover()
-    }
-
-    override method moveLeft() {
-        super()
-        platAsocs.forEach { x => x.moveLeft()} 
-    }
-}
 
 // ------------------ Nuevo fondo
 class BackgroundCover {

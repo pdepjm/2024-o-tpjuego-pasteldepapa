@@ -1,5 +1,6 @@
 import config.*
 import visualCarteles.*
+import directions.*
 
 // -------------------------------- Personajes
 // ------------------ Superclase
@@ -27,8 +28,10 @@ class Character {
   method setupControls()
   
   method eventoGravedad()
+
+  // Generales
   
-  method esColisionable() = false // Generales
+  method esColisionable() = false 
   
   method esAtravesable() = true
   
@@ -36,9 +39,8 @@ class Character {
     position = charPos
   }
   
-  method colision(personaje) {}
+  method colision(personaje) {} // Para que no genere error si colisionan entre personajes
   
-  // Para que no genere error si colisionan entre personajes
   // Movimientos
   method move(direction) {
     self.plataformaDesadherida()
@@ -64,15 +66,15 @@ class Character {
     }
   }
   
-  method puedeSaltar(
-    nuevaPosicion
-  ) = (!jumping) && (settings.objNivelActual().estaFueraDelMarco(
-    nuevaPosicion
-  ) || (!self.puedeAtravesar(nuevaPosicion)))
+  method puedeSaltar(nuevaPosicion) = 
+    (!jumping) && 
+    (settings.objNivelActual().estaFueraDelMarco(nuevaPosicion) || 
+    (!self.puedeAtravesar(nuevaPosicion)))
   
   // Gravedad
+
   method gravedad() {
-    game.onTick(250, self.eventoGravedad(), { self.move(down) })
+    game.onTick(250, self.eventoGravedad(), { self.move(downCharacter) })
   }
   
   method desactivarGravedad() {
@@ -85,21 +87,19 @@ class Character {
   }
   
   // Control movimiento
-  method puedeDesplazarse(nuevaPosicion) = self.puedeAtravesar(
-    nuevaPosicion
-  ) || self.puedeColisionar(nuevaPosicion)
+  method puedeDesplazarse(nuevaPosicion) = 
+    self.puedeAtravesar(nuevaPosicion) || self.puedeColisionar(nuevaPosicion)
   
-  method puedeAtravesar(nuevaPosicion) = game.getObjectsIn(nuevaPosicion).all(
-    { obj => obj.esAtravesable() }
+  method puedeAtravesar(nuevaPosicion) = 
+    game.getObjectsIn(nuevaPosicion).all({ obj => obj.esAtravesable() }
   )
   
-  method puedeColisionar(nuevaPosicion) = game.getObjectsIn(nuevaPosicion).all(
-    { obj => obj.esColisionable() }
+  method puedeColisionar(nuevaPosicion) = 
+    game.getObjectsIn(nuevaPosicion).all({ obj => obj.esColisionable() }
   )
   
-  method estaDentroDelMarco(
-    nuevaPosicion
-  ) = !settings.objNivelActual().estaFueraDelMarco(nuevaPosicion)
+  method estaDentroDelMarco(nuevaPosicion) = !settings.objNivelActual().estaFueraDelMarco(nuevaPosicion)
+  
   // Muerte de personaje
   
   method die() {
@@ -116,6 +116,7 @@ class Character {
   }
   
   // Mecanica con Plataforma
+  
   method moverALaPar(plataforma) {
     plataformaAdherida = plataforma
   }
@@ -129,7 +130,6 @@ class Character {
   }
   
   method colisionEspecial(objeto) {
-    // SI HAY ALGO MEJOR, CAMBIAR
     objeto.colisionEspecial(self)
   }
 } // ------------------ Subclases
@@ -160,62 +160,8 @@ class Watergirl inherits Character {
   }
   
   override method eventoGravedad() = "W_Gravedad"
-} // -------------------------------- Direcciones
-
-class Direction {
-  const unidadMovimiento = 1
-  
-  method puedeMoverse(character, nuevaPosicion) = character.estaDentroDelMarco(nuevaPosicion) && character.puedeDesplazarse(nuevaPosicion)
-  
-  method calcularNuevaPosicion(personaje)
-  
-  method actualizarPosicion(personaje, nuevaPosicion)
-}
-
-object left inherits Direction {
-  override method calcularNuevaPosicion(character) = character.position().left(unidadMovimiento)
-  
-  override method actualizarPosicion(character, nuevaPosicion) {
-    character.position().goLeft(1)
-  }
-}
-
-object right inherits Direction {
-  override method calcularNuevaPosicion(character) = character.position().right(1)
-  
-  override method actualizarPosicion(character, nuevaPosicion) {
-    character.position().goRight(1)
-  }
-}
-
-object up inherits Direction {
-  override method calcularNuevaPosicion(character) = character.position().up(1)
-  
-  override method actualizarPosicion(character, nuevaPosicion) {
-    character.position().goUp(1)
-  }
-}
-
-object down inherits Direction {
-  override method puedeMoverse(character, nuevaPosicion) = true
-  
-  override method calcularNuevaPosicion(character) = character.position().down(1)
-  
-  override method actualizarPosicion(character, nuevaPosicion) {
-    
-   self.listaCharcos().anyOne().puedeMorirPersonaje(character, nuevaPosicion) //obtenemos un charco random ya que el control de si puede morir o no esta en el charco
-      
-    if (self.posicionValida(character, nuevaPosicion)) {
-        character.position().goDown(1)
-    } else {
-        character.jumping(false) // evitar doble salto 
-    }
-  }
-  
-  method posicionValida(character, nuevaPosicion) = character.estaDentroDelMarco(nuevaPosicion) && character.puedeAtravesar(nuevaPosicion)
-
-  method listaCharcos() = settings.objNivelActual().charcos()
 } 
+
 // -------------------------------- Tipos
 
 object fuego {}

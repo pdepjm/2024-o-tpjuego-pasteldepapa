@@ -21,12 +21,14 @@ object level1 inherits Level {
     const extensionPlatAmarilla1 = new PlataformaBase(position = new MutablePosition(x=2, y=9))
     const extensionPlatAmarilla2 = new PlataformaBase(position = new MutablePosition(x=3, y=9))
 
-    const plataformaAmarilla = new PlataformaMoviVertical(
+    const plataformaAmarilla = new PlataformaMovible(
         position = new MutablePosition(x=1, y=9),
-        maxAltura = 13,
-        minAltura = 9,
+        posicionMax = 13,
+        posicionMin = 9,
         platAsocs = [extensionPlatAmarilla1, extensionPlatAmarilla2],
-        image = "E_horizontal_gate.png"
+        image = "E_horizontal_gate.png", 
+        dirOriginal = movePlatMoviVertical,
+        dirVuelta = moveBackPlatMoviVertical
     )
 
     const botonAmarilloA = new Boton(posX = 10, posY = 9, plataformaAsoc = plataformaAmarilla) // Boton Abajo
@@ -37,12 +39,14 @@ object level1 inherits Level {
     const extensionPlatBordo1 = new PlataformaBase(position = new MutablePosition(x=35, y=13))
     const extensionPlatBordo2 = new PlataformaBase(position = new MutablePosition(x=36, y=13))
 
-    const plataformaBordo = new PlataformaMoviVertical(
+    const plataformaBordo = new PlataformaMovible(
         position = new MutablePosition(x=34, y=13),
-        maxAltura = 16,
-        minAltura = 13,
+        posicionMax = 16,
+        posicionMin = 13,
         platAsocs = [extensionPlatBordo1, extensionPlatBordo2],
-        image = "E_horizontal_gate.png"
+        image = imagePlatHorizontal, 
+        dirOriginal = movePlatMoviVertical,
+        dirVuelta = moveBackPlatMoviVertical
     )
 
     const botonBordoA = new Boton(posX = 30, posY = 18, plataformaAsoc = plataformaBordo) // Boton Arriba

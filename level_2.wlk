@@ -20,11 +20,14 @@ object level2 inherits Level {
     const extensionPlatVioleta3 = new PlataformaBase(position = new MutablePosition(x=25, y=23))
     const extensionPlatVioleta4 = new PlataformaBase(position = new MutablePosition(x=26, y=23))
 
-    const plataformaVioleta = new PlataformaMoviHorizontal(
+    const plataformaVioleta = new PlataformaMovible(
         position = new MutablePosition(x=22, y=23),
-        maxDistancia = 17,
-        minDistancia = 22,
-        platAsocs = [extensionPlatVioleta1, extensionPlatVioleta2,extensionPlatVioleta3,extensionPlatVioleta4]
+        posicionMax = 17,
+        posicionMin = 22,
+        platAsocs = [extensionPlatVioleta1, extensionPlatVioleta2,extensionPlatVioleta3,extensionPlatVioleta4],
+        image = imagePlatHorizontalLong, 
+        dirOriginal = movePlatMoviHorizontal,
+        dirVuelta = moveBackPlatMoviHorizontal
     )
 
     const botonVioletaA = new Boton(posX = 12, posY = 24, plataformaAsoc = plataformaVioleta) // Boton izquierda
@@ -36,12 +39,14 @@ object level2 inherits Level {
     const extensionPlatAmarilla2 = new PlataformaBase(position = new MutablePosition(x=19, y=10))
     const extensionPlatAmarilla3 = new PlataformaBase(position = new MutablePosition(x=19, y=11))
 
-    const plataformaAmarilla = new PlataformaMoviVertical(
+    const plataformaAmarilla = new PlataformaMovible(
         position = new MutablePosition(x=19, y=8),
-        maxAltura = 12,
-        minAltura = 8,
+        posicionMax = 12,
+        posicionMin = 8,
         platAsocs = [extensionPlatAmarilla1, extensionPlatAmarilla2],
-        image = "E_vertical_gate2.png"
+        image = imagePlatVertical, 
+        dirOriginal = movePlatMoviVertical,
+        dirVuelta = moveBackPlatMoviVertical
     )
 
     const botonAmarilloA = new Boton(posX = 8, posY = 8, plataformaAsoc = plataformaAmarilla) // Boton izquierda

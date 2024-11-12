@@ -1,3 +1,4 @@
+import directions.*
 import wollok.game.*
 import config.*
 import characters.*
@@ -35,7 +36,7 @@ describe "Movimientos de los Personajes" {
                 position = new MutablePosition (x=2, y=4), 
                 lastMovement = null)
 
-        fireboy.move(down)
+        fireboy.move(downCharacter)
         assert.equals(2, fireboy.position().x())
         assert.equals(3, fireboy.position().y())
     }       
@@ -61,7 +62,7 @@ describe "Zonas Prohibidas" {
                 position = new MutablePosition (x=19, y=1), 
                 lastMovement = null) 
 
-        fireboy.move(down)
+        fireboy.move(downCharacter)
         assert.that(fireboy.murioPersonajeTest())}
         
     test "Fireboy no muere al moverse a posiciones no peligrosas" {
