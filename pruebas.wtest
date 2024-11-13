@@ -1,9 +1,136 @@
-import pepita.*
+import directions.*
+import wollok.game.*
+import config.*
+import characters.*
+import elements.*
+import level_1.*
 
-describe "group of tests for pepita" {
+describe "Movimientos de los Personajes" {
+    test "Fireboy - Movimiento a Izquierda Correcto" {
+        const fireboy = new Fireboy(
+            position = new MutablePosition (x=5, y=5), 
+            lastMovement = null) 
+            
+        fireboy.move(left)
+        
+        assert.equals(4, fireboy.position().x()) // Debería moverse 1 unidad a la izquierda
+        assert.equals(5, fireboy.position().y()) // La coordenada y no debería cambiar
+    }
 
-  test "pepita has initial energy" {
-    assert.equals(100, pepita.energy())
-  }
+    test "Watergirl - Movimiento a Derecha Correcto" {
+        const watergirl = new Watergirl(
+            position = new MutablePosition (x=5, y=5), 
+            lastMovement = null
+        ) 
 
+        watergirl.move(right)
+        
+        assert.equals(6, watergirl.position().x()) // Debería moverse 1 unidad a la derecha
+        assert.equals(5, watergirl.position().y()) // La coordenada y no debería cambiar
+    }
+    
+    test "Fireboy - No atraviesa los pisos intermedios"{
+        
+        level1.setupCharcos ()
+        const fireboy = new Fireboy(
+                position = new MutablePosition (x=2, y=4), 
+                lastMovement = null)
+
+        fireboy.move(downCharacter)
+        assert.equals(2, fireboy.position().x())
+        assert.equals(3, fireboy.position().y())
+    }       
+
+    test "Watergirl - Respeta el descubrimiento de Newton" {
+        const watergirl = new Watergirl(
+                position = new MutablePosition (x=1, y=1), 
+                lastMovement = null) 
+
+        watergirl.jump()
+        
+        assert.equals(1, watergirl.position().y()) // La coordenada y no debería cambiar
+    }
+
+}
+
+describe "Zonas Prohibidas" {
+
+    test "Fireboy muere al pasar por charco de distinto tipo" {
+        level1.setupCharcos() //necesario para cargar los charcos en la lista
+        const fireboy = new Fireboy(
+                position = new MutablePosition (x=19, y=1), 
+                lastMovement = null) 
+
+        fireboy.move(downCharacter)
+        assert.that(fireboy.murioPersonajeTest())}
+        
+    test "Fireboy no muere al moverse a posiciones no peligrosas" {
+        level1.setupCharcos() //necesario para cargar los charcos en la lista
+        const fireboy = new Fireboy(
+            position = new MutablePosition(x=28, y=1), 
+            lastMovement = null)
+
+        fireboy.move(right)
+        assert.notThat(fireboy.murioPersonajeTest())
+    }
+}
+
+describe "Diamantes" {
+
+    test "Fireboy puede agarrar diamantes Rojos" {
+        
+        const diamante = new DiamanteRojo(posX = 2, posY = 1)
+        
+        const fireboy = new Fireboy(
+            position = new MutablePosition (x=1, y=1), 
+            lastMovement = null)
+            
+        fireboy.move(right)
+        diamante.colision(fireboy) 
+
+        assert.that(diamante.fuiRecolectado())
+    }
+    
+    test "Watergirl no puede agarrar diamantes rojos" {
+        
+        const diamante = new DiamanteRojo(posX = 2, posY = 1)
+
+        const watergirl = new Watergirl(
+            position = new MutablePosition (x=1, y=1), 
+            lastMovement = null
+        ) 
+
+        watergirl.move(right)
+        diamante.colision(watergirl) 
+
+        assert.notThat(diamante.fuiRecolectado())
+    }
+    test "Fireboy puede agarrar diamantes Grises" {
+     
+        const diamante = new DiamanteGris(posX = 2, posY = 1)
+
+        const fireboy = new Fireboy(
+            position = new MutablePosition (x=1, y=1), 
+            lastMovement = null
+        ) 
+
+        fireboy.move(right) // el movimiento no afecta  ala colision y no la toma
+        diamante.colision(fireboy) 
+            
+        assert.that(diamante.fuiRecolectado())
+    }
+    test "Watergirl puede agarrar diamantes Azules en saltos" {
+     
+        const diamante = new DiamanteAzul(posX = 1, posY = 2)
+
+        const watergirl = new Watergirl(
+            position = new MutablePosition (x=1, y=1), 
+            lastMovement = null
+        ) 
+
+        watergirl.jump()
+        diamante.colision(watergirl) 
+
+        assert.that(diamante.fuiRecolectado())
+    }
 }

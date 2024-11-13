@@ -1,16 +1,16 @@
 import wollok.game.*
+import config.*
+import level_1.*
+import level_2.*
 
-import pepita.*
+program FireBoyWaterGirlGame {
 
-program PepitaGame {
-	game.title("Pepita")
-	game.height(10)
-	game.width(10)
-	game.cellSize(100)
-
-	game.addVisual(pepita)
-
-	keyboard.w().onPressDo({ pepita.fly(1) })
-
-	game.start()
+    // Sonidos
+    const fondo = game.sound("S_fondo.mp3")
+    fondo.shouldLoop(true)
+    game.schedule(2000, { fondo.play() fondo.volume(0.3)} )
+    
+    // Inicio del nivel 1
+    settings.init("FireBoyAndWaterGirl", "F_lobby.png", 29, 39, 36)
+    keyboard.enter().onPressDo({settings.startGame()})
 }
