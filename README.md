@@ -21,12 +21,12 @@ Los jugadores deben completar los niveles del mapa guiando a los dos personajes,
 
 **Controles para Fireboy**
 
-- ```↑``` para saltar 5 unidades.
+- ```↑``` para saltar 4 unidades.
 - ```→``` para dirigirse 1 unidad a la derecha. 
 - ```←``` para dirigirse 1 unidad a la izquierda. 
 
 **Controles para Watergirl**
 
-- ```w``` para saltar 5 unidades.
+- ```w``` para saltar 4 unidades.
 - ```a``` para dirigirse 1 unidad a la derecha. 
 - ```d``` para dirigirse 1 unidad a la izquierda. 
